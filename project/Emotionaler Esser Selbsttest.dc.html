@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/mama-spagat-design-system-9e61be6c-8cd6-40fb-8c86-107b0960fc82/colors_and_type.css">
+  <link rel="stylesheet" href="_ds/mama-spagat-design-system-9e61be6c-8cd6-40fb-8c86-107b0960fc82/preview/_base.css">
+  <script src="_ds/mama-spagat-design-system-9e61be6c-8cd6-40fb-8c86-107b0960fc82/_ds_bundle.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    @keyframes ee-pulse { 0% { transform: scale(1); } 42% { transform: scale(1.07); } 100% { transform: scale(1); } }
+    textarea::placeholder { color: rgba(122,111,99,0.55); }
+  </style>
+</helmet>
+<div style="min-height:100dvh; display:flex; flex-direction:column; background:var(--ms-cream); font-family:var(--ms-font-body); position:relative; overflow-x:hidden">
+  <div style="flex:1; display:flex; flex-direction:column; opacity:{{ opacity }}; transition:opacity 260ms var(--ms-ease)">
+
+    <!-- ============ STATE 1 · HERO ============ -->
+    <sc-if value="{{ isHero }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Hero" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--ms-sage); padding:64px 26px 76px; text-align:center; position:relative">
+        <img src="assets/logo-script-light.png" alt="Mama Spagat" style="height:80px; width:auto; margin-bottom:42px; opacity:0.95">
+        <span style="font-family:var(--ms-font-body); font-weight:600; font-size:13px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(239,231,221,0.62); margin-bottom:24px">Der ehrliche Selbsttest</span>
+        <h1 style="font-family:var(--ms-font-display); font-weight:600; font-size:clamp(40px,11.5vw,62px); line-height:1.0; letter-spacing:-0.01em; color:var(--ms-cream); max-width:600px; margin:0 0 22px; text-wrap:balance">{{ heroTitle }}</h1>
+        <p style="font-family:var(--ms-font-display); font-style:italic; font-size:clamp(21px,5.5vw,28px); line-height:1.3; color:var(--ms-blush); margin:0 0 34px; max-width:470px">15 knackige Fragen. Ehrlich beantwortet und du weißt es.</p>
+        <p style="font-family:var(--ms-font-body); font-size:16px; line-height:1.75; color:rgba(239,231,221,0.84); max-width:430px; margin:0 0 42px">Ich kenne dieses Ziehen zum Kühlschrank, wenn der Tag zu viel war. Lange dachte ich, mir fehle einfach Disziplin. Heute weiß ich: Es war nie der Hunger. Diese 15 Fragen helfen dir, ehrlich hinzuschauen – ohne Urteil. Nur du und du.</p>
+        <button onClick="{{ onStart }}" style="display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:18px 40px; border:none; border-radius:14px; background:{{ accent }}; color:var(--ms-cream); font-family:var(--ms-font-body); font-weight:700; font-size:15px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; box-shadow:0 12px 30px rgba(0,0,0,0.22); transition:transform 160ms var(--ms-ease), box-shadow 220ms var(--ms-ease)" style-hover="transform:translateY(-2px); box-shadow:0 18px 38px rgba(0,0,0,0.28)" style-active="transform:scale(0.98)">Jetzt Test starten</button>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:11px; margin-top:60px">
+          <img src="assets/vanessa-avatar.png" alt="Vanessa Reinthaller" style="width:58px; height:58px; border-radius:999px; object-fit:cover; box-shadow:0 4px 14px rgba(0,0,0,0.2)">
+          <span style="font-family:var(--ms-font-body); font-size:14px; font-weight:600; letter-spacing:0.04em; color:var(--ms-cream)">Vanessa Reinthaller</span>
+        </div>
+        <span style="position:absolute; bottom:22px; left:0; right:0; text-align:center; font-family:var(--ms-font-body); font-size:12px; letter-spacing:0.12em; color:rgba(239,231,221,0.5)">mama.spagat</span>
+      </section>
+    </sc-if>
+
+    <!-- ============ STATE 2 · QUIZ ============ -->
+    <sc-if value="{{ isQuiz }}">
+      <section data-screen-label="Quiz" style="flex:1; display:flex; flex-direction:column; background:var(--ms-cream); padding:26px 22px 30px">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; max-width:520px; width:100%; margin:0 auto 10px">
+          <button onClick="{{ onBack }}" style="display:inline-flex; align-items:center; gap:6px; background:none; border:none; cursor:pointer; color:var(--ms-muted); font-family:var(--ms-font-body); font-size:13px; font-weight:600; letter-spacing:0.02em; padding:6px 2px" style-hover="color:var(--ms-sage)">←&nbsp;zurück</button>
+          <span style="font-family:var(--ms-font-body); font-size:13px; font-weight:700; letter-spacing:0.12em; color:var(--ms-sage); white-space:nowrap">{{ qNumber }} / 15</span>
+        </div>
+        <div style="max-width:520px; width:100%; margin:0 auto 44px; height:5px; border-radius:999px; background:rgba(71,97,96,0.14); overflow:hidden">
+          <div style="height:100%; border-radius:999px; background:var(--ms-sage); width:{{ progressPct }}; transition:width 380ms var(--ms-ease)"></div>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; max-width:520px; width:100%; margin:0 auto">
+          <span style="align-self:center; display:inline-flex; align-items:center; gap:8px; padding:7px 17px; border-radius:999px; background:var(--ms-blush); color:var(--ms-terracotta); font-family:var(--ms-font-body); font-size:11px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; margin-bottom:30px">{{ blockTag }}</span>
+          <h2 style="font-family:var(--ms-font-display); font-weight:500; font-size:clamp(26px,6.6vw,38px); line-height:1.22; color:var(--ms-ink); text-align:center; margin:0 0 46px; text-wrap:balance">{{ questionText }}</h2>
+          <div style="display:flex; gap:10px; justify-content:center">
+            <sc-for list="{{ answerOptions }}" as="opt" hint-placeholder-count="4">
+              <button onClick="{{ opt.onClick }}" style="display:flex; flex-direction:column; align-items:center; gap:9px; flex:1; min-width:0; padding:18px 6px 14px; border:1.5px solid {{ opt.border }}; border-radius:16px; background:{{ opt.bg }}; color:{{ opt.fg }}; cursor:pointer; font-family:var(--ms-font-body); box-shadow:{{ opt.shadow }}; animation:{{ opt.anim }}; transition:transform 150ms var(--ms-ease), background-color 220ms var(--ms-ease), color 220ms var(--ms-ease), border-color 220ms var(--ms-ease), box-shadow 220ms var(--ms-ease)" style-hover="transform:translateY(-2px)">
+                <span style="font-family:var(--ms-font-display); font-size:32px; font-weight:700; line-height:1">{{ opt.value }}</span>
+                <span style="font-size:10.5px; line-height:1.3; letter-spacing:0.02em; text-align:center; min-height:27px; display:flex; align-items:center">{{ opt.label }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        <span style="text-align:center; font-family:var(--ms-font-body); font-size:12px; letter-spacing:0.12em; font-weight:600; color:var(--ms-sage); margin-top:30px">mama.spagat</span>
+      </section>
+    </sc-if>
+
+    <!-- ============ STATE 2.5 · EMAIL CAPTURE ============ -->
+    <sc-if value="{{ isCapture }}">
+      <section data-screen-label="Capture" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--ms-sage); padding:56px 26px 64px; text-align:center; position:relative">
+        <div style="display:inline-flex; align-items:center; gap:9px; padding:8px 18px; border-radius:999px; background:rgba(239,231,221,0.14); margin-bottom:26px">
+          <span style="width:8px; height:8px; border-radius:999px; background:#9FC0A8"></span>
+          <span style="font-family:var(--ms-font-body); font-size:12px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--ms-cream); white-space:nowrap">Test abgeschlossen · 15 / 15</span>
+        </div>
+        <h2 style="font-family:var(--ms-font-display); font-weight:600; font-size:clamp(34px,9vw,50px); line-height:1.02; color:var(--ms-cream); margin:0 0 18px; text-wrap:balance">Dein Ergebnis ist bereit.</h2>
+        <p style="font-family:var(--ms-font-body); font-size:16px; line-height:1.72; color:rgba(239,231,221,0.88); max-width:430px; margin:0 0 30px">Trag deine E-Mail ein und ich schicke dir deine <strong style="color:var(--ms-cream); font-weight:700">ausführliche, persönliche Auswertung</strong> – und zeige dir direkt dein Ergebnis hier auf dem Bildschirm.</p>
+
+        <div style="width:100%; max-width:380px; display:flex; flex-direction:column; gap:14px; text-align:left; margin-bottom:32px">
+          <div style="display:flex; align-items:flex-start; gap:13px">
+            <span style="flex-shrink:0; width:24px; height:24px; border-radius:999px; background:var(--ms-terracotta); color:var(--ms-cream); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; margin-top:1px">✓</span>
+            <span style="font-family:var(--ms-font-body); font-size:14.5px; line-height:1.5; color:rgba(239,231,221,0.92)">Deine persönliche Auswertung im Detail – was dein Typ wirklich bedeutet</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:13px">
+            <span style="flex-shrink:0; width:24px; height:24px; border-radius:999px; background:var(--ms-terracotta); color:var(--ms-cream); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; margin-top:1px">✓</span>
+            <span style="font-family:var(--ms-font-body); font-size:14.5px; line-height:1.5; color:rgba(239,231,221,0.92)">Konkrete erste Schritte, abgestimmt auf genau dein Ergebnis</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:13px">
+            <span style="flex-shrink:0; width:24px; height:24px; border-radius:999px; background:var(--ms-terracotta); color:var(--ms-cream); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; margin-top:1px">✓</span>
+            <span style="font-family:var(--ms-font-body); font-size:14.5px; line-height:1.5; color:rgba(239,231,221,0.92)">Einladung zum kostenlosen Workshop für Frauen 35+</span>
+          </div>
+        </div>
+
+        <div style="width:100%; max-width:380px; display:flex; flex-direction:column; gap:12px">
+          <input type="email" value="{{ email }}" onChange="{{ onEmail }}" onKeyDown="{{ onEmailKey }}" placeholder="deine@email.de" inputMode="email" autoComplete="email" style="width:100%; padding:17px 18px; border:1.5px solid {{ emailBorder }}; border-radius:14px; background:rgba(250,247,246,0.96); font-family:var(--ms-font-body); font-size:16px; color:var(--ms-charcoal); text-align:center" style-focus="border-color:var(--ms-cream); outline:none">
+          <sc-if value="{{ hasEmailErr }}">
+            <span style="font-family:var(--ms-font-body); font-size:13px; font-weight:600; color:#FBD9C4">{{ emailErr }}</span>
+          </sc-if>
+          <button onClick="{{ onSubmitLead }}" style="width:100%; display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:18px 28px; border:none; border-radius:14px; background:{{ accent }}; color:var(--ms-cream); font-family:var(--ms-font-body); font-weight:700; font-size:15px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; box-shadow:0 12px 30px rgba(0,0,0,0.24); transition:transform 160ms var(--ms-ease), box-shadow 220ms var(--ms-ease)" style-hover="transform:translateY(-2px); box-shadow:0 18px 38px rgba(0,0,0,0.3)" style-active="transform:scale(0.98)">Auswertung jetzt freischalten</button>
+        </div>
+        <p style="font-family:var(--ms-font-body); font-size:12px; line-height:1.6; color:rgba(239,231,221,0.6); max-width:340px; margin:18px 0 0">100 % kostenlos. Kein Spam. Du kannst dich jederzeit mit einem Klick wieder abmelden.</p>
+        <button onClick="{{ onBackCapture }}" style="background:none; border:none; cursor:pointer; color:rgba(239,231,221,0.55); font-family:var(--ms-font-body); font-size:13px; font-weight:600; margin-top:20px; padding:6px" style-hover="color:var(--ms-cream)">←&nbsp;zurück zur letzten Frage</button>
+        <span style="position:absolute; bottom:20px; left:0; right:0; text-align:center; font-family:var(--ms-font-body); font-size:12px; letter-spacing:0.12em; color:rgba(239,231,221,0.5)">mama.spagat</span>
+      </section>
+    </sc-if>
+
+    <!-- ============ STATE 3 · RESULT ============ -->
+    <sc-if value="{{ isResult }}">
+      <section data-screen-label="Result" style="flex:1; display:flex; flex-direction:column; align-items:center; background:var(--ms-cream); padding:52px 22px 40px">
+        <div style="max-width:560px; width:100%; display:flex; flex-direction:column; align-items:center; text-align:center">
+          <sc-if value="{{ leadSubmitted }}">
+            <div style="display:inline-flex; align-items:center; gap:9px; padding:9px 18px; border-radius:999px; background:var(--ms-blush); margin-bottom:26px; max-width:100%">
+              <span style="flex-shrink:0; width:18px; height:18px; border-radius:999px; background:var(--ms-terracotta); color:var(--ms-cream); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800">✓</span>
+              <span style="font-family:var(--ms-font-body); font-size:12.5px; font-weight:600; line-height:1.4; color:var(--ms-terracotta-deep, #A8431B); text-align:left">{{ confirmText }}</span>
+            </div>
+          </sc-if>
+          <span style="font-family:var(--ms-font-body); font-size:12px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:var(--ms-muted); margin-bottom:26px">Dein Typ</span>
+
+          <div style="position:relative; margin-bottom:22px">
+            <div style="width:158px; height:158px; border-radius:999px; overflow:hidden; background:{{ resultColor }}; box-shadow:var(--ms-shadow-lift); display:flex; align-items:flex-end; justify-content:center">
+              <dc-import name="HeroAvatar" suit="{{ avSuit }}" suit-deep="{{ avSuitDeep }}" cape="{{ avCape }}" mask="{{ avMask }}" hair="{{ avHair }}" skin="{{ avSkin }}" emblem="{{ avEmblem }}" label="{{ resultName }}" hint-size="158px,158px" style="width:158px; height:158px"></dc-import>
+            </div>
+            <div style="position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); display:inline-flex; align-items:baseline; gap:4px; padding:8px 16px; border-radius:999px; background:var(--ms-white); box-shadow:0 6px 18px rgba(27,32,32,0.14); white-space:nowrap">
+              <span style="font-family:var(--ms-font-display); font-size:24px; font-weight:700; line-height:1; color:var(--ms-ink)">{{ score }}</span>
+              <span style="font-family:var(--ms-font-body); font-size:11px; font-weight:600; letter-spacing:0.04em; color:var(--ms-muted)">/&nbsp;60</span>
+            </div>
+          </div>
+          <span style="font-family:var(--ms-font-body); font-size:12px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:{{ resultEyebrow }}; margin-bottom:13px; white-space:nowrap">{{ resultRange }}</span>
+          <h2 style="font-family:var(--ms-font-display); font-weight:600; font-size:clamp(42px,11vw,60px); line-height:0.98; color:var(--ms-ink); margin:0 0 26px">{{ resultName }}</h2>
+          <p style="font-family:var(--ms-font-body); font-size:16px; line-height:1.78; color:var(--ms-charcoal); max-width:460px; margin:0">{{ resultText }}</p>
+
+          <div style="width:48px; height:3px; border-radius:999px; background:{{ resultColor }}; margin:42px 0 38px"></div>
+
+          <div style="width:100%; display:flex; flex-direction:column; gap:8px; margin-bottom:30px">
+            <h3 style="font-family:var(--ms-font-display); font-weight:600; font-size:26px; color:var(--ms-ink); margin:0 0 4px">Zum Nachdenken</h3>
+            <p style="font-family:var(--ms-font-body); font-size:14px; line-height:1.6; color:var(--ms-muted); margin:0">Nimm dir einen Moment. Es liest niemand mit – nur du.</p>
+          </div>
+
+          <div style="width:100%; text-align:left; display:flex; flex-direction:column; gap:26px">
+            <div style="display:flex; flex-direction:column; gap:11px">
+              <label style="font-family:var(--ms-font-body); font-size:15px; font-weight:600; color:var(--ms-charcoal); line-height:1.5">1. &nbsp;In welchen Momenten greifst du am häufigsten zum Essen – und was fühlst du kurz davor?</label>
+              <textarea value="{{ refl0 }}" onChange="{{ onRefl0 }}" rows="3" placeholder="Schreib ehrlich – nur für dich." style="width:100%; resize:vertical; border:1.5px solid rgba(71,97,96,0.22); border-radius:14px; background:var(--ms-white); padding:14px 16px; font-family:var(--ms-font-body); font-size:14px; line-height:1.6; color:var(--ms-charcoal)" style-focus="border-color:var(--ms-sage); outline:none"></textarea>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:11px">
+              <label style="font-family:var(--ms-font-body); font-size:15px; font-weight:600; color:var(--ms-charcoal); line-height:1.5">2. &nbsp;Was bräuchtest du in genau diesen Momenten wirklich, wenn es nicht das Essen wäre?</label>
+              <textarea value="{{ refl1 }}" onChange="{{ onRefl1 }}" rows="3" placeholder="Schreib ehrlich – nur für dich." style="width:100%; resize:vertical; border:1.5px solid rgba(71,97,96,0.22); border-radius:14px; background:var(--ms-white); padding:14px 16px; font-family:var(--ms-font-body); font-size:14px; line-height:1.6; color:var(--ms-charcoal)" style-focus="border-color:var(--ms-sage); outline:none"></textarea>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:11px">
+              <label style="font-family:var(--ms-font-body); font-size:15px; font-weight:600; color:var(--ms-charcoal); line-height:1.5">3. &nbsp;Was ist der eine kleine Schritt, den du dir diese Woche zutraust?</label>
+              <textarea value="{{ refl2 }}" onChange="{{ onRefl2 }}" rows="3" placeholder="Schreib ehrlich – nur für dich." style="width:100%; resize:vertical; border:1.5px solid rgba(71,97,96,0.22); border-radius:14px; background:var(--ms-white); padding:14px 16px; font-family:var(--ms-font-body); font-size:14px; line-height:1.6; color:var(--ms-charcoal)" style-focus="border-color:var(--ms-sage); outline:none"></textarea>
+            </div>
+          </div>
+
+          <button onClick="{{ onToCta }}" style="display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:18px 40px; border:none; border-radius:14px; background:{{ accent }}; color:var(--ms-cream); font-family:var(--ms-font-body); font-weight:700; font-size:15px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; box-shadow:0 12px 30px rgba(202,93,37,0.3); transition:transform 160ms var(--ms-ease), box-shadow 220ms var(--ms-ease); margin-top:42px" style-hover="transform:translateY(-2px); box-shadow:0 18px 38px rgba(202,93,37,0.38)" style-active="transform:scale(0.98)">Weiter</button>
+          <button onClick="{{ onRestart }}" style="background:none; border:none; cursor:pointer; color:var(--ms-muted); font-family:var(--ms-font-body); font-size:13px; font-weight:600; letter-spacing:0.02em; margin-top:18px; text-decoration:underline; text-underline-offset:3px" style-hover="color:var(--ms-sage)">Test neu starten</button>
+          <span style="font-family:var(--ms-font-body); font-size:12px; letter-spacing:0.12em; font-weight:600; color:var(--ms-sage); margin-top:36px">mama.spagat</span>
+        </div>
+      </section>
+    </sc-if>
+
+    <!-- ============ STATE 4 · CTA ============ -->
+    <sc-if value="{{ isCta }}">
+      <section data-screen-label="CTA" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--ms-sage); padding:60px 26px 72px; text-align:center; position:relative">
+        <img src="assets/logo-script-light.png" alt="Mama Spagat" style="height:62px; width:auto; margin-bottom:38px; opacity:0.95">
+        <span style="font-family:var(--ms-font-body); font-weight:600; font-size:13px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(239,231,221,0.62); margin-bottom:22px">Dein nächster Schritt</span>
+        <h2 style="font-family:var(--ms-font-display); font-weight:600; font-size:clamp(44px,12vw,66px); line-height:0.98; color:var(--ms-cream); margin:0 0 26px">Was jetzt?</h2>
+        <p style="font-family:var(--ms-font-body); font-size:16px; line-height:1.78; color:rgba(239,231,221,0.86); max-width:460px; margin:0 0 40px">Egal, welches Ergebnis du bekommen hast – du bist damit nicht allein, und du bist nicht kaputt. In meinem kostenlosen Workshop zeige ich dir, wie du den Kreislauf aus Stress, Essen und schlechtem Gewissen sanft durchbrichst. Ohne Verbote. Ohne Hungern. In deinem Tempo.</p>
+        <a href="https://vanessareinthaller.de" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:18px 40px; border:none; border-radius:14px; background:{{ accent }}; color:var(--ms-cream); font-family:var(--ms-font-body); font-weight:700; font-size:15px; letter-spacing:0.08em; text-transform:uppercase; text-decoration:none; cursor:pointer; box-shadow:0 12px 30px rgba(0,0,0,0.22); transition:transform 160ms var(--ms-ease), box-shadow 220ms var(--ms-ease)" style-hover="transform:translateY(-2px); box-shadow:0 18px 38px rgba(0,0,0,0.28)" style-active="transform:scale(0.98)">Zum kostenlosen Workshop anmelden</a>
+        <span style="font-family:var(--ms-font-body); font-size:13px; letter-spacing:0.06em; color:rgba(239,231,221,0.7); margin-top:30px">mama.spagat · vanessareinthaller.de</span>
+        <!-- ===== TYPE CAROUSEL ===== -->
+        <div style="width:100%; max-width:400px; margin-top:52px; display:flex; flex-direction:column; align-items:center">
+          <div style="width:40px; height:1px; background:rgba(239,231,221,0.22); margin-bottom:30px"></div>
+          <span style="font-family:var(--ms-font-body); font-size:11px; font-weight:700; letter-spacing:0.28em; text-transform:uppercase; color:rgba(239,231,221,0.48); margin-bottom:22px">Die 4 Typen</span>
+          <div style="width:100%; background:rgba(250,247,246,0.07); border:1px solid rgba(239,231,221,0.15); border-radius:24px; padding:34px 26px 30px; display:flex; flex-direction:column; align-items:center; gap:14px" data-comment-anchor="aef74c8b32-div">
+            <div style="width:92px; height:92px; border-radius:999px; overflow:hidden; background:{{ carouselCard.color }}; box-shadow:0 8px 24px rgba(0,0,0,0.24); flex-shrink:0; display:flex; align-items:flex-end; justify-content:center">
+              <dc-import name="HeroAvatar" suit="{{ carouselCard.suit }}" suit-deep="{{ carouselCard.suitDeep }}" cape="{{ carouselCard.cape }}" mask="{{ carouselCard.mask }}" hair="{{ carouselCard.hair }}" skin="{{ carouselCard.skin }}" emblem="{{ carouselCard.emblem }}" label="{{ carouselCard.name }}" hint-size="92px,92px" style="width:92px; height:92px"></dc-import>
+            </div>
+            <span style="font-family:var(--ms-font-body); font-size:10.5px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:rgba(239,231,221,0.52); white-space:nowrap">{{ carouselCard.range }}</span>
+            <h3 style="font-family:var(--ms-font-display); font-size:38px; font-weight:600; color:var(--ms-cream); margin:0; line-height:1">{{ carouselCard.name }}</h3>
+            <p style="font-family:var(--ms-font-body); font-size:14px; line-height:1.74; color:rgba(239,231,221,0.76); margin:0; max-width:320px">{{ carouselCard.text }}</p>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-top:20px">
+            <button onClick="{{ onCarouselPrev }}" style="width:38px; height:38px; border-radius:999px; border:1px solid rgba(239,231,221,0.28); background:rgba(239,231,221,0.07); color:var(--ms-cream); font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 180ms" style-hover="background:rgba(239,231,221,0.18)">←</button>
+            <div style="display:flex; gap:7px; align-items:center">
+              <sc-for list="{{ carouselDots }}" as="dot" hint-placeholder-count="4">
+                <button onClick="{{ dot.onClick }}" style="height:8px; width:{{ dot.w }}; border-radius:999px; background:{{ dot.bg }}; border:none; cursor:pointer; padding:0; transition:all 250ms ease-out"></button>
+              </sc-for>
+            </div>
+            <button onClick="{{ onCarouselNext }}" style="width:38px; height:38px; border-radius:999px; border:1px solid rgba(239,231,221,0.28); background:rgba(239,231,221,0.07); color:var(--ms-cream); font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 180ms" style-hover="background:rgba(239,231,221,0.18)">→</button>
+          </div>
+        </div>
+
+        <button onClick="{{ onBackCta }}" style="background:none; border:none; cursor:pointer; color:rgba(239,231,221,0.6); font-family:var(--ms-font-body); font-size:13px; font-weight:600; margin-top:36px; text-decoration:underline; text-underline-offset:3px" style-hover="color:var(--ms-cream)">←&nbsp;zurück zum Ergebnis</button>
+      </section>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 440, &quot;height&quot;: 900 },
+  &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#CA5D25&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;heroTitle&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Bin ich ein emotionaler Esser?&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;heroSubline&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;15 ehrliche Fragen. Eine klare Antwort.&quot;, &quot;tsType&quot;: &quot;string&quot; }
+}">
+class Component extends DCLogic {
+  state = {
+    screen: 'hero',
+    qIndex: 0,
+    answers: new Array(15).fill(null),
+    reflections: ['', '', ''],
+    email: '',
+    emailErr: '',
+    leadSubmitted: false,
+    opacity: 1,
+    fading: false,
+    carouselIdx: 0,
+  };
+
+  componentDidMount() {
+    try {
+      const raw = localStorage.getItem('ms_emotional_eater_v1');
+      if (raw) {
+        const saved = JSON.parse(raw);
+        const patch = {};
+        if (saved.screen) patch.screen = saved.screen;
+        if (typeof saved.qIndex === 'number') patch.qIndex = saved.qIndex;
+        if (Array.isArray(saved.answers) && saved.answers.length === 15) patch.answers = saved.answers;
+        if (Array.isArray(saved.reflections) && saved.reflections.length === 3) patch.reflections = saved.reflections;
+        if (typeof saved.email === 'string') patch.email = saved.email;
+        if (typeof saved.leadSubmitted === 'boolean') patch.leadSubmitted = saved.leadSubmitted;
+        patch.opacity = 1;
+        patch.fading = false;
+        this.setState(patch);
+      }
+    } catch (e) {}
+  }
+
+  save(extra) {
+    const s = Object.assign({}, this.state, extra || {});
+    try {
+      localStorage.setItem('ms_emotional_eater_v1', JSON.stringify({
+        screen: s.screen, qIndex: s.qIndex, answers: s.answers, reflections: s.reflections,
+        email: s.email, leadSubmitted: s.leadSubmitted,
+      }));
+    } catch (e) {}
+  }
+
+  persist(patch) {
+    this.setState(patch, () => this.save());
+  }
+
+  fadeTo(patch) {
+    this.setState({ opacity: 0, fading: true });
+    setTimeout(() => {
+      this.setState(Object.assign({ opacity: 1, fading: false }, patch), () => this.save());
+      try { window.scrollTo({ top: 0 }); } catch (e) {}
+    }, 270);
+  }
+
+  start = () => { this.fadeTo({ screen: 'quiz', qIndex: 0 }); };
+
+  selectAnswer(value) {
+    if (this.state.fading) return;
+    const answers = this.state.answers.slice();
+    answers[this.state.qIndex] = value;
+    this.setState({ answers }, () => this.save());
+    setTimeout(() => {
+      if (this.state.qIndex < 14) {
+        this.fadeTo({ qIndex: this.state.qIndex + 1 });
+      } else if (this.state.leadSubmitted) {
+        this.fadeTo({ screen: 'result' });
+      } else {
+        this.fadeTo({ screen: 'capture' });
+      }
+    }, 430);
+  }
+
+  back = () => {
+    if (this.state.fading) return;
+    if (this.state.qIndex > 0) {
+      this.fadeTo({ qIndex: this.state.qIndex - 1 });
+    } else {
+      this.fadeTo({ screen: 'hero' });
+    }
+  };
+
+  toCta = () => { this.fadeTo({ screen: 'cta' }); };
+  backCta = () => { this.fadeTo({ screen: 'result' }); };
+
+  setEmail = (v) => { this.setState({ email: v, emailErr: '' }); };
+
+  submitLead = () => {
+    const email = (this.state.email || '').trim();
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    if (!ok) {
+      this.setState({ emailErr: 'Bitte gib eine gültige E-Mail-Adresse ein.' });
+      return;
+    }
+    this.setState({ leadSubmitted: true, emailErr: '' }, () => this.save());
+    this.fadeTo({ screen: 'result' });
+  };
+
+  emailKey = (e) => { if (e.key === 'Enter') { e.preventDefault(); this.submitLead(); } };
+
+  carouselPrev = () => this.setState(s => ({ carouselIdx: (s.carouselIdx + 3) % 4 }));
+  carouselNext = () => this.setState(s => ({ carouselIdx: (s.carouselIdx + 1) % 4 }));
+
+  backCapture = () => { this.fadeTo({ screen: 'quiz', qIndex: 14 }); };
+
+  restart = () => {
+    this.fadeTo({ screen: 'hero', qIndex: 0, answers: new Array(15).fill(null), reflections: ['', '', ''], email: '', emailErr: '', leadSubmitted: false });
+  };
+
+  setRefl(i, v) {
+    const reflections = this.state.reflections.slice();
+    reflections[i] = v;
+    this.setState({ reflections }, () => this.save());
+  }
+
+  renderVals() {
+    const s = this.state;
+    const qIndex = s.qIndex;
+
+    const QUESTIONS = [
+      'Wenn ich gestresst bin, denke ich schneller an Essen als an etwas anderes.',
+      'Nach einem langen, anstrengenden Tag esse ich mehr als ich eigentlich wollte.',
+      'Wenn ich mich einsam oder unverstanden fühle, tröstet mich Essen.',
+      'Wenn ich mich langweile, wandere ich in die Küche – auch ohne Hunger.',
+      'Ich esse anders, wenn ich alleine bin, als wenn andere dabei sind.',
+      'Ich esse manchmal so schnell, dass ich erst danach merke, wie viel ich gegessen habe.',
+      'Wenn ich einmal vom Plan abweiche, denke ich: Jetzt ist es sowieso egal.',
+      'Ich habe bestimmte Lebensmittel, die ich in schwierigen Momenten fast automatisch greife.',
+      'Nach dem Essen fühle ich mich manchmal schuldig – obwohl ich körperlich satt bin.',
+      'Ich unterscheide kaum, ob ich Hunger habe oder ob ich einfach etwas essen will.',
+      'Gedanken über Essen, Kalorien oder meinen Körper begleiten mich durch den Tag.',
+      'Ich belohne mich mit Essen, wenn etwas gut gelaufen ist.',
+      'Ich esse manchmal, um ein unangenehmes Gefühl wegzumachen – Angst, Druck, Traurigkeit.',
+      'Wenn ich unter Beobachtung esse, esse ich weniger als wenn ich allein bin.',
+      'Ich wünschte, ich könnte einfach essen, ohne so viel darüber nachzudenken.',
+    ];
+
+    const blocks = [
+      { letter: 'A', name: 'Auslöser' },
+      { letter: 'B', name: 'Muster' },
+      { letter: 'C', name: 'Gedanken & Gefühle' },
+    ];
+    const bi = qIndex < 5 ? 0 : (qIndex < 10 ? 1 : 2);
+
+    const labels = ['trifft gar nicht zu', 'trifft selten zu', 'trifft oft zu', 'trifft fast immer zu'];
+    const sel = s.answers[qIndex];
+    const answerOptions = [1, 2, 3, 4].map((v) => {
+      const selected = sel === v;
+      return {
+        value: v,
+        label: labels[v - 1],
+        bg: selected ? 'var(--ms-sage)' : 'var(--ms-white)',
+        fg: selected ? 'var(--ms-cream)' : 'var(--ms-charcoal)',
+        border: selected ? 'var(--ms-sage)' : 'rgba(71,97,96,0.22)',
+        shadow: selected ? '0 10px 24px rgba(71,97,96,0.28)' : '0 1px 3px rgba(27,32,32,0.05)',
+        anim: selected ? 'ee-pulse 400ms var(--ms-ease)' : 'none',
+        onClick: () => this.selectAnswer(v),
+      };
+    });
+
+    const score = s.answers.reduce((a, b) => a + (b || 0), 0);
+    const RESULTS = [
+      {
+        min: 15, max: 25, range: '15–25 Punkte', name: 'Die Bewusste',
+        color: 'var(--ms-sage)', onColor: 'var(--ms-cream)', eyebrow: 'var(--ms-sage)',
+        text: 'Du hast ein feines Gespür für dich und deinen Körper. Essen ist für dich meistens das, was es sein soll – Nahrung, Genuss, Pause. Stress und Gefühle bringen dich nur selten aus dem Takt. Halt dir dieses Bewusstsein warm: Es ist dein größter Schutz.',
+      },
+      {
+        min: 26, max: 40, range: '26–40 Punkte', name: 'Die Suchende',
+        color: '#D8A790', onColor: 'var(--ms-charcoal)', eyebrow: '#B87E5E',
+        text: 'Du spürst, dass Essen bei dir manchmal mehr ist als Hunger. Mal trägt es dich, mal trägt es dich davon. Du bist mitten auf dem Weg – aufmerksam, ehrlich, suchend. Und genau hier beginnt Veränderung: nicht mit Strenge, sondern mit Verstehen.',
+      },
+      {
+        min: 41, max: 52, range: '41–52 Punkte', name: 'Die Kämpferin',
+        color: 'var(--ms-terracotta)', onColor: 'var(--ms-cream)', eyebrow: 'var(--ms-terracotta)',
+        text: 'Du kämpfst – mit dem Essen, mit dir, mit dem ewigen Hin und Her. Das kostet Kraft, jeden einzelnen Tag. Aber dass du hier bist und ehrlich hinschaust, zeigt deine Stärke. Du musst diesen Kampf nicht allein führen – und du musst ihn auch nicht gewinnen. Du darfst ihn loslassen.',
+      },
+      {
+        min: 53, max: 60, range: '53–60 Punkte', name: 'Die Erschöpfte',
+        color: '#D1B388', onColor: 'var(--ms-charcoal)', eyebrow: '#A98A4E',
+        text: 'Essen, Körper, Kontrolle – es nimmt gerade sehr viel Raum ein, und das macht müde. Bitte sei sanft mit dir: Das hier ist kein Versagen, sondern ein leiser Hilferuf deiner Seele. Du verdienst Unterstützung und Leichtigkeit. Lass uns den ersten Schritt zusammen gehen.',
+      },
+    ];
+    const result = RESULTS.find((r) => score >= r.min && score <= r.max) || RESULTS[0];
+    const typeIndex = RESULTS.indexOf(result);
+
+    const AVATARS = [
+      { suit: '#476160', suitDeep: '#3A504F', cape: '#34484A', mask: '#2C3E3C', hair: '#3A2E28', skin: '#EAC6A6', emblem: '#EFE7DD' },
+      { suit: '#CC8F6E', suitDeep: '#A86E4E', cape: '#8A5740', mask: '#7A4A33', hair: '#4A3A30', skin: '#EAC6A6', emblem: '#FAF3EC' },
+      { suit: '#CA5D25', suitDeep: '#A8431B', cape: '#8A3614', mask: '#FD6500', hair: '#2A2320', skin: '#EAC6A6', emblem: '#FBE7D6' },
+      { suit: '#C9A85E', suitDeep: '#A98A4E', cape: '#8A6E3A', mask: '#7A6030', hair: '#3A2E28', skin: '#EAC6A6', emblem: '#FAF3E2' },
+    ];
+    const resultAvatar = AVATARS[typeIndex] || AVATARS[0];
+
+    return {
+      opacity: s.opacity,
+      isHero: s.screen === 'hero',
+      isQuiz: s.screen === 'quiz',
+      isCapture: s.screen === 'capture',
+      isResult: s.screen === 'result',
+      isCta: s.screen === 'cta',
+
+      email: s.email,
+      emailErr: s.emailErr,
+      hasEmailErr: !!s.emailErr,
+      leadSubmitted: s.leadSubmitted,
+      emailBorder: s.emailErr ? '#CA5D25' : 'rgba(239,231,221,0.35)',
+
+      accent: this.props.accent ?? '#CA5D25',
+      heroTitle: this.props.heroTitle ?? 'Bin ich ein emotionaler Esser?',
+      heroSubline: this.props.heroSubline ?? '15 ehrliche Fragen. Eine klare Antwort.',
+
+      qNumber: qIndex + 1,
+      progressPct: (((qIndex + 1) / 15) * 100) + '%',
+      blockTag: 'Block ' + blocks[bi].letter + ' · ' + blocks[bi].name,
+      questionText: QUESTIONS[qIndex],
+      answerOptions,
+
+      score,
+      resultColor: result.color,
+      resultOnColor: result.onColor,
+      resultEyebrow: result.eyebrow,
+      resultRange: result.range,
+      resultName: result.name,
+      resultText: result.text,
+      isType0: result === RESULTS[0],
+      isType1: result === RESULTS[1],
+      isType2: result === RESULTS[2],
+      isType3: result === RESULTS[3],
+      avSuit: resultAvatar.suit, avSuitDeep: resultAvatar.suitDeep, avCape: resultAvatar.cape,
+      avMask: resultAvatar.mask, avHair: resultAvatar.hair, avSkin: resultAvatar.skin, avEmblem: resultAvatar.emblem,
+      confirmText: 'Deine ausführliche Auswertung ist unterwegs zu ' + (s.email || 'dir') + '.',
+
+      refl0: s.reflections[0],
+      refl1: s.reflections[1],
+      refl2: s.reflections[2],
+
+      onStart: this.start,
+      onBack: this.back,
+      onEmail: (e) => this.setEmail(e.target.value),
+      onEmailKey: this.emailKey,
+      onSubmitLead: this.submitLead,
+      onBackCapture: this.backCapture,
+      onToCta: this.toCta,
+      onBackCta: this.backCta,
+      onRestart: this.restart,
+      onRefl0: (e) => this.setRefl(0, e.target.value),
+      onRefl1: (e) => this.setRefl(1, e.target.value),
+      onRefl2: (e) => this.setRefl(2, e.target.value),
+
+      carouselCard: Object.assign({}, RESULTS[s.carouselIdx] || RESULTS[0], {
+        initial: ['B','S','K','E'][s.carouselIdx] || 'B',
+      }, AVATARS[s.carouselIdx] || AVATARS[0]),
+      carouselDots: RESULTS.map((r, i) => ({
+        active: i === s.carouselIdx,
+        bg: i === s.carouselIdx ? 'rgba(239,231,221,0.92)' : 'rgba(239,231,221,0.28)',
+        w: i === s.carouselIdx ? '24px' : '8px',
+        onClick: () => this.setState({ carouselIdx: i }),
+      })),
+      onCarouselPrev: this.carouselPrev,
+      onCarouselNext: this.carouselNext,
+    };
+  }
+}
+</script>
+</body>
+</html>

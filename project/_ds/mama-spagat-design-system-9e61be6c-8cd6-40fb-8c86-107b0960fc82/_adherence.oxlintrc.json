@@ -1,0 +1,197 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": [
+          {
+            "group": [
+              "ui_kits/link_in_bio/**",
+              "ui_kits/sales_page/**"
+            ],
+            "message": "Import design-system components from 'index.js', not component internals."
+          }
+        ]
+      }
+    ],
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var()."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing token via var()."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:TAN AEGEAN|Montserrat|Cormorant Garamond))/i]",
+        "message": "Font not provided by the design system. Available: TAN AEGEAN, Montserrat, Cormorant Garamond."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/index.js"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "x-omelette": {
+    "components": {},
+    "tokens": [
+      "--ms-accent",
+      "--ms-accent-fg",
+      "--ms-bg-card",
+      "--ms-bg-page",
+      "--ms-bg-subtle",
+      "--ms-blush",
+      "--ms-bone",
+      "--ms-border",
+      "--ms-border-strong",
+      "--ms-charcoal",
+      "--ms-cream",
+      "--ms-dur",
+      "--ms-dur-fast",
+      "--ms-dur-slow",
+      "--ms-ease",
+      "--ms-ember",
+      "--ms-fg-1",
+      "--ms-fg-2",
+      "--ms-fg-3",
+      "--ms-font-body",
+      "--ms-font-display",
+      "--ms-font-script",
+      "--ms-font-ui",
+      "--ms-gold",
+      "--ms-ink",
+      "--ms-muted",
+      "--ms-orange",
+      "--ms-peach",
+      "--ms-radius-lg",
+      "--ms-radius-md",
+      "--ms-radius-pill",
+      "--ms-radius-sm",
+      "--ms-radius-xl",
+      "--ms-sage",
+      "--ms-sage-deep",
+      "--ms-sage-soft",
+      "--ms-sand",
+      "--ms-shadow-card",
+      "--ms-shadow-hero",
+      "--ms-shadow-lift",
+      "--ms-shadow-soft",
+      "--ms-space-1",
+      "--ms-space-10",
+      "--ms-space-2",
+      "--ms-space-3",
+      "--ms-space-4",
+      "--ms-space-5",
+      "--ms-space-6",
+      "--ms-space-7",
+      "--ms-space-8",
+      "--ms-space-9",
+      "--ms-terracotta",
+      "--ms-terracotta-deep",
+      "--ms-terracotta-soft",
+      "--ms-text-2xl",
+      "--ms-text-3xl",
+      "--ms-text-4xl",
+      "--ms-text-5xl",
+      "--ms-text-base",
+      "--ms-text-lg",
+      "--ms-text-md",
+      "--ms-text-sm",
+      "--ms-text-xl",
+      "--ms-text-xs",
+      "--ms-warm-white",
+      "--ms-white"
+    ],
+    "tokenKinds": {
+      "--ms-terracotta": "color",
+      "--ms-orange": "color",
+      "--ms-terracotta-deep": "color",
+      "--ms-sage": "color",
+      "--ms-sage-deep": "color",
+      "--ms-ink": "color",
+      "--ms-charcoal": "color",
+      "--ms-muted": "color",
+      "--ms-cream": "color",
+      "--ms-blush": "color",
+      "--ms-white": "color",
+      "--ms-bone": "color",
+      "--ms-warm-white": "color",
+      "--ms-sage-soft": "color",
+      "--ms-peach": "color",
+      "--ms-terracotta-soft": "color",
+      "--ms-sand": "color",
+      "--ms-gold": "color",
+      "--ms-ember": "color",
+      "--ms-fg-1": "color",
+      "--ms-fg-2": "color",
+      "--ms-fg-3": "color",
+      "--ms-bg-page": "color",
+      "--ms-bg-card": "color",
+      "--ms-bg-subtle": "color",
+      "--ms-accent": "color",
+      "--ms-accent-fg": "color",
+      "--ms-border": "color",
+      "--ms-border-strong": "color",
+      "--ms-font-display": "font",
+      "--ms-font-script": "font",
+      "--ms-font-body": "font",
+      "--ms-font-ui": "font",
+      "--ms-text-xs": "font",
+      "--ms-text-sm": "font",
+      "--ms-text-base": "font",
+      "--ms-text-md": "font",
+      "--ms-text-lg": "font",
+      "--ms-text-xl": "font",
+      "--ms-text-2xl": "font",
+      "--ms-text-3xl": "font",
+      "--ms-text-4xl": "font",
+      "--ms-text-5xl": "font",
+      "--ms-space-1": "spacing",
+      "--ms-space-2": "spacing",
+      "--ms-space-3": "spacing",
+      "--ms-space-4": "spacing",
+      "--ms-space-5": "spacing",
+      "--ms-space-6": "spacing",
+      "--ms-space-7": "spacing",
+      "--ms-space-8": "spacing",
+      "--ms-space-9": "spacing",
+      "--ms-space-10": "spacing",
+      "--ms-radius-sm": "radius",
+      "--ms-radius-md": "radius",
+      "--ms-radius-lg": "radius",
+      "--ms-radius-xl": "radius",
+      "--ms-radius-pill": "radius",
+      "--ms-shadow-soft": "shadow",
+      "--ms-shadow-card": "shadow",
+      "--ms-shadow-lift": "shadow",
+      "--ms-shadow-hero": "shadow",
+      "--ms-ease": "other",
+      "--ms-dur-fast": "other",
+      "--ms-dur": "other",
+      "--ms-dur-slow": "other"
+    },
+    "fontFamilies": [
+      "Cormorant Garamond",
+      "Montserrat",
+      "TAN AEGEAN"
+    ]
+  }
+}

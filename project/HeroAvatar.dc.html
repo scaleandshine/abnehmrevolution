@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<svg viewBox="0 0 240 240" width="100%" height="100%" style="display:block" preserveAspectRatio="xMidYMax meet" aria-label="{{ label }}" role="img">
+  <!-- cape -->
+  <path d="M64 148 Q14 196 24 240 L120 240 L120 150 Z" fill="{{ cape }}"></path>
+  <path d="M176 148 Q226 196 216 240 L120 240 L120 150 Z" fill="{{ cape }}"></path>
+  <path d="M64 148 Q40 188 48 240 L120 240 L120 150 Z" fill="{{ suitDeep }}" opacity="0.45"></path>
+  <path d="M176 148 Q200 188 192 240 L120 240 L120 150 Z" fill="{{ suitDeep }}" opacity="0.45"></path>
+  <!-- shoulders / suit -->
+  <path d="M40 240 Q40 182 120 178 Q200 182 200 240 Z" fill="{{ suit }}"></path>
+  <!-- suit V chest panels -->
+  <path d="M120 186 L156 240 L184 240 Q170 200 130 186 Z" fill="{{ suitDeep }}" opacity="0.55"></path>
+  <path d="M120 186 L84 240 L56 240 Q70 200 110 186 Z" fill="{{ suitDeep }}" opacity="0.55"></path>
+  <!-- chest emblem star -->
+  <path d="M120 198 L125 211 L139 211 L128 220 L132 234 L120 226 L108 234 L112 220 L101 211 L115 211 Z" fill="{{ emblem }}"></path>
+  <!-- neck -->
+  <rect x="106" y="150" width="28" height="34" rx="14" fill="{{ skin }}"></rect>
+  <!-- hair back -->
+  <path d="M60 118 Q50 38 120 34 Q190 38 180 118 Q178 170 156 180 Q174 132 165 96 L75 96 Q66 132 84 180 Q62 170 60 118 Z" fill="{{ hair }}"></path>
+  <!-- side locks -->
+  <path d="M70 112 Q56 156 72 196 L86 196 Q70 154 82 112 Z" fill="{{ hair }}"></path>
+  <path d="M170 112 Q184 156 168 196 L154 196 Q170 154 158 112 Z" fill="{{ hair }}"></path>
+  <!-- head -->
+  <ellipse cx="120" cy="106" rx="46" ry="50" fill="{{ skin }}"></ellipse>
+  <!-- front fringe -->
+  <path d="M74 98 Q70 52 120 50 Q170 52 166 98 Q150 72 120 74 Q92 76 74 98 Z" fill="{{ hair }}"></path>
+  <!-- cheeks -->
+  <circle cx="96" cy="120" r="8.5" fill="#D98C5F" opacity="0.26"></circle>
+  <circle cx="144" cy="120" r="8.5" fill="#D98C5F" opacity="0.26"></circle>
+  <!-- mask -->
+  <path d="M58 90 L74 98 Q72 84 96 84 Q120 86 144 84 Q168 84 166 98 L182 90 L168 104 Q176 120 148 124 Q150 110 138 107 Q120 104 102 107 Q90 110 92 124 Q64 120 72 104 Z" fill="{{ mask }}"></path>
+  <path d="M58 90 L74 98 Q72 84 96 84 Q120 86 144 84 Q168 84 166 98 L182 90 L168 104 Q176 120 148 124 Q150 110 138 107 Q120 104 102 107 Q90 110 92 124 Q64 120 72 104 Z" fill="#FFFFFF" opacity="0.12"></path>
+  <!-- eye holes -->
+  <ellipse cx="101" cy="104" rx="11" ry="8" fill="{{ skin }}"></ellipse>
+  <ellipse cx="139" cy="104" rx="11" ry="8" fill="{{ skin }}"></ellipse>
+  <!-- eyes -->
+  <circle cx="101" cy="105" r="4.4" fill="#2A2320"></circle>
+  <circle cx="139" cy="105" r="4.4" fill="#2A2320"></circle>
+  <circle cx="102.6" cy="103.4" r="1.4" fill="#FAF7F6"></circle>
+  <circle cx="140.6" cy="103.4" r="1.4" fill="#FAF7F6"></circle>
+  <!-- nose hint -->
+  <path d="M120 116 Q116 126 121 130" stroke="#C99A78" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.6"></path>
+  <!-- lips -->
+  <path d="M107 140 Q120 150 133 140 Q120 145 107 140 Z" fill="#C0654A"></path>
+  <path d="M107 140 Q120 147 133 140" stroke="#9E4E38" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.7"></path>
+</svg>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 200, &quot;height&quot;: 200 },
+  &quot;suit&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#CA5D25&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;suitDeep&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#8A3614&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;cape&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#8A3614&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;mask&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FD6500&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;hair&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#2A2320&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;skin&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#EAC6A6&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;emblem&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#EFE7DD&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;label&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Hero&quot;, &quot;tsType&quot;: &quot;string&quot; }
+}"></script>
+</body>
+</html>
