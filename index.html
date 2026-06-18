@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bin ich ein emotionaler Esser? | Mama Spagat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+@font-face {
+  font-family: 'TAN AEGEAN';
+  src: url('project/_ds/mama-spagat-design-system-9e61be6c-8cd6-40fb-8c86-107b0960fc82/fonts/TAN-AEGEAN/TANAEGEAN-Regular.otf') format('opentype'),
+       url('project/_ds/mama-spagat-design-system-9e61be6c-8cd6-40fb-8c86-107b0960fc82/fonts/TAN-AEGEAN/TANAEGEAN-Regular.ttf') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+:root {
+  --ms-terracotta:      #CA5D25;
+  --ms-terracotta-deep: #A8431B;
+  --ms-sage:            #476160;
+  --ms-sage-deep:       #3A504F;
+  --ms-ink:             #0C1114;
+  --ms-charcoal:        #1B2020;
+  --ms-muted:           #7A6F63;
+  --ms-cream:           #EFE7DD;
+  --ms-blush:           #F7E0D1;
+  --ms-white:           #FAF7F6;
+  --fd: 'TAN AEGEAN', 'Cormorant Garamond', Georgia, serif;
+  --fb: 'Montserrat', system-ui, sans-serif;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100%; background: var(--ms-cream); font-family: var(--fb); -webkit-font-smoothing: antialiased; }
+#main { min-height: 100dvh; transition: opacity 260ms var(--ease); }
+button, input, textarea { font-family: var(--fb); }
+::placeholder { color: rgba(122,111,99,0.55); }
+textarea:focus, input:focus { outline: none; }
+@keyframes pulse { 0%{transform:scale(1)} 42%{transform:scale(1.07)} 100%{transform:scale(1)} }
+
+/* Shared button styles */
+.btn-orange {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 18px 40px; border: none; border-radius: 14px;
+  background: var(--ms-terracotta); color: var(--ms-cream);
+  font-family: var(--fb); font-weight: 700; font-size: 15px;
+  letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.22); text-decoration: none;
+  transition: transform 160ms var(--ease), box-shadow 220ms var(--ease);
+}
+.btn-orange:hover { transform: translateY(-2px); box-shadow: 0 18px 38px rgba(0,0,0,0.28); }
+.btn-orange:active { transform: scale(0.98); }
+.btn-ghost-light { background: none; border: none; cursor: pointer; color: rgba(239,231,221,0.55); font-family: var(--fb); font-size: 13px; font-weight: 600; padding: 6px; transition: color 150ms; }
+.btn-ghost-light:hover { color: var(--ms-cream); }
+.btn-ghost-dark { background: none; border: none; cursor: pointer; color: var(--ms-muted); font-family: var(--fb); font-size: 13px; font-weight: 600; transition: color 150ms; }
+.btn-ghost-dark:hover { color: var(--ms-sage); }
+.footer-label { font-family: var(--fb); font-size: 12px; letter-spacing: 0.12em; color: rgba(239,231,221,0.5); }
+.footer-label-sage { font-family: var(--fb); font-size: 12px; letter-spacing: 0.12em; font-weight: 600; color: var(--ms-sage); }
+</style>
+</head>
+<body>
+<div id="main"></div>
+<div id="admin-panel" style="display:none;position:fixed;top:16px;right:16px;z-index:9999;background:var(--ms-cream);border:1.5px solid rgba(71,97,96,0.22);border-radius:20px;padding:20px 22px 18px;box-shadow:0 16px 40px rgba(27,32,32,0.14);max-width:420px;width:calc(100vw - 32px);font-family:var(--fb)"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// KONFIGURATION — vor dem Live-Gang ausfüllen
+// ═══════════════════════════════════════════════════════════
+var CONFIG = {
+  // EmailJS: emailjs.com (kostenlos bis 200 E-Mails/Monat)
+  // Setup: 1) Account erstellen  2) Gmail-Service hinzufügen  3) 2 Templates anlegen
+  //   Template "ms_notify"  → An: hello@vanessareinthaller.de, Body: {{message}}
+  //   Template "ms_result"  → An: {{to_email}}, HTML-Body: {{{message}}}
+  // 4) Public Key + Service ID + Template-IDs hier eintragen
+  emailjs: {
+    publicKey: 'YOUR_PUBLIC_KEY',
+    serviceId: 'service_XXXXXXX',
+    notifyTpl: 'template_notify',
+    resultTpl: 'template_result'
+  },
+  notifyTo:   'hello@vanessareinthaller.de',
+  workshopUrl:'https://start.vanessareinthaller.de/emotionaler-esser-test'
+};
+
+function track(event, params) {
+  try {
+    var raw = localStorage.getItem('ms_stats_v1') || '{}';
+    var st = JSON.parse(raw);
+    st[event] = (st[event] || 0) + 1;
+    localStorage.setItem('ms_stats_v1', JSON.stringify(st));
+  } catch(e) {}
+}
+function getStats() {
+  try { return JSON.parse(localStorage.getItem('ms_stats_v1') || '{}'); } catch(e) { return {}; }
+}
+
+// ═══════════════════════════════════════════════════════════
+// State
+// ═══════════════════════════════════════════════════════════
+var state = {
+  screen: 'hero',
+  qIndex: 0,
+  answers: new Array(15).fill(null),
+  reflections: ['', '', ''],
+  email: '',
+  emailErr: '',
+  leadSubmitted: false,
+  carouselIdx: 0
+};
+
+function saveState() {
+  try {
+    localStorage.setItem('ms_eater_v1', JSON.stringify({
+      screen: state.screen, qIndex: state.qIndex, answers: state.answers,
+      reflections: state.reflections, email: state.email, leadSubmitted: state.leadSubmitted
+    }));
+  } catch(e) {}
+}
+function loadState() {
+  try {
+    var raw = localStorage.getItem('ms_eater_v1');
+    if (!raw) return;
+    var s = JSON.parse(raw);
+    if (s.screen) state.screen = s.screen;
+    if (typeof s.qIndex === 'number') state.qIndex = s.qIndex;
+    if (Array.isArray(s.answers) && s.answers.length === 15) state.answers = s.answers;
+    if (Array.isArray(s.reflections) && s.reflections.length === 3) state.reflections = s.reflections;
+    if (typeof s.email === 'string') state.email = s.email;
+    if (typeof s.leadSubmitted === 'boolean') state.leadSubmitted = s.leadSubmitted;
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════════════
+// Quiz content
+// ═══════════════════════════════════════════════════════════
+var QUESTIONS = [
+  'Wenn ich gestresst bin, denke ich schneller an Essen als an etwas anderes.',
+  'Nach einem langen, anstrengenden Tag esse ich mehr als ich eigentlich wollte.',
+  'Wenn ich mich einsam oder unverstanden fühle, tröstet mich Essen.',
+  'Wenn ich mich langweile, wandere ich in die Küche – auch ohne Hunger.',
+  'Ich esse anders, wenn ich alleine bin, als wenn andere dabei sind.',
+  'Ich esse manchmal so schnell, dass ich erst danach merke, wie viel ich gegessen habe.',
+  'Wenn ich einmal vom Plan abweiche, denke ich: Jetzt ist es sowieso egal.',
+  'Ich habe bestimmte Lebensmittel, die ich in schwierigen Momenten fast automatisch greife.',
+  'Nach dem Essen fühle ich mich manchmal schuldig – obwohl ich körperlich satt bin.',
+  'Ich unterscheide kaum, ob ich Hunger habe oder ob ich einfach etwas essen will.',
+  'Gedanken über Essen, Kalorien oder meinen Körper begleiten mich durch den Tag.',
+  'Ich belohne mich mit Essen, wenn etwas gut gelaufen ist.',
+  'Ich esse manchmal, um ein unangenehmes Gefühl wegzumachen – Angst, Druck, Traurigkeit.',
+  'Wenn ich unter Beobachtung esse, esse ich weniger als wenn ich allein bin.',
+  'Ich wünschte, ich könnte einfach essen, ohne so viel darüber nachzudenken.'
+];
+var BLOCKS = ['Block A · Auslöser', 'Block B · Muster', 'Block C · Gedanken & Gefühle'];
+var ANS_LABELS = ['trifft gar nicht zu', 'trifft selten zu', 'trifft oft zu', 'trifft fast immer zu'];
+var RESULTS = [
+  { min:15, max:25, range:'15–25 Punkte', name:'Die Bewusste',   color:'#476160', eyebrow:'#476160',
+    text:'Du hast ein feines Gespür für dich und deinen Körper. Essen ist für dich meistens das, was es sein soll – Nahrung, Genuss, Pause. Stress und Gefühle bringen dich nur selten aus dem Takt. Halt dir dieses Bewusstsein warm: Es ist dein größter Schutz.' },
+  { min:26, max:40, range:'26–40 Punkte', name:'Die Suchende',   color:'#D8A790', eyebrow:'#B87E5E',
+    text:'Du spürst, dass Essen bei dir manchmal mehr ist als Hunger. Mal trägt es dich, mal trägt es dich davon. Du bist mitten auf dem Weg – aufmerksam, ehrlich, suchend. Genau hier beginnt Veränderung: nicht mit Strenge, sondern mit Verstehen.' },
+  { min:41, max:52, range:'41–52 Punkte', name:'Die Kämpferin',  color:'#CA5D25', eyebrow:'#CA5D25',
+    text:'Du kämpfst – mit dem Essen, mit dir, mit dem ewigen Hin und Her. Das kostet Kraft, jeden einzelnen Tag. Aber dass du hier bist und ehrlich hinschaust, zeigt deine Stärke. Du musst diesen Kampf nicht allein führen – und du darfst ihn loslassen.' },
+  { min:53, max:60, range:'53–60 Punkte', name:'Die Erschöpfte', color:'#D1B388', eyebrow:'#A98A4E',
+    text:'Essen, Körper, Kontrolle – es nimmt gerade sehr viel Raum ein, und das macht müde. Sei sanft mit dir: Das ist kein Versagen, sondern ein leiser Hilferuf deiner Seele. Du verdienst Unterstützung und Leichtigkeit. Lass uns den ersten Schritt zusammen gehen.' }
+];
+var AVATARS = [
+  { suit:'#476160', suitDeep:'#3A504F', cape:'#34484A', mask:'#2C3E3C', hair:'#3A2E28', skin:'#EAC6A6', emblem:'#EFE7DD' },
+  { suit:'#CC8F6E', suitDeep:'#A86E4E', cape:'#8A5740', mask:'#7A4A33', hair:'#4A3A30', skin:'#EAC6A6', emblem:'#FAF3EC' },
+  { suit:'#CA5D25', suitDeep:'#A8431B', cape:'#8A3614', mask:'#FD6500', hair:'#2A2320', skin:'#EAC6A6', emblem:'#FBE7D6' },
+  { suit:'#C9A85E', suitDeep:'#A98A4E', cape:'#8A6E3A', mask:'#7A6030', hair:'#3A2E28', skin:'#EAC6A6', emblem:'#FAF3E2' }
+];
+var DETAILED = {
+  'Die Bewusste': {
+    hl: 'Du hast ein gesundes Fundament — und das ist kostbarer als du denkst.',
+    body: 'Du unterscheidest meistens intuitiv zwischen echtem Hunger und emotionalem Verlangen. Das klingt selbstverständlich, ist es aber nicht — viele Frauen verlieren diesen Kontakt zu ihrem Körper über Jahre hinweg.\n\nDeine 3 nächsten Schritte:\n1. Pflege dieses Bewusstsein aktiv — beobachte einmal täglich kurz vor dem Essen, was dich antreibt.\n2. Schau auf die Momente, in denen du doch automatisch greifst — nicht mit Urteil, sondern mit Neugier.\n3. Nutze dein Fundament: Im Workshop zeige ich dir, wie du von hier aus eine leichte, freudvolle Beziehung zum Essen aufbaust.'
+  },
+  'Die Suchende': {
+    hl: 'Du bist auf dem Weg — und Suchen ist mutig.',
+    body: 'Du spürst es: Manchmal ist Essen mehr als Hunger. Mal tröstet es, mal lenkt es ab, mal füllt es etwas auf, was kein Lebensmittel wirklich füllen kann. Dass du dir das eingestehst — das ist der erste und wichtigste Schritt.\n\nDeine 3 nächsten Schritte:\n1. Pause vor dem Essen: Frag dich kurz — „Bin ich hungrig, oder fühle ich gerade etwas?"\n2. Führe 3 Tage lang ein kurzes Gefühls-Essen-Protokoll. Nicht Kalorien — nur Situation und Gefühl.\n3. Komm in den Workshop: Ich begleite dich durch diesen Erkenntnisprozess mit konkreten Übungen.'
+  },
+  'Die Kämpferin': {
+    hl: 'Du kämpfst — und dass du hier bist, zeigt deine Stärke.',
+    body: 'Dieser Kampf, den du jeden Tag kämpfst — mit dem Essen, mit dir selbst, mit dem Hin und Her — kostet enorm viel Kraft. Aber: Dein Gehirn hat gelernt, Gefühle über Essen zu regulieren. Das ist keine Schwäche. Das ist eine Strategie, die du ersetzen kannst.\n\nDeine 3 dringlichsten Schritte:\n1. Hör auf, dich nach jedem „Rückfall" zu bestrafen — Scham verstärkt das Muster.\n2. Finde einen Anker außerhalb des Essens: eine Atemübung, ein Lied, eine Bewegung.\n3. Komm in den Workshop: Ich zeige dir, wie du diesen Kreislauf sanft durchbrichst — ohne Verbote.'
+  },
+  'Die Erschöpfte': {
+    hl: 'Bitte lies das mit aller Sanftheit, die du dir selbst gegenüber aufbringen kannst.',
+    body: 'Du bist erschöpft. Nicht schwach — erschöpft. Das ist ein wichtiger Unterschied.\n\nEssen, Körper, Kontrolle, Gedanken — all das nimmt so viel Raum ein, dass kaum noch Platz bleibt für das Leben dahinter. Das ist kein Versagen. Das ist ein leiser Hilferuf deiner Seele, der schon lange ruft.\n\nDeine 3 wichtigsten Schritte:\n1. Sei sanft mit dir. Heute. Nicht perfekt — nur sanft.\n2. Sag dir: „Ich verdiene Unterstützung." Und dann versuche, es zu glauben.\n3. Komm in den Workshop: Nicht weil du musst — sondern weil du es verdienst.'
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+// Helpers
+// ═══════════════════════════════════════════════════════════
+function esc(v) {
+  return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function getScore() {
+  return state.answers.reduce(function(a,b){ return a + (b||0); }, 0);
+}
+function getResult() {
+  var sc = getScore();
+  for (var i=0; i<RESULTS.length; i++) {
+    if (sc >= RESULTS[i].min && sc <= RESULTS[i].max) return i;
+  }
+  return 0;
+}
+
+function heroSvg(av, w, h) {
+  return '<svg viewBox="0 0 240 240" width="'+(w||'100%')+'" height="'+(h||'100%')+'" style="display:block" preserveAspectRatio="xMidYMax meet">'
+    +'<path d="M64 148 Q14 196 24 240 L120 240 L120 150 Z" fill="'+av.cape+'"/>'
+    +'<path d="M176 148 Q226 196 216 240 L120 240 L120 150 Z" fill="'+av.cape+'"/>'
+    +'<path d="M64 148 Q40 188 48 240 L120 240 L120 150 Z" fill="'+av.suitDeep+'" opacity="0.45"/>'
+    +'<path d="M176 148 Q200 188 192 240 L120 240 L120 150 Z" fill="'+av.suitDeep+'" opacity="0.45"/>'
+    +'<path d="M40 240 Q40 182 120 178 Q200 182 200 240 Z" fill="'+av.suit+'"/>'
+    +'<path d="M120 186 L156 240 L184 240 Q170 200 130 186 Z" fill="'+av.suitDeep+'" opacity="0.55"/>'
+    +'<path d="M120 186 L84 240 L56 240 Q70 200 110 186 Z" fill="'+av.suitDeep+'" opacity="0.55"/>'
+    +'<path d="M120 198 L125 211 L139 211 L128 220 L132 234 L120 226 L108 234 L112 220 L101 211 L115 211 Z" fill="'+av.emblem+'"/>'
+    +'<rect x="106" y="150" width="28" height="34" rx="14" fill="'+av.skin+'"/>'
+    +'<path d="M60 118 Q50 38 120 34 Q190 38 180 118 Q178 170 156 180 Q174 132 165 96 L75 96 Q66 132 84 180 Q62 170 60 118 Z" fill="'+av.hair+'"/>'
+    +'<path d="M70 112 Q56 156 72 196 L86 196 Q70 154 82 112 Z" fill="'+av.hair+'"/>'
+    +'<path d="M170 112 Q184 156 168 196 L154 196 Q170 154 158 112 Z" fill="'+av.hair+'"/>'
+    +'<ellipse cx="120" cy="106" rx="46" ry="50" fill="'+av.skin+'"/>'
+    +'<path d="M74 98 Q70 52 120 50 Q170 52 166 98 Q150 72 120 74 Q92 76 74 98 Z" fill="'+av.hair+'"/>'
+    +'<circle cx="96" cy="120" r="8.5" fill="#D98C5F" opacity="0.26"/>'
+    +'<circle cx="144" cy="120" r="8.5" fill="#D98C5F" opacity="0.26"/>'
+    +'<path d="M58 90 L74 98 Q72 84 96 84 Q120 86 144 84 Q168 84 166 98 L182 90 L168 104 Q176 120 148 124 Q150 110 138 107 Q120 104 102 107 Q90 110 92 124 Q64 120 72 104 Z" fill="'+av.mask+'"/>'
+    +'<path d="M58 90 L74 98 Q72 84 96 84 Q120 86 144 84 Q168 84 166 98 L182 90 L168 104 Q176 120 148 124 Q150 110 138 107 Q120 104 102 107 Q90 110 92 124 Q64 120 72 104 Z" fill="#FFF" opacity="0.12"/>'
+    +'<ellipse cx="101" cy="104" rx="11" ry="8" fill="'+av.skin+'"/>'
+    +'<ellipse cx="139" cy="104" rx="11" ry="8" fill="'+av.skin+'"/>'
+    +'<circle cx="101" cy="105" r="4.4" fill="#2A2320"/>'
+    +'<circle cx="139" cy="105" r="4.4" fill="#2A2320"/>'
+    +'<circle cx="102.6" cy="103.4" r="1.4" fill="#FAF7F6"/>'
+    +'<circle cx="140.6" cy="103.4" r="1.4" fill="#FAF7F6"/>'
+    +'<path d="M120 116 Q116 126 121 130" stroke="#C99A78" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.6"/>'
+    +'<path d="M107 140 Q120 150 133 140 Q120 145 107 140 Z" fill="#C0654A"/>'
+    +'<path d="M107 140 Q120 147 133 140" stroke="#9E4E38" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.7"/>'
+    +'</svg>';
+}
+
+// ═══════════════════════════════════════════════════════════
+// Email content
+// ═══════════════════════════════════════════════════════════
+function buildResultEmail(ri, score, reflections) {
+  var r = RESULTS[ri];
+  var d = DETAILED[r.name] || { hl:'', body:'' };
+  var ac = r.color;
+  var refl = reflections || ['','',''];
+  var hasRefl = refl.some(function(x){ return x && x.trim(); });
+  var bodyHtml = d.body.split('\n').map(function(l){
+    return l ? '<p style="margin:0 0 13px;font-family:Montserrat,Arial,sans-serif;font-size:15px;line-height:1.75;color:#1B2020;">'+esc(l)+'</p>' : '<br>';
+  }).join('');
+  var reflHtml = '';
+  if (hasRefl) {
+    reflHtml = '<tr><td style="background:#F7E0D1;padding:28px 32px;">'
+      +'<p style="margin:0 0 14px;font-family:Montserrat,Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#7A6F63;">Deine Reflexionen</p>'
+      + refl.map(function(rx){ return rx && rx.trim() ? '<p style="margin:0 0 12px;font-family:Montserrat,Arial,sans-serif;font-size:14px;line-height:1.65;color:#1B2020;font-style:italic;">"'+esc(rx.trim())+'"</p>' : ''; }).join('')
+      +'</td></tr>';
+  }
+  return '<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="margin:0;padding:0;background:#EFE7DD;font-family:Montserrat,Arial,sans-serif;">'
+    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#EFE7DD;padding:40px 16px;"><tr><td align="center">'
+    +'<table width="100%" style="max-width:560px;" cellpadding="0" cellspacing="0">'
+    +'<tr><td align="center" style="background:'+ac+';border-radius:20px 20px 0 0;padding:40px 32px 36px;">'
+    +'<p style="margin:0 0 14px;font-family:Montserrat,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:rgba(239,231,221,0.7);">Mama Spagat · Vanessa Reinthaller</p>'
+    +'<h1 style="margin:0;font-family:Georgia,serif;font-size:36px;font-weight:600;color:#EFE7DD;line-height:1.1;">Dein Ergebnis</h1>'
+    +'</td></tr>'
+    +'<tr><td align="center" style="background:#FAF7F6;padding:32px 32px 24px;">'
+    +'<p style="margin:0 0 6px;font-family:Montserrat,Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:'+ac+';">'+esc(r.range)+'</p>'
+    +'<h2 style="margin:0 0 18px;font-family:Georgia,serif;font-size:42px;font-weight:600;color:#0C1114;line-height:1;">'+esc(r.name)+'</h2>'
+    +'<p style="margin:0;display:inline-block;background:'+ac+';color:#EFE7DD;font-family:Montserrat,Arial,sans-serif;font-size:14px;font-weight:700;padding:8px 24px;border-radius:99px;">'+score+' / 60 Punkte</p>'
+    +'</td></tr>'
+    +'<tr><td style="background:#FAF7F6;padding:8px 32px 28px;">'
+    +'<h3 style="margin:0 0 16px;font-family:Georgia,serif;font-size:22px;font-weight:600;color:#0C1114;line-height:1.3;">'+esc(d.hl)+'</h3>'
+    +bodyHtml+'</td></tr>'
+    +reflHtml
+    +'<tr><td align="center" style="background:#476160;padding:36px 32px;border-radius:0 0 20px 20px;">'
+    +'<p style="margin:0 0 18px;font-family:Montserrat,Arial,sans-serif;font-size:16px;line-height:1.7;color:rgba(239,231,221,0.9);">Egal, welches Ergebnis du bekommen hast – du bist damit nicht allein. Im kostenlosen Workshop zeige ich dir deinen nächsten Schritt.</p>'
+    +'<a href="'+CONFIG.workshopUrl+'" style="display:inline-block;background:#CA5D25;color:#EFE7DD;font-family:Montserrat,Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:16px 36px;border-radius:12px;text-decoration:none;">Zum kostenlosen Workshop →</a>'
+    +'<p style="margin:20px 0 0;font-family:Montserrat,Arial,sans-serif;font-size:12px;color:rgba(239,231,221,0.5);">mama.spagat · vanessareinthaller.de</p>'
+    +'</td></tr></table></td></tr></table></body></html>';
+}
+
+function sendEmails(email, ri, score, reflections) {
+  if (typeof emailjs === 'undefined') return;
+  if (CONFIG.emailjs.publicKey === 'YOUR_PUBLIC_KEY') {
+    console.info('[EmailJS] CONFIG nicht ausgefüllt – E-Mail-Versand übersprungen.');
+    return;
+  }
+  var r = RESULTS[ri];
+  var ts = new Date().toLocaleString('de-AT', { timeZone:'Europe/Vienna' });
+  var refl = reflections || ['','',''];
+  var notifyText = 'Neue Conversion im Emotionaler-Esser-Test!\n\nZeitpunkt: '+ts+'\nE-Mail: '+email+'\nErgebnis: '+r.name+'\nPunktzahl: '+score+'/60\nBereich: '+r.range+'\n\nReflexionen:\n1. '+(refl[0]||'(leer)')+'\n2. '+(refl[1]||'(leer)')+'\n3. '+(refl[2]||'(leer)');
+  emailjs.send(CONFIG.emailjs.serviceId, CONFIG.emailjs.notifyTpl, {
+    to_email: CONFIG.notifyTo, result_name: r.name, score: String(score),
+    result_range: r.range, user_email: email,
+    refl_1: refl[0]||'(leer)', refl_2: refl[1]||'(leer)', refl_3: refl[2]||'(leer)',
+    message: notifyText
+  }).catch(function(e){ console.warn('[EmailJS] Notify failed:', e); });
+  emailjs.send(CONFIG.emailjs.serviceId, CONFIG.emailjs.resultTpl, {
+    to_email: email, result_name: r.name, score: String(score),
+    message: buildResultEmail(ri, score, reflections)
+  }).catch(function(e){ console.warn('[EmailJS] Result email failed:', e); });
+}
+
+// ═══════════════════════════════════════════════════════════
+// Screen renderers
+// ═══════════════════════════════════════════════════════════
+function screenHero() {
+  return '<section style="min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--ms-sage);padding:64px 26px 76px;text-align:center;position:relative;">'
+    +'<img src="project/assets/logo-script-light.png" alt="Mama Spagat" style="height:80px;width:auto;margin-bottom:42px;opacity:0.95" onerror="this.style.display=\'none\'">'
+    +'<span style="font-family:var(--fb);font-weight:600;font-size:13px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(239,231,221,0.62);margin-bottom:24px;display:block;">Der ehrliche Selbsttest</span>'
+    +'<h1 style="font-family:var(--fd);font-weight:600;font-size:clamp(40px,11.5vw,62px);line-height:1;letter-spacing:-0.01em;color:var(--ms-cream);max-width:600px;margin:0 0 22px;">Bin ich ein emotionaler Esser?</h1>'
+    +'<p style="font-family:var(--fd);font-style:italic;font-size:clamp(21px,5.5vw,28px);line-height:1.3;color:var(--ms-blush);margin:0 0 34px;max-width:470px;">15 knackige Fragen. Ehrlich beantwortet und du weißt es.</p>'
+    +'<p style="font-size:16px;line-height:1.75;color:rgba(239,231,221,0.84);max-width:430px;margin:0 0 42px;">Ich kenne dieses Ziehen zum Kühlschrank, wenn der Tag zu viel war. Lange dachte ich, mir fehle einfach Disziplin. Heute weiß ich: Es war nie der Hunger. Diese 15 Fragen helfen dir, ehrlich hinzuschauen – ohne Urteil.</p>'
+    +'<button class="btn-orange" data-action="start">Jetzt Test starten</button>'
+    +'<div style="display:flex;flex-direction:column;align-items:center;gap:11px;margin-top:60px;">'
+    +'<img src="project/assets/vanessa-avatar.png" alt="Vanessa" style="width:58px;height:58px;border-radius:999px;object-fit:cover;box-shadow:0 4px 14px rgba(0,0,0,0.2)" onerror="this.style.display=\'none\'">'
+    +'<span style="font-size:14px;font-weight:600;letter-spacing:0.04em;color:var(--ms-cream);">Vanessa Reinthaller</span></div>'
+    +'<span class="footer-label" style="position:absolute;bottom:22px;left:0;right:0;text-align:center;">mama.spagat</span>'
+    +'</section>';
+}
+
+function screenQuiz() {
+  var qi = state.qIndex;
+  var bi = qi < 5 ? 0 : (qi < 10 ? 1 : 2);
+  var sel = state.answers[qi];
+  var pct = Math.round(((qi+1)/15)*100);
+  var ansHtml = '';
+  for (var v=1; v<=4; v++) {
+    var isSel = sel === v;
+    ansHtml += '<button data-action="answer" data-val="'+v+'" class="ans-btn" style="display:flex;flex-direction:column;align-items:center;gap:9px;flex:1;min-width:0;padding:18px 6px 14px;border:1.5px solid '+(isSel?'var(--ms-sage)':'rgba(71,97,96,0.22)')+';border-radius:16px;background:'+(isSel?'var(--ms-sage)':'var(--ms-white)')+';color:'+(isSel?'var(--ms-cream)':'var(--ms-charcoal)')+';cursor:pointer;box-shadow:'+(isSel?'0 10px 24px rgba(71,97,96,0.28)':'0 1px 3px rgba(27,32,32,0.05)')+';animation:'+(isSel?'pulse 400ms var(--ease)':'none')+';transition:transform 150ms,background 220ms,color 220ms,border-color 220ms,box-shadow 220ms;">'
+      +'<span style="font-family:var(--fd);font-size:32px;font-weight:700;line-height:1;">'+v+'</span>'
+      +'<span style="font-size:10.5px;line-height:1.3;text-align:center;min-height:27px;display:flex;align-items:center;">'+ANS_LABELS[v-1]+'</span>'
+      +'</button>';
+  }
+  return '<section style="min-height:100dvh;display:flex;flex-direction:column;background:var(--ms-cream);padding:26px 22px 30px;">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:520px;width:100%;margin:0 auto 10px;">'
+    +'<button data-action="back" class="btn-ghost-dark" style="display:inline-flex;align-items:center;gap:6px;">← zurück</button>'
+    +'<span style="font-size:13px;font-weight:700;letter-spacing:0.12em;color:var(--ms-sage);white-space:nowrap;">'+(qi+1)+' / 15</span>'
+    +'</div>'
+    +'<div style="max-width:520px;width:100%;margin:0 auto 44px;height:5px;border-radius:999px;background:rgba(71,97,96,0.14);overflow:hidden;">'
+    +'<div style="height:100%;border-radius:999px;background:var(--ms-sage);width:'+pct+'%;transition:width 380ms var(--ease);"></div></div>'
+    +'<div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:520px;width:100%;margin:0 auto;">'
+    +'<span style="align-self:center;display:inline-flex;align-items:center;gap:8px;padding:7px 17px;border-radius:999px;background:var(--ms-blush);color:var(--ms-terracotta);font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:30px;">'+BLOCKS[bi]+'</span>'
+    +'<h2 style="font-family:var(--fd);font-weight:500;font-size:clamp(26px,6.6vw,38px);line-height:1.22;color:var(--ms-ink);text-align:center;margin:0 0 46px;">'+esc(QUESTIONS[qi])+'</h2>'
+    +'<div style="display:flex;gap:10px;justify-content:center;">'+ansHtml+'</div>'
+    +'</div>'
+    +'<span class="footer-label-sage" style="text-align:center;margin-top:30px;">mama.spagat</span>'
+    +'</section>';
+}
+
+function screenCapture() {
+  var errHtml = state.emailErr ? '<span style="font-size:13px;font-weight:600;color:#FBD9C4;">'+esc(state.emailErr)+'</span>' : '';
+  var bdr = state.emailErr ? '#CA5D25' : 'rgba(239,231,221,0.35)';
+  return '<section style="min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--ms-sage);padding:56px 26px 64px;text-align:center;position:relative;">'
+    +'<div style="display:inline-flex;align-items:center;gap:9px;padding:8px 18px;border-radius:999px;background:rgba(239,231,221,0.14);margin-bottom:26px;">'
+    +'<span style="width:8px;height:8px;border-radius:999px;background:#9FC0A8;flex-shrink:0;"></span>'
+    +'<span style="font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--ms-cream);white-space:nowrap;">Test abgeschlossen · 15 / 15</span></div>'
+    +'<h2 style="font-family:var(--fd);font-weight:600;font-size:clamp(34px,9vw,50px);line-height:1.02;color:var(--ms-cream);margin:0 0 18px;">Dein Ergebnis ist bereit.</h2>'
+    +'<p style="font-size:16px;line-height:1.72;color:rgba(239,231,221,0.88);max-width:430px;margin:0 0 30px;">Trag deine E-Mail ein und ich schicke dir deine <strong style="color:var(--ms-cream);font-weight:700;">ausführliche, persönliche Auswertung</strong> – und zeige dir direkt dein Ergebnis.</p>'
+    +'<div style="width:100%;max-width:380px;display:flex;flex-direction:column;gap:14px;text-align:left;margin-bottom:32px;">'
+    +['Deine persönliche Auswertung im Detail – was dein Typ wirklich bedeutet','Konkrete erste Schritte, abgestimmt auf genau dein Ergebnis','Einladung zum kostenlosen Workshop für Frauen 35+'].map(function(t){
+      return '<div style="display:flex;align-items:flex-start;gap:13px;"><span style="flex-shrink:0;width:24px;height:24px;border-radius:999px;background:var(--ms-terracotta);color:var(--ms-cream);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;margin-top:1px;">✓</span><span style="font-size:14.5px;line-height:1.5;color:rgba(239,231,221,0.92);">'+esc(t)+'</span></div>';
+    }).join('')+'</div>'
+    +'<div style="width:100%;max-width:380px;display:flex;flex-direction:column;gap:12px;">'
+    +'<input id="email-input" type="email" value="'+esc(state.email)+'" placeholder="deine@email.de" inputmode="email" autocomplete="email" style="width:100%;padding:17px 18px;border:1.5px solid '+bdr+';border-radius:14px;background:rgba(250,247,246,0.96);font-size:16px;color:var(--ms-charcoal);text-align:center;transition:border-color 180ms;">'
+    +errHtml
+    +'<button class="btn-orange" data-action="submit-lead" style="width:100%;">Auswertung jetzt freischalten</button></div>'
+    +'<p style="font-size:12px;line-height:1.6;color:rgba(239,231,221,0.6);max-width:340px;margin:18px 0 0;">100 % kostenlos. Kein Spam. Du kannst dich jederzeit abmelden.</p>'
+    +'<button class="btn-ghost-light" data-action="back-capture" style="margin-top:20px;">← zurück zur letzten Frage</button>'
+    +'<span class="footer-label" style="position:absolute;bottom:20px;left:0;right:0;text-align:center;">mama.spagat</span>'
+    +'</section>';
+}
+
+function screenResult() {
+  var ri = getResult();
+  var r = RESULTS[ri];
+  var av = AVATARS[ri];
+  var sc = getScore();
+  var confirmHtml = '';
+  if (state.leadSubmitted) {
+    confirmHtml = '<div style="display:inline-flex;align-items:center;gap:9px;padding:9px 18px;border-radius:999px;background:var(--ms-blush);margin-bottom:26px;max-width:100%;">'
+      +'<span style="flex-shrink:0;width:18px;height:18px;border-radius:999px;background:var(--ms-terracotta);color:var(--ms-cream);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;">✓</span>'
+      +'<span style="font-size:12.5px;font-weight:600;line-height:1.4;color:#A8431B;">Deine ausführliche Auswertung ist unterwegs zu '+esc(state.email||'dir')+'.</span></div>';
+  }
+  var reflHtml = '';
+  var reflQs = ['In welchen Momenten greifst du am häufigsten zum Essen – und was fühlst du kurz davor?','Was bräuchtest du in genau diesen Momenten wirklich, wenn es nicht das Essen wäre?','Was ist der eine kleine Schritt, den du dir diese Woche zutraust?'];
+  for (var i=0; i<3; i++) {
+    reflHtml += '<div style="display:flex;flex-direction:column;gap:11px;">'
+      +'<label style="font-size:15px;font-weight:600;color:var(--ms-charcoal);line-height:1.5;">'+(i+1)+'.&nbsp;&nbsp;'+esc(reflQs[i])+'</label>'
+      +'<textarea data-refl="'+i+'" rows="3" placeholder="Schreib ehrlich – nur für dich." style="width:100%;resize:vertical;border:1.5px solid rgba(71,97,96,0.22);border-radius:14px;background:var(--ms-white);padding:14px 16px;font-size:14px;line-height:1.6;color:var(--ms-charcoal);transition:border-color 180ms;">'+esc(state.reflections[i])+'</textarea></div>';
+  }
+  return '<section style="min-height:100dvh;display:flex;flex-direction:column;align-items:center;background:var(--ms-cream);padding:52px 22px 40px;">'
+    +'<div style="max-width:560px;width:100%;display:flex;flex-direction:column;align-items:center;text-align:center;">'
+    +confirmHtml
+    +'<span style="font-size:12px;font-weight:700;letter-spacing:0.26em;text-transform:uppercase;color:var(--ms-muted);margin-bottom:26px;display:block;">Dein Typ</span>'
+    +'<div style="position:relative;margin-bottom:22px;">'
+    +'<div style="width:158px;height:158px;border-radius:999px;overflow:hidden;background:'+r.color+';box-shadow:var(--ms-shadow-lift, 0 12px 32px rgba(31,26,21,0.1));display:flex;align-items:flex-end;justify-content:center;">'+heroSvg(av)+'</div>'
+    +'<div style="position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:baseline;gap:4px;padding:8px 16px;border-radius:999px;background:var(--ms-white);box-shadow:0 6px 18px rgba(27,32,32,0.14);white-space:nowrap;">'
+    +'<span style="font-family:var(--fd);font-size:24px;font-weight:700;line-height:1;color:var(--ms-ink);">'+sc+'</span>'
+    +'<span style="font-size:11px;font-weight:600;letter-spacing:0.04em;color:var(--ms-muted);">/&nbsp;60</span></div></div>'
+    +'<span style="font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:'+r.eyebrow+';margin:22px 0 13px;display:block;white-space:nowrap;">'+esc(r.range)+'</span>'
+    +'<h2 style="font-family:var(--fd);font-weight:600;font-size:clamp(42px,11vw,60px);line-height:0.98;color:var(--ms-ink);margin:0 0 26px;">'+esc(r.name)+'</h2>'
+    +'<p style="font-size:16px;line-height:1.78;color:var(--ms-charcoal);max-width:460px;margin:0;">'+esc(r.text)+'</p>'
+    +'<div style="width:48px;height:3px;border-radius:999px;background:'+r.color+';margin:42px 0 38px;"></div>'
+    +'<div style="width:100%;display:flex;flex-direction:column;gap:8px;margin-bottom:30px;">'
+    +'<h3 style="font-family:var(--fd);font-weight:600;font-size:26px;color:var(--ms-ink);margin:0 0 4px;">Zum Nachdenken</h3>'
+    +'<p style="font-size:14px;line-height:1.6;color:var(--ms-muted);margin:0;">Nimm dir einen Moment. Es liest niemand mit – nur du.</p></div>'
+    +'<div style="width:100%;text-align:left;display:flex;flex-direction:column;gap:26px;">'+reflHtml+'</div>'
+    +'<button class="btn-orange" data-action="to-cta" style="margin-top:42px;">Weiter</button>'
+    +'<button class="btn-ghost-dark" data-action="restart" style="margin-top:18px;text-decoration:underline;text-underline-offset:3px;">Test neu starten</button>'
+    +'<span class="footer-label-sage" style="margin-top:36px;">mama.spagat</span>'
+    +'</div></section>';
+}
+
+function screenCta() {
+  var ci = state.carouselIdx;
+  var cr = RESULTS[ci];
+  var cav = AVATARS[ci];
+  var dotsHtml = '';
+  for (var d=0; d<4; d++) {
+    var isc = d === ci;
+    dotsHtml += '<button data-action="carousel-dot" data-val="'+d+'" style="height:8px;width:'+(isc?'24px':'8px')+';border-radius:999px;background:'+(isc?'rgba(239,231,221,0.92)':'rgba(239,231,221,0.28)')+';border:none;cursor:pointer;padding:0;transition:all 250ms ease-out;"></button>';
+  }
+  return '<section style="min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--ms-sage);padding:60px 26px 72px;text-align:center;position:relative;">'
+    +'<img src="project/assets/logo-script-light.png" alt="Mama Spagat" style="height:62px;width:auto;margin-bottom:38px;opacity:0.95" onerror="this.style.display=\'none\'">'
+    +'<span style="font-weight:600;font-size:13px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(239,231,221,0.62);margin-bottom:22px;display:block;">Dein nächster Schritt</span>'
+    +'<h2 style="font-family:var(--fd);font-weight:600;font-size:clamp(44px,12vw,66px);line-height:0.98;color:var(--ms-cream);margin:0 0 26px;">Was jetzt?</h2>'
+    +'<p style="font-size:16px;line-height:1.78;color:rgba(239,231,221,0.86);max-width:460px;margin:0 0 40px;">Egal, welches Ergebnis du bekommen hast – du bist damit nicht allein, und du bist nicht kaputt. In meinem kostenlosen Workshop zeige ich dir, wie du den Kreislauf aus Stress, Essen und schlechtem Gewissen sanft durchbrichst. Ohne Verbote. Ohne Hungern. In deinem Tempo.</p>'
+    +'<a href="'+CONFIG.workshopUrl+'" target="_blank" rel="noopener" class="btn-orange" data-action="workshop-click">Zum kostenlosen Workshop anmelden</a>'
+    +'<span style="font-size:13px;letter-spacing:0.06em;color:rgba(239,231,221,0.7);margin-top:30px;display:block;">mama.spagat · vanessareinthaller.de</span>'
+    // Carousel
+    +'<div style="width:100%;max-width:400px;margin-top:52px;display:flex;flex-direction:column;align-items:center;">'
+    +'<div style="width:40px;height:1px;background:rgba(239,231,221,0.22);margin-bottom:30px;"></div>'
+    +'<span style="font-size:11px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:rgba(239,231,221,0.48);margin-bottom:22px;display:block;">Die 4 Typen</span>'
+    +'<div style="width:100%;background:rgba(250,247,246,0.07);border:1px solid rgba(239,231,221,0.15);border-radius:24px;padding:34px 26px 30px;display:flex;flex-direction:column;align-items:center;gap:14px;">'
+    +'<div style="width:92px;height:92px;border-radius:999px;overflow:hidden;background:'+cr.color+';box-shadow:0 8px 24px rgba(0,0,0,0.24);display:flex;align-items:flex-end;justify-content:center;">'+heroSvg(cav)+'</div>'
+    +'<span style="font-size:10.5px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(239,231,221,0.52);white-space:nowrap;">'+esc(cr.range)+'</span>'
+    +'<h3 style="font-family:var(--fd);font-size:38px;font-weight:600;color:var(--ms-cream);margin:0;line-height:1;">'+esc(cr.name)+'</h3>'
+    +'<p style="font-size:14px;line-height:1.74;color:rgba(239,231,221,0.76);margin:0;max-width:320px;">'+esc(cr.text)+'</p>'
+    +'</div>'
+    +'<div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:20px;">'
+    +'<button data-action="carousel-prev" class="nav-btn" style="width:38px;height:38px;border-radius:999px;border:1px solid rgba(239,231,221,0.28);background:rgba(239,231,221,0.07);color:var(--ms-cream);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 180ms;">←</button>'
+    +'<div style="display:flex;gap:7px;align-items:center;">'+dotsHtml+'</div>'
+    +'<button data-action="carousel-next" class="nav-btn" style="width:38px;height:38px;border-radius:999px;border:1px solid rgba(239,231,221,0.28);background:rgba(239,231,221,0.07);color:var(--ms-cream);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 180ms;">→</button>'
+    +'</div></div>'
+    +'<button class="btn-ghost-light" data-action="back-cta" style="margin-top:36px;text-decoration:underline;text-underline-offset:3px;">← zurück zum Ergebnis</button>'
+    +'</section>';
+}
+
+// ═══════════════════════════════════════════════════════════
+// Render engine
+// ═══════════════════════════════════════════════════════════
+var fading = false;
+function render(instant) {
+  var main = document.getElementById('main');
+  var screens = { hero:screenHero, quiz:screenQuiz, capture:screenCapture, result:screenResult, cta:screenCta };
+  var html = (screens[state.screen] || screenHero)();
+  if (instant) {
+    main.innerHTML = html;
+    attachListeners();
+    return;
+  }
+  fading = true;
+  main.style.opacity = '0';
+  setTimeout(function() {
+    main.innerHTML = html;
+    attachListeners();
+    main.offsetHeight; // force reflow before fade-in
+    main.style.opacity = '1';
+    try { window.scrollTo({ top:0, behavior:'instant' }); } catch(e) {}
+    fading = false;
+  }, 270);
+}
+
+function attachListeners() {
+  // Email input live sync
+  var emailEl = document.getElementById('email-input');
+  if (emailEl) {
+    emailEl.addEventListener('input', function(){ state.email = this.value; state.emailErr = ''; });
+    emailEl.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doSubmitLead(); } });
+  }
+  // Reflection textareas
+  document.querySelectorAll('[data-refl]').forEach(function(ta) {
+    ta.addEventListener('input', function() {
+      var i = parseInt(this.dataset.refl);
+      var r = state.reflections.slice();
+      r[i] = this.value;
+      state.reflections = r;
+      saveState();
+    });
+    ta.addEventListener('focus', function() { this.style.borderColor = 'var(--ms-sage)'; });
+    ta.addEventListener('blur',  function() { this.style.borderColor = 'rgba(71,97,96,0.22)'; });
+  });
+  // answer button hover
+  document.querySelectorAll('.ans-btn').forEach(function(b) {
+    b.addEventListener('mouseenter', function(){ this.style.transform = 'translateY(-2px)'; });
+    b.addEventListener('mouseleave', function(){ this.style.transform = ''; });
+  });
+  // nav button hover
+  document.querySelectorAll('.nav-btn').forEach(function(b) {
+    b.addEventListener('mouseenter', function(){ this.style.background = 'rgba(239,231,221,0.18)'; });
+    b.addEventListener('mouseleave', function(){ this.style.background = 'rgba(239,231,221,0.07)'; });
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// Actions
+// ═══════════════════════════════════════════════════════════
+function fadeTo(newScreen, patch) {
+  if (fading) return;
+  if (patch) Object.assign(state, patch);
+  state.screen = newScreen;
+  saveState();
+  render(false);
+}
+
+function doStart() {
+  track('quiz_started');
+  fadeTo('quiz', { qIndex:0 });
+}
+function doBack() {
+  if (fading) return;
+  if (state.qIndex > 0) fadeTo('quiz', { qIndex: state.qIndex - 1 });
+  else fadeTo('hero');
+}
+var answerTimer = null;
+function doAnswer(v) {
+  if (fading) return;
+  var answers = state.answers.slice();
+  answers[state.qIndex] = v;
+  state.answers = answers;
+  saveState();
+  render(true); // instant update to show selected highlight
+  if (answerTimer) clearTimeout(answerTimer);
+  answerTimer = setTimeout(function() {
+    if (state.qIndex < 14) fadeTo('quiz', { qIndex: state.qIndex + 1 });
+    else if (state.leadSubmitted) fadeTo('result');
+    else fadeTo('capture');
+  }, 430);
+}
+function doSubmitLead() {
+  var email = (state.email || '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    state.emailErr = 'Bitte gib eine gültige E-Mail-Adresse ein.';
+    render(true);
+    return;
+  }
+  var ri = getResult();
+  var sc = getScore();
+  track('email_submitted', { result_name: RESULTS[ri].name });
+  sendEmails(email, ri, sc, state.reflections);
+  state.email = email;
+  state.leadSubmitted = true;
+  state.emailErr = '';
+  fadeTo('result');
+}
+function doRestart() {
+  state.answers = new Array(15).fill(null);
+  state.reflections = ['','',''];
+  state.email = ''; state.emailErr = '';
+  state.leadSubmitted = false; state.qIndex = 0;
+  fadeTo('hero');
+}
+
+// ═══════════════════════════════════════════════════════════
+// Event delegation
+// ═══════════════════════════════════════════════════════════
+document.getElementById('main').addEventListener('click', function(e) {
+  var el = e.target.closest('[data-action]');
+  if (!el) return;
+  var action = el.dataset.action;
+  var val = el.dataset.val;
+  switch(action) {
+    case 'start':         doStart(); break;
+    case 'back':          doBack(); break;
+    case 'answer':        doAnswer(parseInt(val)); break;
+    case 'submit-lead':   doSubmitLead(); break;
+    case 'to-cta':        fadeTo('cta'); break;
+    case 'back-cta':      fadeTo('result'); break;
+    case 'restart':       doRestart(); break;
+    case 'back-capture':  fadeTo('quiz', { qIndex:14 }); break;
+    case 'carousel-prev': state.carouselIdx=(state.carouselIdx+3)%4; render(true); break;
+    case 'carousel-next': state.carouselIdx=(state.carouselIdx+1)%4; render(true); break;
+    case 'carousel-dot':  state.carouselIdx=parseInt(val); render(true); break;
+    case 'workshop-click':track('workshop_click'); break;
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// Admin panel (?admin in URL)
+// ═══════════════════════════════════════════════════════════
+function renderAdmin() {
+  var st = getStats();
+  var visits = st.page_view    || 0;
+  var starts  = st.quiz_started || 0;
+  var convs   = st.email_submitted || 0;
+  var rate    = starts > 0 ? Math.round((convs/starts)*100) : 0;
+  function tile(lbl, val, sub) {
+    return '<div style="background:var(--ms-white);border-radius:14px;padding:16px 18px;flex:1;min-width:120px;">'
+      +'<p style="margin:0 0 4px;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ms-muted);">'+lbl+'</p>'
+      +'<p style="margin:0 0 2px;font-family:var(--fd);font-size:32px;font-weight:700;color:var(--ms-sage);line-height:1;">'+val+'</p>'
+      +'<p style="margin:0;font-size:11px;color:var(--ms-muted);">'+sub+'</p></div>';
+  }
+  var panel = document.getElementById('admin-panel');
+  panel.style.display = 'block';
+  panel.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">'
+    +'<span style="font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--ms-sage);">📊 Funnel-Statistiken</span>'
+    +'<span style="font-size:11px;color:var(--ms-muted);">dieses Gerät</span></div>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">'
+    +tile('Besuche',  visits,  'Seitenaufrufe')
+    +tile('Starts',   starts,  'Quiz gestartet')
+    +tile('Leads',    convs,   'E-Mails gesammelt')
+    +tile('Rate',     rate+'%','von Quiz-Starts')
+    +'</div>'
+    +'<button onclick="localStorage.removeItem(\'ms_stats_v1\');document.getElementById(\'admin-panel\').innerHTML=\'<p style=padding:8px;font-size:13px>Statistiken gelöscht.</p>\';" style="background:none;border:1px solid rgba(71,97,96,0.22);border-radius:8px;padding:6px 14px;cursor:pointer;font-size:12px;color:var(--ms-muted);">Statistiken löschen</button>'
+    +'<p style="margin:10px 0 0;font-size:11px;color:var(--ms-muted);line-height:1.5;">Zählt nur dieses Gerät / diesen Browser.</p>';
+}
+
+// ═══════════════════════════════════════════════════════════
+// Init
+// ═══════════════════════════════════════════════════════════
+if (typeof emailjs !== 'undefined' && CONFIG.emailjs.publicKey !== 'YOUR_PUBLIC_KEY') {
+  emailjs.init({ publicKey: CONFIG.emailjs.publicKey });
+}
+loadState();
+render(true);
+
+// Track page view once per session
+if (!sessionStorage.getItem('ms_pv')) {
+  sessionStorage.setItem('ms_pv', '1');
+  track('page_view');
+}
+
+// Show admin panel if ?admin in URL
+if (window.location.search.indexOf('admin') !== -1) {
+  renderAdmin();
+}
+</script>
+</body>
+</html>
