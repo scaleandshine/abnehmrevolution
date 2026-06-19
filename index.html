@@ -462,11 +462,25 @@ function screenCta() {
   return '<section style="min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--ms-sage);padding:60px 26px 72px;text-align:center;position:relative;">'
     +'<img src="project/assets/logo-script-light.png" alt="Mama Spagat" style="height:62px;width:auto;margin-bottom:38px;opacity:0.95" onerror="this.style.display=\'none\'">'
     +'<span style="font-weight:600;font-size:13px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(239,231,221,0.62);margin-bottom:22px;display:block;">Dein nächster Schritt</span>'
-    +'<h2 style="font-family:var(--fd);font-weight:600;font-size:clamp(44px,12vw,66px);line-height:0.98;color:var(--ms-cream);margin:0 0 26px;">Was jetzt?</h2>'
-    +'<p style="font-size:16px;line-height:1.78;color:rgba(239,231,221,0.86);max-width:460px;margin:0 0 40px;">Dein Ergebnis zeigt mir, wo du gerade stehst. Im kostenlosen Info-Call schauen wir gemeinsam, wie mein 1:1-Coaching dir helfen kann, den Kreislauf aus Stress, Essen und schlechtem Gewissen zu durchbrechen – in deinem Tempo, ohne Verbote.</p>'
-    +'<a href="'+CONFIG.workshopUrl+'" target="_blank" rel="noopener" class="btn-orange" data-action="workshop-click">Kostenlosen Info-Call buchen →</a>'
-    +'<p style="font-size:14px;line-height:1.6;color:rgba(239,231,221,0.75);max-width:380px;margin:18px 0 0;">Deine ausführliche Auswertung mit persönlichen Tipps zu deinem Ergebnis kommt gleich per E-Mail zu dir.</p>'
-    +'<span style="font-size:13px;letter-spacing:0.06em;color:rgba(239,231,221,0.7);margin-top:30px;display:block;">mama.spagat · vanessareinthaller.de</span>'
+    +'<h2 style="font-family:var(--fd);font-weight:600;font-size:clamp(44px,12vw,66px);line-height:0.98;color:var(--ms-cream);margin:0 0 18px;">Was jetzt?</h2>'
+    +'<p style="font-size:17px;line-height:1.75;color:rgba(239,231,221,0.9);max-width:440px;margin:0 0 32px;">Dein Ergebnis ist der erste Schritt. Der zweite: Ein <strong style="color:#EFE7DD;">kostenloser 30-Minuten-Call</strong> mit mir — nur du, ich und dein Weg zu mehr Leichtigkeit.</p>'
+    +'<div style="width:100%;max-width:400px;background:rgba(250,247,246,0.10);border:1px solid rgba(239,231,221,0.18);border-radius:20px;padding:26px 24px;margin-bottom:32px;text-align:left;">'
+    +'<p style="margin:0 0 16px;font-size:12px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(239,231,221,0.55);">Was dich im Call erwartet:</p>'
+    +[
+      'Wir schauen gemeinsam auf dein Ergebnis und was es für dich konkret bedeutet',
+      'Du bekommst 2–3 sofort umsetzbare Impulse, abgestimmt auf deinen Typ',
+      'Ich zeige dir, wie mein Programm dir helfen kann – ohne Druck, ohne Verpflichtung'
+    ].map(function(t){
+      return '<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:13px;">'
+        +'<span style="flex-shrink:0;width:22px;height:22px;border-radius:999px;background:var(--ms-terracotta);color:#EFE7DD;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px;">✓</span>'
+        +'<span style="font-size:14.5px;line-height:1.55;color:rgba(239,231,221,0.88);">'+t+'</span>'
+        +'</div>';
+    }).join('')
+    +'<p style="margin:4px 0 0;font-size:12px;color:rgba(239,231,221,0.45);text-align:center;">100 % kostenlos · keine Verpflichtung</p>'
+    +'</div>'
+    +'<a href="'+CONFIG.workshopUrl+'" target="_blank" rel="noopener" class="btn-orange" data-action="workshop-click" style="font-size:16px;padding:18px 44px;">Kostenlosen Termin buchen →</a>'
+    +'<p style="font-size:13px;line-height:1.6;color:rgba(239,231,221,0.6);max-width:360px;margin:16px 0 0;">Deine ausführliche Auswertung kommt gleich per E-Mail zu dir.</p>'
+    +'<span style="font-size:13px;letter-spacing:0.06em;color:rgba(239,231,221,0.55);margin-top:28px;display:block;">mama.spagat · vanessareinthaller.de</span>'
     // Carousel
     +'<div style="width:100%;max-width:400px;margin-top:52px;display:flex;flex-direction:column;align-items:center;">'
     +'<div style="width:40px;height:1px;background:rgba(239,231,221,0.22);margin-bottom:30px;"></div>'
