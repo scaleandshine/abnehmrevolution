@@ -279,6 +279,44 @@ function buildResultEmail(ri, score, reflections) {
     +'</td></tr></table></td></tr></table></body></html>';
 }
 
+function kitSubscribe(email, resultName, score) {
+  var KEY = 'kit_e5d98aa4b305a71cbc71cae087628b28';
+  var BASE = 'https://api.kit.com/v4';
+  var H = { 'X-Kit-Api-Key': KEY, 'Content-Type': 'application/json' };
+  var TAG_MAP = {
+    'Die Bewusste':   'selbsttest-die-bewusste',
+    'Die Suchende':   'selbsttest-die-suchende',
+    'Die Kämpferin':  'selbsttest-die-kaempferin',
+    'Die Erschöpfte': 'selbsttest-die-erschoepfte'
+  };
+  var tagNames = ['selbsttest-emotionaler-esser', TAG_MAP[resultName] || 'selbsttest-sonstige'];
+  fetch(BASE + '/subscribers', {
+    method: 'POST', headers: H,
+    body: JSON.stringify({
+      email_address: email,
+      fields: { ergebnis_typ: resultName, punkte: String(score), quelle: 'selbsttest-emotionaler-esser' }
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var subId = data.subscriber && data.subscriber.id;
+    if (!subId) return;
+    return Promise.all(tagNames.map(function(name) {
+      return fetch(BASE + '/tags', { method: 'POST', headers: H, body: JSON.stringify({ name: name }) })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          var tid = d.tag && d.tag.id;
+          if (!tid) return;
+          return fetch(BASE + '/tags/' + tid + '/subscribers', {
+            method: 'POST', headers: H,
+            body: JSON.stringify({ subscriber_id: subId })
+          });
+        });
+    }));
+  })
+  .catch(function(e) { console.warn('[KIT]', e); });
+}
+
 function sendEmails(email, ri, score, reflections) {
   if (typeof emailjs === 'undefined') return;
   if (CONFIG.emailjs.publicKey === 'YOUR_PUBLIC_KEY') {
@@ -550,6 +588,7 @@ function doSubmitLead() {
   var sc = getScore();
   track('email_submitted', { result_name: RESULTS[ri].name });
   sendEmails(email, ri, sc, state.reflections);
+  kitSubscribe(email, RESULTS[ri].name, sc);
   state.email = email;
   state.leadSubmitted = true;
   state.emailErr = '';

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<!--
+════════════════════════════════════════════════════════════════════
+  KIT (ConvertKit) E-MAIL-TEMPLATES
+  Selbsttest: Bin ich ein emotionaler Esser?
+  selbsttest.vanessareinthaller.de
+
+  SETUP IN KIT (3 Schritte):
+  ─────────────────────────────────────────────────────────────────
+  1. TAGS: Werden automatisch angelegt, sobald jemand den Test
+     abschließt. Kontrollieren unter Subscribers > Tags:
+       • selbsttest-emotionaler-esser  (alle Teilnehmenden)
+       • selbsttest-die-bewusste
+       • selbsttest-die-suchende
+       • selbsttest-die-kaempferin
+       • selbsttest-die-erschoepfte
+
+  2. SEQUENCES: Für jedes Ergebnis eine Sequence anlegen
+     (Automations > Sequences > New Sequence), jeweils mit
+     dem HTML-Content aus diesem File → Email 1, Delay: sofort.
+
+  3. AUTOMATIONS: Für jede Sequence eine Automation anlegen:
+       Trigger: Tag added = selbsttest-[typ]
+       Action:  Subscribe to Sequence [entsprechende Sequence]
+     + Eine Automation für Vanessa-Notification:
+       Trigger: Tag added = selbsttest-emotionaler-esser
+       Action:  Send email notification → hello@vanessareinthaller.de
+
+  CUSTOM FIELDS: Das Quiz sendet automatisch:
+       ergebnis_typ   = "Die Kämpferin" etc.
+       punkte         = "47" etc.
+       quelle         = "selbsttest-emotionaler-esser"
+════════════════════════════════════════════════════════════════════
+-->
+<html>
+<head><meta charset="utf-8"><title>KIT E-Mail-Templates</title>
+<style>body{font-family:Arial,sans-serif;background:#f0f0f0;padding:30px;} .template{background:#fff;border:2px solid #476160;border-radius:12px;margin-bottom:60px;overflow:hidden;} .template-header{background:#476160;color:#EFE7DD;padding:20px 28px;font-family:monospace;font-size:14px;line-height:1.7;} .template-body{padding:28px;}</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════
+     1. DIE BEWUSSTE
+     TAG: selbsttest-die-bewusste
+     BETREFF: Dein Ergebnis: Du bist Die Bewusste 🌿
+════════════════════════════════════════════════════════════════════ -->
+<div class="template">
+<div class="template-header">
+ERGEBNIS-TYP: Die Bewusste (15–25 Punkte)<br>
+TAG: selbsttest-die-bewusste<br>
+BETREFF: Dein Ergebnis: Du bist Die Bewusste 🌿
+</div>
+<div class="template-body">
+
+<!-- COPY THIS HTML INTO KIT: -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FAF7F6;font-family:Arial,Helvetica,sans-serif;">
+<tr><td align="center" style="padding:32px 16px;">
+<table width="100%" style="max-width:560px;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(27,32,32,0.10);" cellpadding="0" cellspacing="0">
+
+<!-- HEADER -->
+<tr><td align="center" style="background:#476160;padding:48px 32px 36px;">
+<p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.26em;text-transform:uppercase;color:rgba(239,231,221,0.65);">Dein Selbsttest-Ergebnis</p>
+<h1 style="margin:0 0 18px;font-family:Georgia,serif;font-size:48px;font-weight:600;color:#EFE7DD;line-height:1;">Die Bewusste</h1>
+<div style="display:inline-block;background:rgba(239,231,221,0.18);border-radius:99px;padding:8px 22px;">
+<span style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#EFE7DD;letter-spacing:0.06em;">15–25 Punkte</span>
+</div>
+</td></tr>
+
+<!-- RESULT TEXT -->
+<tr><td style="background:#FAF7F6;padding:36px 32px 28px;text-align:center;">
+<p style="margin:0;font-family:Georgia,serif;font-style:italic;font-size:19px;line-height:1.65;color:#2D4543;max-width:460px;display:inline-block;">„Du hast ein feines Gespür für dich und deinen Körper. Essen ist für dich meistens das, was es sein soll – Nahrung, Genuss, Pause."</p>
+</td></tr>
+
+<!-- DETAILED -->
+<tr><td style="background:#fff;padding:28px 32px;border-top:1px solid #EDE8E3;">
+<h2 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;font-weight:600;color:#476160;">Du hast ein gesundes Fundament — und das ist kostbarer als du denkst.</h2>
+<p style="margin:0 0 20px;font-family:Arial,sans-serif;font-size:15px;line-height:1.75;color:#3A4A4A;">Du unterscheidest meistens intuitiv zwischen echtem Hunger und emotionalem Verlangen. Das klingt selbstverständlich, ist es aber nicht — viele Frauen verlieren diesen Kontakt zu ihrem Körper über Jahre hinweg.</p>
+<p style="margin:0 0 14px;font-family:Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#476160;">Deine 3 nächsten Schritte:</p>
+<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#3A4A4A;">1. &nbsp;Pflege dieses Bewusstsein aktiv — beobachte einmal täglich kurz vor dem Essen, was dich antreibt.</p>
+<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#3A4A4A;">2. &nbsp;Schau auf die Momente, in denen du doch automatisch greifst — nicht mit Urteil, sondern mit Neugier.</p>
+<p style="margin:0;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#3A4A4A;">3. &nbsp;Nutze dein Fundament: Baue von hier aus eine leichte, freudvolle Beziehung zum Essen auf.</p>
+</td></tr>
+
+<!-- CALL PITCH -->
+<tr><td style="background:#EEF4F3;padding:32px 32px 28px;border-top:1px solid #D0E2DF;">
+<p style="margin:0 0 8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#476160;">Dein nächster Schritt</p>
+<h2 style="margin:0 0 16px;font-family:Georgia,serif;font-size:24px;font-weight:600;color:#1B2020;line-height:1.25;">Du bist bereit für mehr.</h2>
+<p style="margin:0 0 18px;font-family:Arial,sans-serif;font-size:15px;line-height:1.78;color:#3A4A4A;">Du hast etwas, das die meisten Frauen erst lernen müssen: ein echtes Körpergespür. Das ist dein stärkstes Werkzeug — und ich zeige dir in der <strong>Abnehmrevolution</strong>, wie du es in dauerhafte, entspannte Leichtigkeit verwandelst.</p>
+<p style="margin:0 0 24px;font-family:Arial,sans-serif;font-size:15px;line-height:1.78;color:#3A4A4A;">Keine Verbote. Kein Hungern. Kein Jo-Jo. Nur du — mit deinem Körper im Einklang, und einem klaren Weg nach vorne.</p>
+<table cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="border-radius:12px;background:#CA5D25;">
+<a href="https://start.vanessareinthaller.de/abnehmrevolution/" target="_blank" style="display:inline-block;padding:16px 36px;font-family:Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#EFE7DD;text-decoration:none;">Zur Abnehmrevolution →</a>
+</td></tr></table>
+</td></tr>
+
+<!-- FOOTER -->
+<tr><td align="center" style="background:#476160;padding:28px 32px 32px;">
+<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:13px;color:rgba(239,231,221,0.7);">Alles Liebe,</p>
+<p style="margin:0 0 16px;font-family:Georgia,serif;font-style:italic;font-size:20px;color:#EFE7DD;">Vanessa</p>
+<p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:rgba(239,231,221,0.5);letter-spacing:0.08em;">mama.spagat · vanessareinthaller.de</p>
+</td></tr>
+
+</table>
+</td></tr>
+</table>
+<!-- END COPY -->
+
+</div></div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     2. DIE SUCHENDE
+     TAG: selbsttest-die-suchende
+     BETREFF: Dein Ergebnis: Du bist Die Suchende ✨
+════════════════════════════════════════════════════════════════════ -->
+<div class="template">
+<div class="template-header">
+ERGEBNIS-TYP: Die Suchende (26–40 Punkte)<br>
+TAG: selbsttest-die-suchende<br>
+BETREFF: Dein Ergebnis: Du bist Die Suchende ✨
+</div>
+<div class="template-body">
+
+<!-- COPY THIS HTML INTO KIT: -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FAF7F6;font-family:Arial,Helvetica,sans-serif;">
+<tr><td align="center" style="padding:32px 16px;">
+<table width="100%" style="max-width:560px;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(27,32,32,0.10);" cellpadding="0" cellspacing="0">
+
+<!-- HEADER -->
+<tr><td align="center" style="background:#8A5740;padding:48px 32px 36px;">
+<p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.26em;text-transform:uppercase;color:rgba(239,231,221,0.65);">Dein Selbsttest-Ergebnis</p>
+<h1 style="margin:0 0 18px;font-family:Georgia,serif;font-size:48px;font-weight:600;color:#EFE7DD;line-height:1;">Die Suchende</h1>
+<div style="display:inline-block;background:rgba(239,231,221,0.18);border-radius:99px;padding:8px 22px;">
+<span style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#EFE7DD;letter-spacing:0.06em;">26–40 Punkte</span>
+</div>
+</td></tr>
+
+<!-- RESULT TEXT -->
+<tr><td style="background:#FAF7F6;padding:36px 32px 28px;text-align:center;">
+<p style="margin:0;font-family:Georgia,serif;font-style:italic;font-size:19px;line-height:1.65;color:#2D2018;max-width:460px;display:inline-block;">„Du spürst, dass Essen bei dir manchmal mehr ist als Hunger. Du bist mitten auf dem Weg – aufmerksam, ehrlich, suchend. Genau hier beginnt Veränderung."</p>
+</td></tr>
+
+<!-- DETAILED -->
+<tr><td style="background:#fff;padding:28px 32px;border-top:1px solid #EDE8E3;">
+<h2 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;font-weight:600;color:#8A5740;">Du bist auf dem Weg — und Suchen ist mutig.</h2>
+<p style="margin:0 0 20px;font-family:Arial,sans-serif;font-size:15px;line-height:1.75;color:#3A3030;">Du spürst es: Manchmal ist Essen mehr als Hunger. Mal tröstet es, mal lenkt es ab, mal füllt es etwas auf, was kein Lebensmittel wirklich füllen kann. Dass du dir das eingestehst — das ist der erste und wichtigste Schritt.</p>
+<p style="margin:0 0 14px;font-family:Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8A5740;">Deine 3 nächsten Schritte:</p>
+<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#3A3030;">1. &nbsp;Pause vor dem Essen: Frag dich kurz — „Bin ich hungrig, oder fühle ich gerade etwas?"</p>
+<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#3A3030;">2. &nbsp;Führe 3 Tage lang ein kurzes Gefühls-Essen-Protokoll. Nicht Kalorien — nur Situation und Gefühl.</p>
+<p style="margin:0;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#3A3030;">3. &nbsp;Begleite diesen Erkenntnisprozess mit konkreten Übungen — das Suchen bekommt eine Antwort.</p>
+</td></tr>
+
+<!-- CALL PITCH -->
+<tr><td style="background:#FDF5F0;padding:32px 32px 28px;border-top:1px solid #E8D8CC;">
+<p style="margin:0 0 8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#B87E5E;">Dein nächster Schritt</p>
+<h2 style="margin:0 0 16px;font-family:Georgia,serif;font-size:24px;font-weight:600;color:#1B2020;line-height:1.25;">Das Suchen hat ein Ende.</h2>
+<p style="margin:0 0 18px;font-family:Arial,sans-serif;font-size:15px;line-height:1.78;color:#3A3030;">Du hast die wichtigste Zutat schon: Ehrlichkeit mit dir selbst. Was dir fehlt, ist ein klarer Weg. Genau den gebe ich dir in der <strong>Abnehmrevolution</strong> — ein strukturiertes Programm, das dich durch genau die Momente führt, in denen Essen bisher mehr war als Hunger.</p>
+<p style="margin:0 0 24px;font-family:Arial,sans-serif;font-size:15px;line-height:1.78;color:#3A3030;">Du musst das nicht länger alleine herausfinden.</p>
+<table cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="border-radius:12px;background:#CA5D25;">
+<a href="https://start.vanessareinthaller.de/abnehmrevolution/" target="_blank" style="display:inline-block;padding:16px 36px;font-family:Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#EFE7DD;text-decoration:none;">Zur Abnehmrevolution →</a>
+</td></tr></table>
+</td></tr>
+
+<!-- FOOTER -->
+<tr><td align="center" style="background:#8A5740;padding:28px 32px 32px;">
+<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:13px;color:rgba(239,231,221,0.7);">Alles Liebe,</p>
+<p style="margin:0 0 16px;font-family:Georgia,serif;font-style:italic;font-size:20px;color:#EFE7DD;">Vanessa</p>
+<p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:rgba(239,231,221,0.5);letter-spacing:0.08em;">mama.spagat · vanessareinthaller.de</p>
+</td></tr>
+
+</table>
+</td></tr>
+</table>
+<!-- END COPY -->
+
+</div></div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     3. DIE KÄMPFERIN
+     TAG: selbsttest-die-kaempferin
+     BETREFF: Dein Ergebnis: Du bist Die Kämpferin 💪
+════════════════════════════════════════════════════════════════════ -->
+<div class="template">
+<div class="template-header">
+ERGEBNIS-TYP: Die Kämpferin (41–52 Punkte)<br>
+TAG: selbsttest-die-kaempferin<br>
+BETREFF: Dein Ergebnis: Du bist Die Kämpferin 💪
+</div>
+<div class="template-body">
+
+<!-- COPY THIS HTML INTO KIT: -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FAF7F6;font-family:Arial,Helvetica,sans-serif;">
+<tr><td align="center" style="padding:32px 16px;">
+<table width="100%" style="max-width:560px;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(27,32,32,0.10);" cellpadding="0" cellspacing="0">
+
+<!-- HEADER -->
+<tr><td align="center" style="background:#A8431B;padding:48px 32px 36px;">
+<p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.26em;text-transform:uppercase;color:rgba(239,231,221,0.65);">Dein Selbsttest-Ergebnis</p>
+<h1 style="margin:0 0 18px;font-family:Georgia,serif;font-size:48px;font-weight:600;color:#EFE7DD;line-height:1;">Die Kämpferin</h1>
+<div style="display:inline-block;background:rgba(239,231,221,0.18);border-radius:99px;padding:8px 22px;">
+<span style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#EFE7DD;letter-spacing:0.06em;">41–52 Punkte</span>
+</div>
+</td></tr>
+
+<!-- RESULT TEXT -->
+<tr><td style="background:#FAF7F6;padding:36px 32px 28px;text-align:center;">
+<p style="margin:0;font-family:Georgia,serif;font-style:italic;font-size:19px;line-height:1.65;color:#2D1A0F;max-width:460px;display:inline-block;">„Du kämpfst – mit dem Essen, mit dir, mit dem ewigen Hin und Her. Das kostet Kraft, jeden einzelnen Tag. Aber dass du hier bist und ehrlich hinschaust, zeigt deine Stärke."</p>
+</td></tr>
+
+<!-- DETAILED -->
+<tr><td style="background:#fff;padding:28px 32px;border-top:1px solid #EDE8E3;">
+<h2 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;font-weight:600;color:#CA5D25;">Du kämpfst — und dass du hier bist, zeigt deine Stärke.</h2>
+<p style="margin:0 0 20px;font-family:Arial,sans-serif;font-size:15px;line-height:1.75;color:#3A2A20;">Dieser Kampf, den du jeden Tag kämpfst — mit dem Essen, mit dir selbst, mit dem Hin und Her — kostet enorm viel Kraft. Aber: Dein Gehirn hat gelernt, Gefühle über Essen zu regulieren. Das ist keine Schwäche. Das ist eine Strategie, die du ersetzen kannst.</p>
+<p style="margin:0 0 14px;font-family:Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#CA5D25;">Deine 3 dringlichsten Schritte:</p>
+<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#3A2A20;">1. &nbsp;Hör auf, dich nach jedem „Rückfall" zu bestrafen — Scham verstärkt das Muster.</p>
+<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#3A2A20;">2. &nbsp;Finde einen Anker außerhalb des Essens: eine Atemübung, ein Lied, eine Bewegung.</p>
+<p style="margin:0;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#3A2A20;">3. &nbsp;Verstehe das Muster — dann kannst du es sanft und dauerhaft durchbrechen. Ohne Verbote.</p>
+</td></tr>
+
+<!-- CALL PITCH -->
+<tr><td style="background:#FEF0E8;padding:32px 32px 28px;border-top:1px solid #F0D8C8;">
+<p style="margin:0 0 8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#CA5D25;">Dein nächster Schritt</p>
+<h2 style="margin:0 0 16px;font-family:Georgia,serif;font-size:24px;font-weight:600;color:#1B2020;line-height:1.25;">Es ist Zeit, den Kampf zu beenden.</h2>
+<p style="margin:0 0 18px;font-family:Arial,sans-serif;font-size:15px;line-height:1.78;color:#3A2A20;">Nicht durch mehr Willenskraft. Nicht durch noch strengere Regeln. Sondern durch Verstehen — warum du tust, was du tust. In der <strong>Abnehmrevolution</strong> zeige ich dir, wie du diesen Kreislauf Schritt für Schritt sanft durchbrichst.</p>
+<p style="margin:0 0 24px;font-family:Arial,sans-serif;font-size:15px;line-height:1.78;color:#3A2A20;">Du musst diesen Kampf nicht alleine führen — und du darfst ihn loslassen.</p>
+<table cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="border-radius:12px;background:#CA5D25;">
+<a href="https://start.vanessareinthaller.de/abnehmrevolution/" target="_blank" style="display:inline-block;padding:16px 36px;font-family:Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#EFE7DD;text-decoration:none;">Zur Abnehmrevolution →</a>
+</td></tr></table>
+</td></tr>
+
+<!-- FOOTER -->
+<tr><td align="center" style="background:#A8431B;padding:28px 32px 32px;">
+<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:13px;color:rgba(239,231,221,0.7);">Alles Liebe,</p>
+<p style="margin:0 0 16px;font-family:Georgia,serif;font-style:italic;font-size:20px;color:#EFE7DD;">Vanessa</p>
+<p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:rgba(239,231,221,0.5);letter-spacing:0.08em;">mama.spagat · vanessareinthaller.de</p>
+</td></tr>
+
+</table>
+</td></tr>
+</table>
+<!-- END COPY -->
+
+</div></div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     4. DIE ERSCHÖPFTE
+     TAG: selbsttest-die-erschoepfte
+     BETREFF: Dein Ergebnis: Du bist Die Erschöpfte 🕊️
+════════════════════════════════════════════════════════════════════ -->
+<div class="template">
+<div class="template-header">
+ERGEBNIS-TYP: Die Erschöpfte (53–60 Punkte)<br>
+TAG: selbsttest-die-erschoepfte<br>
+BETREFF: Dein Ergebnis: Du bist Die Erschöpfte 🕊️
+</div>
+<div class="template-body">
+
+<!-- COPY THIS HTML INTO KIT: -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FAF7F6;font-family:Arial,Helvetica,sans-serif;">
+<tr><td align="center" style="padding:32px 16px;">
+<table width="100%" style="max-width:560px;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(27,32,32,0.10);" cellpadding="0" cellspacing="0">
+
+<!-- HEADER -->
+<tr><td align="center" style="background:#6E5830;padding:48px 32px 36px;">
+<p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.26em;text-transform:uppercase;color:rgba(239,231,221,0.65);">Dein Selbsttest-Ergebnis</p>
+<h1 style="margin:0 0 18px;font-family:Georgia,serif;font-size:48px;font-weight:600;color:#EFE7DD;line-height:1;">Die Erschöpfte</h1>
+<div style="display:inline-block;background:rgba(239,231,221,0.18);border-radius:99px;padding:8px 22px;">
+<span style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#EFE7DD;letter-spacing:0.06em;">53–60 Punkte</span>
+</div>
+</td></tr>
+
+<!-- RESULT TEXT -->
+<tr><td style="background:#FAF7F6;padding:36px 32px 28px;text-align:center;">
+<p style="margin:0;font-family:Georgia,serif;font-style:italic;font-size:19px;line-height:1.65;color:#2A2010;max-width:460px;display:inline-block;">„Sei sanft mit dir: Das ist kein Versagen, sondern ein leiser Hilferuf deiner Seele. Du verdienst Unterstützung und Leichtigkeit."</p>
+</td></tr>
+
+<!-- DETAILED -->
+<tr><td style="background:#fff;padding:28px 32px;border-top:1px solid #EDE8E3;">
+<h2 style="margin:0 0 14px;font-family:Georgia,serif;font-size:22px;font-weight:600;color:#A98A4E;">Bitte lies das mit aller Sanftheit, die du dir selbst gegenüber aufbringen kannst.</h2>
+<p style="margin:0 0 20px;font-family:Arial,sans-serif;font-size:15px;line-height:1.75;color:#3A3020;">Du bist erschöpft. Nicht schwach — erschöpft. Das ist ein wichtiger Unterschied. Essen, Körper, Kontrolle, Gedanken — all das nimmt so viel Raum ein, dass kaum noch Platz bleibt für das Leben dahinter. Das ist kein Versagen. Das ist ein leiser Hilferuf deiner Seele, der schon lange ruft.</p>
+<p style="margin:0 0 14px;font-family:Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#A98A4E;">Deine 3 wichtigsten Schritte:</p>
+<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#3A3020;">1. &nbsp;Sei sanft mit dir. Heute. Nicht perfekt — nur sanft.</p>
+<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#3A3020;">2. &nbsp;Sag dir: „Ich verdiene Unterstützung." Und dann versuche, es zu glauben.</p>
+<p style="margin:0;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#3A3020;">3. &nbsp;Mach den nächsten Schritt — nicht weil du musst, sondern weil du es verdienst.</p>
+</td></tr>
+
+<!-- CALL PITCH -->
+<tr><td style="background:#F8F4EC;padding:32px 32px 28px;border-top:1px solid #E8DEC8;">
+<p style="margin:0 0 8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#A98A4E;">Dein nächster Schritt</p>
+<h2 style="margin:0 0 16px;font-family:Georgia,serif;font-size:24px;font-weight:600;color:#1B2020;line-height:1.25;">Du musst das nicht alleine tragen.</h2>
+<p style="margin:0 0 18px;font-family:Arial,sans-serif;font-size:15px;line-height:1.78;color:#3A3020;">Ich nehme dich bei der Hand. In der <strong>Abnehmrevolution</strong> gehen wir diesen Weg gemeinsam — leise, sanft, in deinem Tempo. Kein Druck. Keine Erwartungen. Nur du und ein Weg, der trägt.</p>
+<p style="margin:0 0 24px;font-family:Arial,sans-serif;font-size:15px;line-height:1.78;color:#3A3020;">Du verdienst diese Leichtigkeit. Wirklich.</p>
+<table cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="border-radius:12px;background:#CA5D25;">
+<a href="https://start.vanessareinthaller.de/abnehmrevolution/" target="_blank" style="display:inline-block;padding:16px 36px;font-family:Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#EFE7DD;text-decoration:none;">Zur Abnehmrevolution →</a>
+</td></tr></table>
+</td></tr>
+
+<!-- FOOTER -->
+<tr><td align="center" style="background:#6E5830;padding:28px 32px 32px;">
+<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:13px;color:rgba(239,231,221,0.7);">Alles Liebe,</p>
+<p style="margin:0 0 16px;font-family:Georgia,serif;font-style:italic;font-size:20px;color:#EFE7DD;">Vanessa</p>
+<p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:rgba(239,231,221,0.5);letter-spacing:0.08em;">mama.spagat · vanessareinthaller.de</p>
+</td></tr>
+
+</table>
+</td></tr>
+</table>
+<!-- END COPY -->
+
+</div></div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     NOTIFICATION EMAIL (für Vanessa)
+     KIT AUTOMATION: Trigger: Tag "selbsttest-emotionaler-esser"
+     Action: Send email notification → hello@vanessareinthaller.de
+     BETREFF: Neue Selbsttest-Conversion: {{subscriber.email_address}}
+════════════════════════════════════════════════════════════════════ -->
+<div class="template">
+<div class="template-header">
+NOTIFICATION AN VANESSA<br>
+TRIGGER: Tag "selbsttest-emotionaler-esser" hinzugefügt<br>
+ZIEL: hello@vanessareinthaller.de<br>
+BETREFF: Neue Selbsttest-Conversion: {{subscriber.email_address}}
+</div>
+<div class="template-body">
+
+<!-- COPY THIS HTML INTO KIT NOTIFICATION ACTION: -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f5f5f5;font-family:Arial,sans-serif;">
+<tr><td align="center" style="padding:24px 16px;">
+<table width="100%" style="max-width:480px;border-radius:12px;overflow:hidden;border:2px solid #476160;" cellpadding="0" cellspacing="0">
+<tr><td style="background:#476160;padding:20px 24px;">
+<p style="margin:0;font-family:Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(239,231,221,0.7);">Neue Conversion</p>
+<p style="margin:6px 0 0;font-family:Georgia,serif;font-size:22px;color:#EFE7DD;">Selbsttest Emotionaler Esser</p>
+</td></tr>
+<tr><td style="background:#fff;padding:24px;">
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr><td style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#5A6868;width:120px;">E-Mail</td>
+<td style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-family:Arial,sans-serif;font-size:14px;color:#1B2020;">{{subscriber.email_address}}</td></tr>
+<tr><td style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#5A6868;">Ergebnis-Typ</td>
+<td style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-family:Arial,sans-serif;font-size:14px;color:#1B2020;">{{subscriber.fields.ergebnis_typ}}</td></tr>
+<tr><td style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#5A6868;">Punkte</td>
+<td style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-family:Arial,sans-serif;font-size:14px;color:#1B2020;">{{subscriber.fields.punkte}} / 60</td></tr>
+<tr><td style="padding:8px 0;font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#5A6868;">Quelle</td>
+<td style="padding:8px 0;font-family:Arial,sans-serif;font-size:14px;color:#1B2020;">selbsttest.vanessareinthaller.de</td></tr>
+</table>
+</td></tr>
+<tr><td align="center" style="background:#FAF7F6;padding:16px 24px;">
+<a href="https://app.kit.com/subscribers/{{subscriber.id}}" style="font-family:Arial,sans-serif;font-size:13px;color:#476160;text-decoration:underline;">Subscriber in KIT ansehen →</a>
+</td></tr>
+</table>
+</td></tr>
+</table>
+<!-- END COPY -->
+
+</div></div>
+
+
+</body>
+</html>
