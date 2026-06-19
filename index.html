@@ -677,6 +677,13 @@ if (typeof emailjs !== 'undefined' && CONFIG.emailjs.publicKey !== 'YOUR_PUBLIC_
   emailjs.init({ publicKey: CONFIG.emailjs.publicKey });
 }
 loadState();
+// Preview mode: ?preview=cta jumps directly to Was-jetzt screen
+if (/[?&]preview=cta/.test(location.search)) {
+  state.screen = 'cta';
+  state.answers = new Array(15).fill(3);
+  state.leadSubmitted = true;
+  state.email = 'preview@test.de';
+}
 render(true);
 
 // Track page view once per session
