@@ -95,7 +95,7 @@
     </div>
 
     <div class="block" id="abBlock" style="display:none;">
-      <h3>A/B-Test „Headline" (Hero)</h3>
+      <h3>A/B-Test „CTA-Button"</h3>
       <div class="abrow">
         <button class="abbtn" data-ab="" onclick="setAb(this)">Auto (Test läuft)</button>
         <button class="abbtn" data-ab="A" onclick="setAb(this)">A fixieren</button>
@@ -220,13 +220,13 @@
 
   // ---- A/B ----
   function renderAb() {
-    var cur = (cfg.ab || {}).headline_v1 || '';
+    var cur = (cfg.ab || {}).cta_v1 || '';
     document.querySelectorAll('.abbtn').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-ab') === cur); });
   }
   window.setAb = function (btn) {
     var v = btn.getAttribute('data-ab');
     if (!cfg.ab) cfg.ab = {};
-    if (v === 'A' || v === 'B') cfg.ab.headline_v1 = v; else delete cfg.ab.headline_v1;
+    if (v === 'A' || v === 'B') cfg.ab.cta_v1 = v; else delete cfg.ab.cta_v1;
     saveDraft(); renderAb(); pushPreview();
     setStatus(v ? ('Variante ' + v + ' fixiert (Entwurf) — Vorschau ggf. neu laden.') : 'Zurück auf Auto-Test (Entwurf).');
   };
@@ -333,7 +333,7 @@
   window.resetPage = function () {
     if (!confirm('Alle Anpassungen DIESER Seite („' + page + '“) verwerfen? (Live erst nach „Veröffentlichen“.)')) return;
     delete cfg.pages[page];
-    if (page === 'landing' && cfg.ab) delete cfg.ab.headline_v1;
+    if (page === 'landing' && cfg.ab) delete cfg.ab.cta_v1;
     saveDraft(); renderSecs(); renderTxtList(); renderAb(); reloadFrame();
     setStatus('Seite zurückgesetzt — zum Livestellen „Veröffentlichen“.');
   };

@@ -6,7 +6,7 @@ const KIT_WORKSHOP_TAG = 20481004;
 const KIT_GLOW_TAG = 20501833;
 const POSTHOG_HOST = "https://eu.posthog.com";
 const POSTHOG_PROJECT = "174473";
-const DEFAULT_TEST = "headline_v1";
+const DEFAULT_TEST = "cta_v1";
 
 async function kitVariantCounts(key, tagId, test, fromIso, toIso) {
   const headers = { "X-Kit-Api-Key": key, "Accept": "application/json" };

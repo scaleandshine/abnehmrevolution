@@ -6,7 +6,7 @@
   var API = "/abnehmrevolution/api/design";
   var LS = "ar_design_cfg_v1";
   var MOBILE_BP = 760;
-  var AB_TEST = "headline_v1";
+  var AB_TEST = "cta_v1";
   var pageKey, secEls = [], flexroot = null, pristine = {}; // pristine[txtKey] = hash
 
   function slug(s) {

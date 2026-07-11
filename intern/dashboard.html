@@ -969,6 +969,24 @@
       <div class="ab-hint" id="ab-hint"></div>
     </div>
 
+    <!-- ===== A/B-HISTORIE ===== -->
+    <div class="section" data-tab="abtest">
+      <h2 class="section-title">Abgeschlossene Tests</h2>
+      <p class="section-sub">Eingefrorene Endergebnisse früherer Tests</p>
+      <div style="background:#fff;border:1px solid rgba(27,32,32,0.1);border-radius:16px;padding:18px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+          <span style="font-size:12px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:#476160;">headline_v1 · Hero-Headline</span>
+          <span style="font-size:10px;font-weight:800;background:#2E7D54;color:#fff;border-radius:999px;padding:3px 10px;">GEWINNER: A</span>
+          <span style="font-size:11px;color:#9a9087;">28.06.–11.07.2026 · Gewinner am 11.07. fest übernommen</span>
+        </div>
+        <table class="mail-table"><thead><tr><th>Variante</th><th>Headline</th><th>Besucher</th><th>Anmeldungen</th><th>CR</th><th>Glow</th></tr></thead><tbody>
+          <tr style="background:rgba(46,125,84,0.06);"><td style="font-weight:800;">A ✓</td><td style="max-width:340px;">„99% der Frauen über 40 sind nur eine einzige Erkenntnis davon entfernt, dauerhaft schlank zu sein."</td><td>107</td><td>40</td><td style="font-weight:800;color:#2E7D54;">37,4 %</td><td>1</td></tr>
+          <tr><td style="font-weight:800;color:#9a9087;">B</td><td style="max-width:340px;color:#6f675e;">„Erfahre, wie du mit der Inner-Slim-Code-Methode deinen Abnehmcode entschlüsselst — ohne Sportmodus und frustrierenden Jo-Jo-Effekt."</td><td>103</td><td>26</td><td>25,2 %</td><td>2</td></tr>
+        </tbody></table>
+        <p style="margin:10px 0 0;font-size:11.5px;color:#9a9087;">+12,2 pp für A (~94 % Konfidenz) · Entscheidung: A fest verbaut, headline-Test beendet, Traffic läuft seitdem in cta_v1.</p>
+      </div>
+    </div>
+
     <!-- ===== AUFZEICHNUNG ===== -->
     <div class="section" data-tab="aufzeichnung" style="display:none;">
       <h2 class="section-title">Aufzeichnungsseite</h2>
@@ -2030,8 +2048,8 @@
   // A/B-TEST
   // ============================================================
   var AB_VARIANTS = {
-    A: { tag: 'Variante A', desc: 'Kontrolle: „99% der Frauen über 40 sind nur eine einzige Erkenntnis davon entfernt, dauerhaft schlank zu sein."' },
-    B: { tag: 'Variante B', desc: 'Verkaufsversprechen: „Erfahre, wie du mit der Inner-Slim-Code-Methode deinen Abnehmcode entschlüsselst — ohne Sportmodus und frustrierenden Jo-Jo-Effekt."' }
+    A: { tag: 'Variante A', desc: 'Kontrolle (CTA): „Jetzt kostenlos anmelden"' },
+    B: { tag: 'Variante B', desc: 'Ich-Formulierung (CTA): „Ja, ich sichere mir meinen Platz"' }
   };
   var AB_MIN_VISITORS = 100; // Mindest-Stichprobe pro Variante für valide Aussage
   var AB_BASE = 'https://start.vanessareinthaller.de/abnehmrevolution/';
