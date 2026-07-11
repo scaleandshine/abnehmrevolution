@@ -2049,7 +2049,7 @@
   // ============================================================
   var AB_VARIANTS = {
     A: { tag: 'Variante A', desc: 'Kontrolle (CTA): „Jetzt kostenlos anmelden"' },
-    B: { tag: 'Variante B', desc: 'Ich-Formulierung (CTA): „Ja, ich sichere mir meinen Platz"' }
+    B: { tag: 'Variante B', desc: 'Ergebnisorientiert (CTA): „Ja, ich will dauerhaft abnehmen"' }
   };
   var AB_MIN_VISITORS = 100; // Mindest-Stichprobe pro Variante für valide Aussage
   var AB_BASE = 'https://start.vanessareinthaller.de/abnehmrevolution/';
@@ -2144,8 +2144,8 @@
 
   function renderTestingBoard() {
     var ideas = [
-      { t: 'Headline: Verkaufsversprechen statt Statistik', h: 'Konkretes „Workshop + Versprechen" (INNER SLIM-CODE, ohne Diät) schlägt die abstrakte 99%-Statistik bei der Eintragungsquote.', impact: 'hoch', status: 'läuft' },
-      { t: 'CTA-Button-Text', h: '„Jetzt kostenlos anmelden" vs. „Ja, ich will dauerhaft abnehmen" — handlungs- & ergebnisorientiert testen.', impact: 'hoch', status: 'geplant' },
+      { t: 'Headline: Verkaufsversprechen statt Statistik', h: 'Ergebnis 11.07.: Statistik-Headline (A) schlägt Verkaufsversprechen (B) mit 37,4% vs. 25,2% CR — Gewinner A fest verbaut. Details unter „Abgeschlossene Tests".', impact: 'hoch', status: 'abgeschlossen' },
+      { t: 'CTA-Button-Text', h: '„Jetzt kostenlos anmelden" vs. „Ja, ich will dauerhaft abnehmen" — handlungs- & ergebnisorientiert testen.', impact: 'hoch', status: 'läuft' },
       { t: 'Hero-Bild', h: 'Vanessa-Porträt vs. Vorher/Nachher- oder Lifestyle-Motiv — Bild ist nach der Headline der stärkste Hebel.', impact: 'hoch', status: 'geplant' },
       { t: 'Opt-in-Popup: Felder reduzieren', h: 'Nur E-Mail statt Vorname + E-Mail — weniger Reibung, höhere Eintragungsquote (testen ob Personalisierung leidet).', impact: 'mittel', status: 'geplant' },
       { t: 'Social Proof über der Falz', h: 'Teilnehmerzahl / Testimonial-Zeile direkt unter die Headline — Vertrauen vor dem CTA.', impact: 'mittel', status: 'geplant' },
@@ -2161,7 +2161,7 @@
       return '<div class="ab-idea">' +
         '<span class="ab-impact ' + i.impact + '">' + i.impact + '</span>' +
         '<div class="ab-idea-body"><div class="ab-idea-title">' + escH(i.t) + '</div><div class="ab-idea-hyp">' + escH(i.h) + '</div></div>' +
-        '<span class="ab-idea-status' + (i.status === 'läuft' ? ' live' : '') + '">' + (i.status === 'läuft' ? '● läuft' : i.status) + '</span>' +
+        '<span class="ab-idea-status' + (i.status === 'läuft' ? ' live' : '') + '"' + (i.status === 'abgeschlossen' ? ' style="color:#2E7D54;font-weight:800;"' : '') + '>' + (i.status === 'läuft' ? '● läuft' : (i.status === 'abgeschlossen' ? '✓ abgeschlossen' : i.status)) + '</span>' +
         '</div>';
     }).join('');
   }
