@@ -306,10 +306,10 @@
   .mail-table th { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #9a9087; text-align: left; padding: 0 12px 10px; }
   .mail-table td { font-size: 13px; color: #1B2020; padding: 11px 12px; border-top: 1px solid rgba(27,32,32,0.07); vertical-align: middle; }
   .mail-status { display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 9px; border-radius: 999px; letter-spacing: 0.04em; white-space: nowrap; text-transform: uppercase; }
-  .mail-status.completed { background: rgba(46,125,84,0.13); color: #2E7D54; }
-  .mail-status.sending { background: rgba(202,93,37,0.13); color: #CA5D25; }
-  .mail-status.scheduled { background: rgba(71,97,96,0.13); color: #476160; }
-  .mail-status.draft { background: rgba(27,32,32,0.07); color: #9a9087; }
+  .mail-status.completed { background: #2E7D54; color: #fff; }
+  .mail-status.sending { background: #CA5D25; color: #fff; }
+  .mail-status.scheduled { background: #F6C445; color: #5b4300; }
+  .mail-status.draft { background: #fff; color: #8a8178; border: 1.5px dashed #b8b0a6; }
   .mail-seq-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: rgba(27,32,32,0.04); border-radius: 14px; padding: 16px 20px; margin-bottom: 10px; }
   .mail-seq-name { font-size: 14px; font-weight: 700; color: #1B2020; }
   .mail-seq-meta { font-size: 11.5px; color: #9a9087; margin-top: 3px; }
@@ -952,6 +952,7 @@
         <div class="kpi-card highlight"><p class="kpi-label">Unique Empfänger</p><p class="kpi-num" id="mail-nic-unique">—</p><p class="kpi-note">größter Einzelversand der Strecke</p></div>
         <div class="kpi-card"><p class="kpi-label">Ø Öffnungsrate</p><p class="kpi-num" id="mail-nic-open">—</p><p class="kpi-note">gewichtet über gesendete Mails</p></div>
         <div class="kpi-card"><p class="kpi-label">Ø Klickrate</p><p class="kpi-num" id="mail-nic-click">—</p><p class="kpi-note">gewichtet über gesendete Mails</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">Anmeldungen zum Workshop</p><p class="kpi-num" id="mail-nic-signups" style="color:#2E7D54;">—</p><p class="kpi-note" id="mail-nic-signups-note">über E-Mail-Links (UTM)</p></div>
         <div class="kpi-card"><p class="kpi-label">Abmeldungen</p><p class="kpi-num" id="mail-nic-unsub" style="color:#C0392B;">—</p><p class="kpi-note">über diese Strecke</p></div>
       </div>
       <div id="mail-nic-table"><div class="chart-empty">wird geladen…</div></div>
@@ -1989,18 +1990,19 @@
     }
 
     // ---- Strecken ----
-    function strecke(g, prefix, tableId, subId, subLabel) {
+    function strecke(g, prefix, tableId, subId, subLabel, withSignups) {
       if (!g) return;
       set(prefix + '-unique', g.unique_recipients ? nf(g.unique_recipients) : '—');
       set(prefix + '-open', pct(g.avg_open_rate));
       set(prefix + '-click', pct(g.avg_click_rate));
       set(prefix + '-unsub', nf(g.unsubs));
+      if (withSignups) set(prefix + '-signups', nf(g.signups || 0));
       var sub = document.getElementById(subId);
       if (sub) sub.textContent = subLabel + ' · ' + g.sent + ' von ' + g.total + ' Mails gesendet' + (g.scheduled ? ' · ' + g.scheduled + ' geplant' : '') + (g.draft ? ' · ' + g.draft + ' Entwurf' : '');
       var el = document.getElementById(tableId);
       if (!el) return;
       var labels = { completed: 'Gesendet', sending: 'Läuft', scheduled: 'Geplant', draft: 'Entwurf' };
-      var html = '<table class="mail-table"><thead><tr><th>Mail</th><th>Betreff</th><th>Status</th><th>Empfänger</th><th>Öffnung</th><th>Klicks</th><th>Abmeld.</th></tr></thead><tbody>';
+      var html = '<table class="mail-table"><thead><tr><th>Mail</th><th>Betreff</th><th>Status</th><th>Empfänger</th><th>Öffnung</th><th>Klicks</th>' + (withSignups ? '<th>Anmeld.</th>' : '') + '<th>Abmeld.</th></tr></thead><tbody>';
       (g.mails || []).forEach(function(b) {
         var subj = (b.subject || '').replace(/\{\{[^}]*\}\}/g, '…');
         if (subj.length > 46) subj = subj.slice(0, 46) + '…';
@@ -2013,14 +2015,15 @@
         html += '<td>' + (sent ? nf(b.recipients) : '—') + '</td>';
         html += '<td>' + (sent ? pct(b.open_rate) : '—') + '</td>';
         html += '<td>' + (sent ? nf(b.clicks) + ' · ' + pct(b.click_rate) : '—') + '</td>';
+        if (withSignups) html += '<td style="font-weight:800;color:#2E7D54;">' + (b.signups === null ? '<span title="ohne UTM gesendet – nicht zuordenbar" style="color:#9a9087;font-weight:600;">—</span>' : (sent ? nf(b.signups) : (b.signups > 0 ? nf(b.signups) : '—'))) + '</td>';
         html += '<td>' + (sent ? nf(b.unsubs) : '—') + '</td>';
         html += '</tr>';
       });
       html += '</tbody></table>';
       el.innerHTML = html;
     }
-    strecke(d.angemeldet, 'mail-ang', 'mail-ang-table', 'mail-ang-sub', 'Workshop-Anmelder Juli (Tag-Liste)');
-    strecke(d.nicht, 'mail-nic', 'mail-nic-table', 'mail-nic-sub', 'Bestandsliste ohne Anmelder/Käufer + ReInvite');
+    strecke(d.angemeldet, 'mail-ang', 'mail-ang-table', 'mail-ang-sub', 'Workshop-Anmelder Juli (Tag-Liste)', false);
+    strecke(d.nicht, 'mail-nic', 'mail-nic-table', 'mail-nic-sub', 'Bestandsliste ohne Anmelder/Käufer + ReInvite', true);
   }
 
   // ============================================================

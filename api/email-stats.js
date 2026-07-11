@@ -6,6 +6,9 @@
 // NICHT die Summe über alle Mails. Newsletter-Bilanz über /v4/account/growth_stats.
 const KIT_API = "https://api.kit.com/v4";
 
+const SENT_WITHOUT_UTM = [24764177, 24764178, 24898485]; // A2, A3, RI1 gingen ohne UTM raus
+const WORKSHOP_TAG = 20703609;
+
 const CAMPAIGN = {
   label: "Workshop 18.+19. Juli 2026",
   start: "2026-07-09", // erste Kampagnen-Mail (Aktivierung 2 + ReInvite 1)
@@ -55,6 +58,29 @@ module.exports = async (req, res) => {
   const headers = { "X-Kit-Api-Key": key, "Accept": "application/json" };
   const jget = (url) => fetch(url, { headers }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
 
+  // 0) Anmeldungen über E-Mails: Juli-Anmelder (status=all) mit utm_medium=email nach utm_content
+  async function emailSignups() {
+    const byContent = {};
+    let after = null, total = 0;
+    for (let i = 0; i < 10; i++) {
+      let url = `${KIT_API}/tags/${WORKSHOP_TAG}/subscribers?per_page=500&status=all&include[]=fields`;
+      if (after) url += `&after=${after}`;
+      const d = await jget(url);
+      if (!d) break;
+      for (const s of (d.subscribers || [])) {
+        const f = s.fields || {};
+        if ((f.utm_medium || "").toLowerCase() === "email" && f.utm_content) {
+          byContent[f.utm_content] = (byContent[f.utm_content] || 0) + 1;
+          total++;
+        }
+      }
+      if (!d.pagination || !d.pagination.has_next_page) break;
+      after = d.pagination.end_cursor;
+    }
+    return { byContent, total };
+  }
+  const signupsPromise = emailSignups();
+
   // 1) Broadcast-Metadaten + Stats parallel
   const rows = await Promise.all(MAILS.map(async (m) => {
     const [bd, sd] = await Promise.all([
@@ -75,6 +101,15 @@ module.exports = async (req, res) => {
     };
   }));
 
+  const su = await signupsPromise;
+  rows.forEach((r) => {
+    if (r.g !== "nicht") return;
+    const code = r.label.split(" ·")[0].trim();
+    const sent = r.status === "completed" || r.status === "sending";
+    if (sent && SENT_WITHOUT_UTM.indexOf(r.id) !== -1) r.signups = null; // ohne UTM gesendet → nicht zuordenbar
+    else r.signups = su.byContent[code] || 0;
+  });
+
   // 2) Gruppen-Aggregate: Unique = größter Einzelversand; Raten gewichtet über gesendete Mails
   function agg(g) {
     const list = rows.filter((r) => r.g === g);
@@ -93,6 +128,7 @@ module.exports = async (req, res) => {
       unsubs: sent.reduce((a, r) => a + r.unsubs, 0),
       avg_open_rate: sumRec ? Math.round((sumOpens / sumRec) * 1000) / 10 : null,
       avg_click_rate: sumRec ? Math.round((sumClicks / sumRec) * 1000) / 10 : null,
+      signups: g === "nicht" ? list.reduce((a, r) => a + (r.signups || 0), 0) : undefined,
     };
   }
 
