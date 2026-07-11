@@ -277,17 +277,46 @@
   .ab-lightbox-frame-wrap { height: calc(88vh - 50px); }
   .ab-lightbox-frame-wrap iframe { width: 100%; height: 100%; border: 0; }
 
-  /* Testing-Board */
-  .ab-idea { display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; background: rgba(27,32,32,0.04); border-radius: 14px; margin-bottom: 10px; }
-  .ab-impact { flex: 0 0 auto; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; margin-top: 2px; }
+  /* Testing-Board (Kanban) */
+  .kb-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: start; }
+  @media (max-width: 980px) { .kb-cols { grid-template-columns: 1fr; } }
+  .kb-col { background: rgba(27,32,32,0.035); border-radius: 16px; padding: 12px; }
+  .kb-col-head { display: flex; align-items: center; justify-content: space-between; padding: 2px 6px 10px; }
+  .kb-col-title { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #7A6F63; }
+  .kb-col.laeuft .kb-col-title { color: #2E7D54; }
+  .kb-col-count { font-size: 10.5px; font-weight: 800; background: #fff; border-radius: 999px; padding: 2px 9px; color: #9a9087; }
+  .kb-card { background: #fff; border: 1px solid rgba(27,32,32,0.08); border-radius: 14px; padding: 13px 14px; margin-bottom: 10px; box-shadow: 0 3px 10px rgba(27,32,32,0.05); }
+  .kb-card.live { border-color: rgba(46,125,84,0.45); box-shadow: 0 3px 12px rgba(46,125,84,0.12); }
+  .kb-card.done { opacity: 0.92; }
+  .kb-top { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .ab-impact { font-size: 9.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
   .ab-impact.hoch { background: rgba(46,125,84,0.14); color: #2E7D54; }
   .ab-impact.mittel { background: rgba(202,93,37,0.14); color: #CA5D25; }
   .ab-impact.niedrig { background: rgba(27,32,32,0.08); color: #9a9087; }
-  .ab-idea-body { flex: 1; min-width: 0; }
-  .ab-idea-title { font-size: 14px; font-weight: 700; color: #1B2020; margin-bottom: 3px; }
-  .ab-idea-hyp { font-size: 12px; color: #7A6F63; line-height: 1.5; }
-  .ab-idea-status { flex: 0 0 auto; font-size: 10.5px; font-weight: 800; color: #9a9087; margin-top: 2px; white-space: nowrap; }
-  .ab-idea-status.live { color: #2E7D54; }
+  .kb-flag { margin-left: auto; font-size: 9.5px; font-weight: 800; white-space: nowrap; }
+  .kb-flag.live { color: #2E7D54; } .kb-flag.done { color: #2E7D54; } .kb-flag.neu { color: #CA5D25; }
+  .kb-title { font-size: 13.5px; font-weight: 800; color: #1B2020; margin-bottom: 4px; line-height: 1.3; }
+  .kb-hyp { font-size: 11.5px; color: #7A6F63; line-height: 1.5; }
+  .kb-data { margin-top: 6px; font-size: 10.5px; color: #476160; background: rgba(71,97,96,0.07); border-radius: 8px; padding: 5px 9px; line-height: 1.45; }
+  .kb-pv-btn { margin-top: 9px; width: 100%; border: 1px dashed rgba(27,32,32,0.2); background: transparent; border-radius: 9px; padding: 6px 0; font-size: 11px; font-weight: 800; color: #476160; cursor: pointer; font-family: inherit; }
+  .kb-pv-btn:hover { background: rgba(71,97,96,0.06); }
+  .kb-pv { display: none; margin-top: 9px; border-top: 1px dashed rgba(27,32,32,0.12); padding-top: 9px; }
+  .kb-pv.open { display: block; }
+  .kb-pv-lbl { font-size: 9px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #9a9087; margin: 7px 0 4px; display: flex; align-items: center; gap: 6px; }
+  .kb-pv-lbl .win { background: #2E7D54; color: #fff; border-radius: 999px; padding: 1px 7px; font-size: 8.5px; }
+  .kb-mock { background: #FAF7F6; border: 1px solid rgba(27,32,32,0.08); border-radius: 10px; padding: 12px; text-align: center; }
+  .kb-mock .mk-h { font-family: Georgia, 'Times New Roman', serif; font-size: 13.5px; line-height: 1.25; color: #1B2020; }
+  .kb-mock .mk-h em { font-style: italic; color: #CA5D25; }
+  .kb-mock .mk-cta { display: inline-flex; align-items: center; gap: 7px; background: #CA5D25; color: #fff; border-radius: 999px; padding: 8px 18px; font-size: 11.5px; font-weight: 800; }
+  .kb-mock .mk-sub { font-size: 9.5px; color: #9a9087; margin-top: 5px; }
+  .kb-mock img { max-width: 100%; border-radius: 8px; display: block; }
+  .kb-mock .mk-input { background: #fff; border: 1px solid rgba(27,32,32,0.15); border-radius: 8px; padding: 7px 10px; font-size: 10.5px; color: #9a9087; text-align: left; margin-bottom: 6px; }
+  .kb-mock .mk-stars { color: #E8A33D; font-size: 11px; letter-spacing: 1px; }
+  .kb-mock .mk-price-old { text-decoration: line-through; color: #9a9087; font-size: 11px; }
+  .kb-mock .mk-price-big { font-family: Georgia, serif; font-size: 22px; font-weight: 700; color: #CA5D25; }
+  .kb-mock .mk-phone { width: 96px; margin: 0 auto; border: 2px solid #1B2020; border-radius: 14px; padding: 6px 5px 4px; background: #fff; }
+  .kb-mock .mk-phone .ln { height: 5px; background: rgba(27,32,32,0.09); border-radius: 3px; margin-bottom: 4px; }
+  .kb-mock .mk-phone .stick { background: #CA5D25; color: #fff; border-radius: 6px; font-size: 7.5px; font-weight: 800; padding: 4px 0; margin-top: 5px; }
 
   /* ---- Funnel-Performance ---- */
   .fn-step { margin-bottom: 4px; }
@@ -2143,27 +2172,89 @@
   }
 
   function renderTestingBoard() {
+    var A='/abnehmrevolution/assets/';
     var ideas = [
-      { t: 'Headline: Verkaufsversprechen statt Statistik', h: 'Ergebnis 11.07.: Statistik-Headline (A) schlägt Verkaufsversprechen (B) mit 37,4% vs. 25,2% CR — Gewinner A fest verbaut. Details unter „Abgeschlossene Tests".', impact: 'hoch', status: 'abgeschlossen' },
-      { t: 'CTA-Button-Text', h: '„Jetzt kostenlos anmelden" vs. „Ja, ich will dauerhaft abnehmen" — handlungs- & ergebnisorientiert testen.', impact: 'hoch', status: 'läuft' },
-      { t: 'Hero-Bild', h: 'Vanessa-Porträt vs. Vorher/Nachher- oder Lifestyle-Motiv — Bild ist nach der Headline der stärkste Hebel.', impact: 'hoch', status: 'geplant' },
-      { t: 'Opt-in-Popup: Felder reduzieren', h: 'Nur E-Mail statt Vorname + E-Mail — weniger Reibung, höhere Eintragungsquote (testen ob Personalisierung leidet).', impact: 'mittel', status: 'geplant' },
-      { t: 'Social Proof über der Falz', h: 'Teilnehmerzahl / Testimonial-Zeile direkt unter die Headline — Vertrauen vor dem CTA.', impact: 'mittel', status: 'geplant' },
-      { t: 'Glow-Upsell: Preis-Anker', h: 'Auf der Danke-Seite „365 € Wert → 19,95 €" stärker visualisieren — hebt die Upsell-Rate.', impact: 'mittel', status: 'geplant' },
-      { t: 'Countdown-Dringlichkeit', h: 'Sichtbarer Countdown bis Workshop-Start im Hero — Dringlichkeit kann Eintragung pushen.', impact: 'niedrig', status: 'geplant' },
-      { t: 'Eyebrow-Zeile', h: '„Exklusiv für Frauen 40+" vs. „Kostenloser 2-Tage-Live-Workshop" — Zielgruppe vs. Format betonen.', impact: 'niedrig', status: 'geplant' }
+      // ---- ABGESCHLOSSEN ----
+      { t: 'Headline: Verkaufsversprechen statt Statistik', impact: 'hoch', status: 'abgeschlossen',
+        h: 'These des Boards widerlegt: Die Statistik-Headline (A) schlägt das Verkaufsversprechen (B).',
+        d: 'Ergebnis 28.06.–11.07.: A 37,4 % CR (40/107) vs. B 25,2 % (26/103) · ~94 % Konfidenz · Gewinner A fest verbaut.',
+        pv: '<div class="kb-pv-lbl">Variante A <span class="win">GEWINNER · 37,4 %</span></div><div class="kb-mock"><div class="mk-h">99% der Frauen über 40 sind nur <em>eine einzige Erkenntnis</em> davon entfernt, dauerhaft schlank zu sein.</div></div><div class="kb-pv-lbl">Variante B · 25,2 %</div><div class="kb-mock" style="opacity:0.65;"><div class="mk-h">Erfahre, wie du mit der Inner-Slim-Code-Methode <em>deinen Abnehmcode entschlüsselst</em> — ohne Sportmodus und Jo-Jo-Effekt.</div></div>' },
+      // ---- LÄUFT ----
+      { t: 'CTA-Button-Text', impact: 'hoch', status: 'läuft',
+        h: 'Handlungs- vs. ergebnisorientiert: Sagt die Frau lieber was sie TUT oder was sie WILL?',
+        d: 'Live seit 11.07. (cta_v1, 50/50 auf allen 5 Standard-CTAs). Auswertung oben im Tab · aussagekräftig ab ~100 Besuchern je Variante.',
+        pv: '<div class="kb-pv-lbl">Variante A (Kontrolle)</div><div class="kb-mock"><span class="mk-cta">Jetzt kostenlos anmelden →</span></div><div class="kb-pv-lbl">Variante B (Ergebnis)</div><div class="kb-mock"><span class="mk-cta">Ja, ich will dauerhaft abnehmen →</span></div>' },
+      // ---- GEPLANT (hoch) ----
+      { t: 'Mobile Sticky-CTA-Leiste', impact: 'hoch', status: 'geplant', neu: true,
+        h: 'Beim Scrollen bleibt unten eine schmale Anmelde-Leiste fixiert — die Seite ist 10+ Sektionen lang, zwischen den CTAs verlieren wir Scroller.',
+        d: 'Daten: CR ehrlich ~17,5 % · Großteil des Paid-Traffics ist mobil · 6 CTA-Positionen auf sehr langer Seite = lange CTA-lose Strecken.',
+        pv: '<div class="kb-pv-lbl">Variante B (mit Sticky-Leiste)</div><div class="kb-mock"><div class="mk-phone"><div class="ln" style="width:80%"></div><div class="ln"></div><div class="ln" style="width:60%"></div><div class="ln"></div><div class="ln" style="width:70%"></div><div class="stick">JETZT ANMELDEN</div></div><div class="mk-sub">Leiste erscheint nach dem ersten Scroll, verschwindet im Popup</div></div>' },
+      { t: 'E-Mail-Rückkehrer-Hero', impact: 'hoch', status: 'geplant', neu: true,
+        h: 'Besucherinnen aus den Kit-Mails (utm_medium=email) kennen Vanessa schon — sie sehen aber den Kalt-Traffic-Hero. Eigene Begrüßung + direkter CTA statt voller Pitch.',
+        d: 'Daten: 11.07.: 183 Besucher, großteils Mail-Klicks der Bestandsliste, CR nur 17,5 % · Bestand konvertiert beim Glow mit 9,5 %, kennt die Marke also gut.',
+        pv: '<div class="kb-pv-lbl">Variante A (aktuell für alle)</div><div class="kb-mock"><div class="mk-h" style="font-size:11.5px;">99% der Frauen über 40 sind nur <em>eine Erkenntnis</em> entfernt…</div><div class="mk-sub">voller Kalt-Pitch</div></div><div class="kb-pv-lbl">Variante B (nur E-Mail-Traffic)</div><div class="kb-mock"><div class="mk-h" style="font-size:11.5px;">Schön, dass du da bist! Sichere dir <em>jetzt deinen Platz</em> für Sa + So.</div><div class="mk-sub">kurz + direkt, da Vertrauen schon da</div></div>' },
+      { t: 'Hero-Bild', impact: 'hoch', status: 'geplant',
+        h: 'Vanessa-Porträt vs. Lifestyle-/Vorher-Nachher-Motiv — das Bild ist nach der Headline der stärkste Hebel.',
+        d: 'Nächster sinnvoller Test nach cta_v1 (immer nur EINE Komponente).',
+        pv: '<div class="kb-pv-lbl">Variante A (aktuell)</div><div class="kb-mock"><img src=\'' + A + 'hero-keyvisual.jpg\' alt="aktuell" loading="lazy"></div><div class="kb-pv-lbl">Variante B (Lifestyle)</div><div class="kb-mock"><img src=\'' + A + 'lifestyle-vanessa.png\' alt="Lifestyle" loading="lazy"></div>' },
+      // ---- GEPLANT (mittel) ----
+      { t: 'Opt-in-Popup: Felder reduzieren', impact: 'mittel', status: 'geplant',
+        h: 'Nur E-Mail statt Vorname + E-Mail — weniger Reibung. Achtung: Vorname speist die persönliche Danke-Seite („Schön, dass du dabei bist, Anna").',
+        d: 'Trade-off messen: Eintragungsquote vs. Wirkung der Personalisierung auf die Glow-Rate.',
+        pv: '<div class="kb-pv-lbl">Variante A (aktuell)</div><div class="kb-mock" style="text-align:left;"><div class="mk-input">Dein Vorname *</div><div class="mk-input">Deine E-Mailadresse *</div><div style="text-align:center;"><span class="mk-cta" style="font-size:10px;padding:6px 14px;">Jetzt kostenlos anmelden</span></div></div><div class="kb-pv-lbl">Variante B (1 Feld)</div><div class="kb-mock" style="text-align:left;"><div class="mk-input">Deine E-Mailadresse *</div><div style="text-align:center;"><span class="mk-cta" style="font-size:10px;padding:6px 14px;">Jetzt kostenlos anmelden</span></div></div>' },
+      { t: 'Popup: Trust-Zeile unterm Button', impact: 'mittel', status: 'geplant', neu: true,
+        h: 'Mini-Zeile unter dem Absenden-Button gegen den letzten Zweifel im entscheidenden Moment.',
+        d: 'Daten: ~80 % verlassen die Seite ohne Anmeldung — der Popup-Moment ist der letzte Engpass vor der Conversion.',
+        pv: '<div class="kb-pv-lbl">Variante B</div><div class="kb-mock"><span class="mk-cta" style="font-size:10px;">Jetzt kostenlos anmelden</span><div class="mk-sub">🔒 100 % kostenlos · kein Spam · über 150 Frauen waren im Juni dabei</div></div>' },
+      { t: 'Social Proof über der Falz', impact: 'mittel', status: 'geplant',
+        h: 'Teilnehmerzahl/Testimonial-Zeile direkt unter der Headline — Vertrauen vor dem ersten CTA.',
+        d: 'Belegbar: 157 Juni-Anmeldungen, Testimonials vorhanden.',
+        pv: '<div class="kb-pv-lbl">Variante B</div><div class="kb-mock"><div class="mk-h" style="font-size:11.5px;">99% der Frauen über 40 sind nur <em>eine Erkenntnis</em> entfernt…</div><div class="mk-stars" style="margin-top:6px;">★★★★★</div><div class="mk-sub">Über 150 Frauen waren im Juni dabei — „Endlich hat es klick gemacht!"</div></div>' },
+      { t: 'Glow-Upsell: Preis-Anker', impact: 'mittel', status: 'geplant',
+        h: '„365 € Wert → 19,95 €" stärker visualisieren (Balken/Badge statt Textzeilen) — hebt die Upsell-Rate der Danke-Seite.',
+        d: 'Daten: frische Paid-Leads kaufen nur zu 2,2 % (Bestand: 9,5 %) — der Wert-Kontrast muss in 3 Sekunden sitzen.',
+        pv: '<div class="kb-pv-lbl">Variante A (aktuell)</div><div class="kb-mock"><div class="mk-price-old">Einzeln 365 € · normalerweise 97 €</div><div class="mk-price-big">19,95 €</div></div><div class="kb-pv-lbl">Variante B (Anker-Visual)</div><div class="kb-mock"><div style="display:flex;align-items:flex-end;gap:10px;justify-content:center;"><div><div style="width:26px;height:64px;background:rgba(27,32,32,0.15);border-radius:5px;"></div><div class="mk-sub">365 €</div></div><div><div style="width:26px;height:6px;background:#CA5D25;border-radius:5px;"></div><div class="mk-sub" style="color:#CA5D25;font-weight:800;">19,95 €</div></div></div><div class="mk-sub" style="color:#2E7D54;font-weight:800;">Du sparst 95 %</div></div>' },
+      { t: 'Danke-Video: persönliches Thumbnail', impact: 'mittel', status: 'geplant', neu: true,
+        h: 'Wistia-Standbild vs. Thumbnail mit Vanessa-Blickkontakt + Text „Drück Play — 2 Minuten" — mehr Video-Starts = mehr Glow-Käufe.',
+        d: 'Daten: alle bisherigen Glow-Käufe fielen direkt nach Videokontakt auf der Danke-Seite (13/13 im Juni Sofortkäufe).',
+        pv: '<div class="kb-pv-lbl">Variante A (Standbild)</div><div class="kb-mock"><div style="position:relative;"><img src=\'' + A + 'vanessa-portrait.png\' style="opacity:0.85;max-height:70px;object-fit:cover;width:100%;" loading="lazy"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;">▶️</div></div></div><div class="kb-pv-lbl">Variante B (persönlich + Aufforderung)</div><div class="kb-mock"><div style="position:relative;"><img src=\'' + A + 'vanessa-boho-kueche.jpg\' style="max-height:70px;object-fit:cover;width:100%;" loading="lazy"><div style="position:absolute;left:0;right:0;bottom:2px;font-size:8.5px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.7);">▶ Drück Play — dauert nur 2 Minuten</div></div></div>' },
+      // ---- GEPLANT (niedrig) ----
+      { t: 'Countdown prominenter im Hero', impact: 'niedrig', status: 'geplant',
+        h: 'Countdown direkt über den CTA statt unter den Termin-Chip — Dringlichkeit in den Moment der Entscheidung holen.',
+        d: 'Countdown existiert bereits im Hero (unterhalb) — reiner Positions-Test.',
+        pv: '<div class="kb-pv-lbl">Variante B</div><div class="kb-mock"><div class="mk-sub" style="font-weight:800;color:#CA5D25;">⏳ Start in 6 Tagen : 14 Std : 22 Min</div><div style="margin-top:6px;"><span class="mk-cta" style="font-size:10px;">Jetzt kostenlos anmelden</span></div></div>' },
+      { t: 'Eyebrow-Zeile', impact: 'niedrig', status: 'geplant',
+        h: '„Exklusiv für Frauen 40+" vs. „Kostenloser 2-Tage-Live-Workshop" — Zielgruppe vs. Format betonen.', d: null,
+        pv: '<div class="kb-pv-lbl">Variante A</div><div class="kb-mock"><div class="mk-sub" style="letter-spacing:2px;font-weight:800;">EXKLUSIV FÜR FRAUEN 40+</div></div><div class="kb-pv-lbl">Variante B</div><div class="kb-mock"><div class="mk-sub" style="letter-spacing:2px;font-weight:800;">KOSTENLOSER 2-TAGE-LIVE-WORKSHOP</div></div>' }
     ];
     var el = document.getElementById('ab-ideas');
     if (!el) return;
     var order = { hoch: 0, mittel: 1, niedrig: 2 };
-    ideas.sort(function(a, b) { return order[a.impact] - order[b.impact]; });
-    el.innerHTML = ideas.map(function(i) {
-      return '<div class="ab-idea">' +
-        '<span class="ab-impact ' + i.impact + '">' + i.impact + '</span>' +
-        '<div class="ab-idea-body"><div class="ab-idea-title">' + escH(i.t) + '</div><div class="ab-idea-hyp">' + escH(i.h) + '</div></div>' +
-        '<span class="ab-idea-status' + (i.status === 'läuft' ? ' live' : '') + '"' + (i.status === 'abgeschlossen' ? ' style="color:#2E7D54;font-weight:800;"' : '') + '>' + (i.status === 'läuft' ? '● läuft' : (i.status === 'abgeschlossen' ? '✓ abgeschlossen' : i.status)) + '</span>' +
-        '</div>';
-    }).join('');
+    function col(status, title, cls) {
+      var list = ideas.filter(function(i) { return i.status === status; });
+      list.sort(function(a, b) { return order[a.impact] - order[b.impact]; });
+      var cards = list.map(function(i) {
+        var idx = ideas.indexOf(i);
+        return '<div class="kb-card' + (status === 'läuft' ? ' live' : (status === 'abgeschlossen' ? ' done' : '')) + '">' +
+          '<div class="kb-top"><span class="ab-impact ' + i.impact + '">' + i.impact + '</span>' +
+          (i.neu ? '<span class="kb-flag neu">NEU 11.07.</span>' : '') +
+          (status === 'läuft' ? '<span class="kb-flag live">● live</span>' : '') +
+          (status === 'abgeschlossen' ? '<span class="kb-flag done">✓</span>' : '') + '</div>' +
+          '<div class="kb-title">' + escH(i.t) + '</div>' +
+          '<div class="kb-hyp">' + escH(i.h) + '</div>' +
+          (i.d ? '<div class="kb-data">📊 ' + escH(i.d) + '</div>' : '') +
+          (i.pv ? '<button class="kb-pv-btn" onclick="abTogglePv(' + idx + ', this)">👁 Preview ansehen</button><div class="kb-pv" id="kb-pv-' + idx + '">' + i.pv + '</div>' : '') +
+          '</div>';
+      }).join('');
+      return '<div class="kb-col ' + cls + '"><div class="kb-col-head"><span class="kb-col-title">' + title + '</span><span class="kb-col-count">' + list.length + '</span></div>' + (cards || '<div style="font-size:11px;color:#9a9087;text-align:center;padding:12px 0;">—</div>') + '</div>';
+    }
+    window.abTogglePv = function(idx, btn) {
+      var pv = document.getElementById('kb-pv-' + idx);
+      if (!pv) return;
+      var open = pv.classList.toggle('open');
+      btn.textContent = open ? '✕ Preview schließen' : '👁 Preview ansehen';
+    };
+    el.innerHTML = '<div class="kb-cols">' + col('geplant', '🗂 Geplant', 'geplant') + col('läuft', '🟢 Läuft', 'laeuft') + col('abgeschlossen', '✅ Abgeschlossen', 'done') + '</div>';
   }
 
   // ============================================================
