@@ -32,6 +32,7 @@ const MAILS = [
   { id: 24764128, g: "angemeldet", kind: "Reminder", label: "R12 · 15min vorher (T2)" },
   { id: 24830693, g: "angemeldet", kind: "Reminder", label: "R12b · 🔴 LIVE (T2)" },
   { id: 24764129, g: "angemeldet", kind: "Reminder", label: "R13 · Pause (T2, optional)" },
+  { id: 24950245, g: "angemeldet", kind: "Nachfass", label: "GN1 · Glow-Nachfass" },
   // ---- Strecke 2: Nicht-Angemeldete (Aktivierung Bestandsliste + ReInvite) ----
   { id: 24764174, g: "nicht", kind: "Aktivierung", label: "A1 · Einladung" },
   { id: 24764177, g: "nicht", kind: "Aktivierung", label: "A2 · Gain" },
