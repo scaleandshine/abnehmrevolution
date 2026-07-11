@@ -29,25 +29,25 @@
     background:
       radial-gradient(100% 70% at 100% 0%, var(--ms-blush) 0%, rgba(247,224,209,0) 56%),
       linear-gradient(180deg, #F3EADE 0%, var(--ms-cream) 100%);
-    padding: 48px 20px 70px;
+    padding: 24px 20px 70px;
   }
   .d2-hero__inner { max-width: 720px; margin: 0 auto; text-align: center; }
   .d2-hero__brand {
     font-family: var(--ms-font-display); font-style: italic; font-weight: 600;
-    font-size: 24px; line-height: 1; color: var(--ms-sage); margin-bottom: 30px;
+    font-size: 24px; line-height: 1; color: var(--ms-sage); margin-bottom: 16px;
   }
   .d2-hero__check {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 74px; height: 74px; border-radius: var(--ms-radius-pill);
-    background: var(--ms-sage); margin-bottom: 22px; animation: ds2Ping 2.4s ease-out infinite;
+    width: 52px; height: 52px; border-radius: var(--ms-radius-pill);
+    background: var(--ms-sage); margin-bottom: 12px; animation: ds2Ping 2.4s ease-out infinite;
   }
   .d2-hero__eyebrow {
     margin: 0 0 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.2em;
     text-transform: uppercase; color: var(--ms-terracotta);
   }
   .d2-hero__h1 {
-    margin: 0 0 20px; font-family: var(--ms-font-display); font-weight: 600;
-    font-size: clamp(34px, 5.4vw, 52px); line-height: 1.02; color: var(--ms-charcoal);
+    margin: 0 0 12px; font-family: var(--ms-font-display); font-weight: 600;
+    font-size: clamp(30px, 5vw, 46px); line-height: 1.02; color: var(--ms-charcoal);
   }
   .d2-hero__h1 em { font-style: italic; color: var(--ms-terracotta); }
   .d2-hero__lead {
@@ -58,9 +58,20 @@
   }
   .d2-hero__sub strong { color: var(--ms-sage); }
   .d2-hero__cue {
-    margin: 0 auto 24px; max-width: 560px; font-family: var(--ms-font-display);
-    font-style: italic; font-weight: 500; font-size: clamp(18px, 2.4vw, 23px);
+    margin: 0 auto 18px; max-width: 560px; font-family: var(--ms-font-display);
+    font-style: italic; font-weight: 500; font-size: clamp(16px, 2.2vw, 21px);
     line-height: 1.35; color: var(--ms-sage);
+  }
+  /* Video-first mobil: Kopf maximal kompakt, Video komplett above the fold */
+  @media (max-width: 560px) {
+    .d2-hero { padding: 12px 14px 46px; }
+    .d2-hero__brand { font-size: 19px; margin-bottom: 10px; }
+    .d2-hero__check { width: 38px; height: 38px; margin-bottom: 8px; }
+    .d2-hero__check svg { width: 20px; height: 20px; }
+    .d2-hero__eyebrow { font-size: 10.5px; margin-bottom: 5px; }
+    .d2-hero__h1 { font-size: 27px; margin-bottom: 8px; }
+    .d2-hero__cue { font-size: 14px; line-height: 1.4; margin-bottom: 12px; }
+    .d2-video-wrap { margin-bottom: 20px; }
   }
 
   /* VIDEO FACADE */
@@ -412,10 +423,7 @@
       <p class="d2-hero__eyebrow">Herzlichen Glückwunsch!</p>
       <h1 class="d2-hero__h1">Du bist <em>dabei.</em></h1>
 
-      <p class="d2-hero__lead">Du hast soeben eine E-Mail mit deinem persönlichen Zoom-Link bekommen. Dort warten alle Informationen zu deiner Abnehm-Revolution auf dich.</p>
-      <p class="d2-hero__sub">Dein Platz ist reserviert. Bitte schau in dein Postfach, auch in den Spam-Ordner. Trag dir am besten gleich meine Adresse <strong>support@vanessareinthaller.de</strong> als sicheren Absender ein, damit dir keine Info verloren geht.</p>
-
-      <p class="d2-hero__cue">Bevor du diese Seite verlässt, schau dir bitte mein kurzes Video an. Hier findest du alle wichtigen Infos und Zugänge zu deiner Abnehm-Revolution.</p>
+      <p class="d2-hero__cue">Schau dir zuerst dieses kurze Video an – darin bekommst du alle wichtigen Infos und Zugänge zu deiner Abnehm-Revolution.</p>
 
       <div class="d2-video-wrap">
         <div class="d2-video-card">
@@ -425,6 +433,9 @@
       </div>
 
       <a href="#stream" class="d2-hero__cta">Hier geht's zum Live-Stream<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+
+      <p class="d2-hero__lead" style="margin-top:26px;">Du hast soeben eine E-Mail mit deinem persönlichen Zoom-Link bekommen. Dort warten alle Informationen zu deiner Abnehm-Revolution auf dich.</p>
+      <p class="d2-hero__sub">Dein Platz ist reserviert. Bitte schau in dein Postfach, auch in den Spam-Ordner. Trag dir am besten gleich meine Adresse <strong>support@vanessareinthaller.de</strong> als sicheren Absender ein, damit dir keine Info verloren geht.</p>
     </div>
   </section>
 

@@ -29,10 +29,23 @@
     position: relative; overflow: hidden; color: var(--ms-charcoal);
     background: radial-gradient(100% 70% at 100% 0%, #F7E0D1 0%, rgba(247,224,209,0) 56%),
                 linear-gradient(180deg, #F3EADE 0%, #EFE7DD 100%);
-    padding: 22px 20px 74px;
+    padding: 16px 20px 74px;
+  }
+  /* Video-first: oberhalb des Videos alles kompakt (above the fold, v.a. mobil) */
+  .dk-confirm-pill { margin-bottom: 12px; }
+  .dk-h1 { margin-bottom: 10px; }
+  .dk-lead { margin-bottom: 16px; }
+  @media (max-width: 560px) {
+    .dk-hero { padding: 10px 14px 50px; }
+    .dk-hero-head { padding-bottom: 8px; margin-bottom: 12px; }
+    .dk-brandmark { font-size: 19px; }
+    .dk-confirm-pill { font-size: 11px; padding: 6px 12px; margin-bottom: 10px; }
+    .dk-h1 { font-size: 25px; margin-bottom: 8px; }
+    .dk-lead { font-size: 13.5px; line-height: 1.5; margin-bottom: 12px; }
+    .dk-video-wrap { margin-bottom: 18px; }
   }
   .dk-brandmark { font-family: var(--ms-font-display); font-style: italic; font-weight: 600; font-size: 25px; line-height: 1; color: var(--ms-sage); }
-  .dk-hero-head { text-align: center; padding-bottom: 24px; margin-bottom: 30px; border-bottom: 1px solid rgba(12,17,20,0.08); }
+  .dk-hero-head { text-align: center; padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px solid rgba(12,17,20,0.08); }
 
   .dk-progress-wrap { max-width: 480px; margin: 10px auto 22px; }
   .dk-progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
@@ -54,7 +67,7 @@
   .dk-lead { margin: 0 auto 30px; max-width: 560px; font-size: 16px; line-height: 1.6; color: #4a4540; }
   .dk-hook { margin: 0 auto 22px; max-width: 600px; font-family: var(--ms-font-display); font-style: italic; font-weight: 500; font-size: clamp(15px,2.6vw,22px); line-height: 1.32; color: var(--ms-charcoal); }
 
-  .dk-video-wrap { position: relative; max-width: 860px; margin: 0 auto 30px; }
+  .dk-video-wrap { position: relative; max-width: 720px; margin: 0 auto 26px; }
   .dk-video-wrap .video-facade { box-shadow: 0 0 0 1px rgba(12,17,20,0.08), 0 24px 60px rgba(31,26,21,0.22); }
   .dk-video-tag {
     position: absolute; left: 18px; bottom: 16px; display: inline-flex; align-items: center; gap: 7px;
@@ -227,21 +240,6 @@
     <div class="dk-brandmark">Die Abnehmrevolution</div>
   </div>
 
-  <!-- ANIMATED PROGRESS BAR -->
-  <div class="dk-progress-wrap">
-    <div class="dk-progress-top">
-      <span class="dk-progress-lbl">Nur noch ein Schritt</span>
-      <span class="dk-progress-pct">80%</span>
-    </div>
-    <div class="dk-progress-track">
-      <div id="prog-bar"></div>
-    </div>
-    <div class="dk-progress-foot">
-      <span>✓ Angemeldet</span>
-      <span>Fertig</span>
-    </div>
-  </div>
-
   <div class="dk-hero-inner">
     <div class="dk-confirm-pill">
       <span class="check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
@@ -249,14 +247,29 @@
     </div>
 
     <h1 class="dk-h1">Schön, dass du <em>dabei bist.</em></h1>
-    <p class="dk-lead">Dein Platz im Workshop ist sicher. Bevor du die Seite schließt, habe ich noch etwas für dich, das du danach nicht wieder zu Gesicht bekommst.</p>
-
-    <p class="dk-hook">Die meisten Frauen kommen in den Workshop und hören zu. Ein paar kommen vorbereitet und verändern wirklich etwas. Dieses kurze Video zeigt dir den Unterschied.</p>
+    <p class="dk-lead">Dein Platz ist sicher. Bevor du gehst: Dieses kurze Video zeigt dir, wie du vorbereitet in den Workshop startest.</p>
 
     <div class="dk-video-wrap">
       <script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/mk7isd53f0.js" async type="module"></script><style>wistia-player[media-id='mk7isd53f0']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/mk7isd53f0/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style> <wistia-player media-id="mk7isd53f0" aspect="1.7777777777777777"></wistia-player>
       <span class="dk-video-tag"><span class="dot"></span>Meine Nachricht an dich</span>
     </div>
+
+    <!-- ANIMATED PROGRESS BAR -->
+    <div class="dk-progress-wrap">
+      <div class="dk-progress-top">
+        <span class="dk-progress-lbl">Nur noch ein Schritt</span>
+        <span class="dk-progress-pct">80%</span>
+      </div>
+      <div class="dk-progress-track">
+        <div id="prog-bar"></div>
+      </div>
+      <div class="dk-progress-foot">
+        <span>✓ Angemeldet</span>
+        <span>Fertig</span>
+      </div>
+    </div>
+
+    <p class="dk-hook">Die meisten Frauen kommen in den Workshop und hören nur zu. Ein paar kommen vorbereitet – und verändern wirklich etwas.</p>
 
     <!-- LIVE URGENCY BAR -->
     <div class="dk-urgency">
