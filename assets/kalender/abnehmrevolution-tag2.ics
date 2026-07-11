@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Die Abnehmrevolution//Mama Spagat//DE
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:abnehmrevolution-2026-tag2@vanessareinthaller.de
+DTSTAMP:20260711T120000Z
+DTSTART:20260719T080000Z
+DTEND:20260719T100000Z
+SUMMARY:Die Abnehmrevolution – Workshop Tag 2 (10:00–12:00 Uhr)
+DESCRIPTION:Live via Zoom (Raum öffnet 15 Min. vorher): https://us02web.zoom.us/j/86316316876
+LOCATION:Zoom
+URL:https://us02web.zoom.us/j/86316316876
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Die Abnehmrevolution startet gleich
+END:VALARM
+END:VEVENT
+END:VCALENDAR
