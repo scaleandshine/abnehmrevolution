@@ -217,20 +217,15 @@
   .dk-lead { margin-bottom: 16px; }
   .dk-hook { margin-bottom: 18px; }
   @media (max-width: 560px) {
-    .dk-hero { padding: 6px 12px 50px; }
-    .dk-hero-head { padding-bottom: 4px; margin-bottom: 6px; }
-    .dk-brandmark { font-size: 17px; }
-    .dk-progress-wrap { margin: 4px auto 8px; max-width: 320px; }
-    .dk-progress-top { margin-bottom: 4px; }
-    .dk-progress-lbl, .dk-progress-pct { font-size: 10px; }
-    .dk-progress-track { height: 6px; }
-    .dk-progress-foot { margin-top: 2px; font-size: 8.5px; }
-    .dk-confirm-pill { font-size: 10px; padding: 4px 10px; margin-bottom: 6px; }
-    .dk-h1 { font-size: 22px; margin-bottom: 5px; }
-    .dk-lead { font-size: 12.5px; line-height: 1.4; margin-bottom: 6px; }
-    .dk-hook { font-size: 12.5px; line-height: 1.38; margin-bottom: 8px; }
-    .dk-video-wrap { margin-bottom: 14px; }
-    #urgent-banner.is-down { font-size: 11px; line-height: 1.3; padding-top: 8px; padding-bottom: 8px; }
+    .dk-hero { padding: 14px 16px 50px; }
+    .dk-hero-head { padding-bottom: 10px; margin-bottom: 14px; }
+    .dk-brandmark { font-size: 21px; }
+    .dk-progress-wrap { margin: 8px auto 16px; max-width: 340px; }
+    .dk-confirm-pill { font-size: 11px; padding: 6px 13px; margin-bottom: 12px; }
+    .dk-h1 { font-size: 28px; line-height: 1.12; margin-bottom: 12px; }
+    .dk-lead { font-size: 14.5px; line-height: 1.62; margin-bottom: 20px; max-width: 330px; }
+    .dk-video-wrap { margin-bottom: 22px; }
+    #urgent-banner.is-down { font-size: 11.5px; line-height: 1.35; padding-top: 9px; padding-bottom: 9px; }
   }
   .dk-brandmark { font-family: var(--ms-font-display); font-style: italic; font-weight: 600; font-size: 25px; line-height: 1; color: var(--ms-sage); }
 </style>
@@ -270,10 +265,9 @@
       Anmeldung zur Abnehm-Revolution bestätigt
     </div>
 
-    <h1 class="dk-h1">Schön, dass du <em>dabei bist.</em></h1>
-    <p class="dk-lead">Dein Platz im Workshop ist sicher. Bevor du die Seite schließt: Ich habe noch etwas für dich, das du danach nicht wieder zu Gesicht bekommst.</p>
-
-    <p class="dk-hook">Die meisten Frauen kommen in den Workshop und hören zu. Ein paar kommen vorbereitet und verändern wirklich etwas. Dieses kurze Video zeigt dir den Unterschied.</p>
+    <h1 class="dk-h1">Schön, dass du <em>dabei bist</em><span id="dk-vname"></span>.</h1>
+    <p class="dk-lead">Dein Platz im Workshop ist sicher. Bevor du die Seite schließt: Ich habe noch etwas für dich. Denn die meisten Frauen kommen in den Workshop und hören zu. Ein paar kommen vorbereitet und verändern wirklich etwas. Dieses kurze Video zeigt dir den Unterschied und wie du das Maximum aus der Abnehmrevolution für dich herausholst.</p>
+    <script>(function(){try{var n=(localStorage.getItem("ar_vorname")||"").trim();if(n){n=n.split(/\s+/)[0];n=n.charAt(0).toUpperCase()+n.slice(1);var el=document.getElementById("dk-vname");if(el)el.textContent=", "+n;}}catch(e){}})();</script>
 
     <div class="dk-video-wrap">
       <script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/mk7isd53f0.js" async type="module"></script><style>wistia-player[media-id='mk7isd53f0']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/mk7isd53f0/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style> <wistia-player media-id="mk7isd53f0" aspect="1.7777777777777777"></wistia-player>

@@ -146,6 +146,7 @@
           fbclid: ls("ms_fbclid"), gclid: ls("ms_gclid"), ttclid: ls("ms_ttclid"),
           ab_test: (window.__AB__ || {}).test || "", ab_variant: (window.__AB__ || {}).variant || ""
         };
+        try { if (lead.vorname) localStorage.setItem("ar_vorname", lead.vorname.trim()); } catch (e3) {}
         var done = false;
         var go = function () { if (!done) { done = true; window.location.href = redirect; } };
         // Lead an Kit (Serverless /api/lead) übergeben, dann weiterleiten.
