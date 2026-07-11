@@ -920,28 +920,41 @@
     <!-- ===== E-MAIL TAB ===== -->
     <div class="section" data-tab="email">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
-        <h2 class="section-title" style="margin:0;">Zustellbarkeit</h2>
+        <h2 class="section-title" style="margin:0;">Newsletter-Bilanz · Kampagne Workshop 18.+19. Juli</h2>
         <span id="mail-stand" style="font-size:11.5px;color:#9a9087;">wird geladen…</span>
       </div>
-      <p class="section-sub">Aggregiert über gesendete Projekt-Broadcasts (Betreff „Abnehmrevolution")</p>
+      <p class="section-sub" id="mail-nl-sub">Ganze Liste: Zugänge vs. Abmeldungen über den Kampagnenzeitraum</p>
       <div class="kpi-grid">
-        <div class="kpi-card highlight"><p class="kpi-label">Empfänger gesamt</p><p class="kpi-num" id="mail-recipients">—</p><p class="kpi-note" id="mail-sent-note">gesendete Mails</p></div>
-        <div class="kpi-card highlight"><p class="kpi-label">Ø Öffnungsrate</p><p class="kpi-num" id="mail-open">—</p><p class="kpi-note">Opens ÷ Empfänger</p></div>
-        <div class="kpi-card highlight"><p class="kpi-label">Ø Klickrate</p><p class="kpi-num" id="mail-click">—</p><p class="kpi-note">Klicks ÷ Empfänger</p></div>
-        <div class="kpi-card"><p class="kpi-label">Abmelderate</p><p class="kpi-num" id="mail-unsub" style="color:#C0392B;">—</p><p class="kpi-note"><span id="mail-unsub-abs">—</span> Abmeldungen</p></div>
+        <div class="kpi-card"><p class="kpi-label">Vor der 1. Mail</p><p class="kpi-num" id="mail-nl-start">—</p><p class="kpi-note">Abonnenten bei Kampagnenstart</p></div>
+        <div class="kpi-card"><p class="kpi-label">Dazugekommen</p><p class="kpi-num" id="mail-nl-new" style="color:#2E7D54;">—</p><p class="kpi-note">neue Abonnenten im Zeitraum</p></div>
+        <div class="kpi-card"><p class="kpi-label">Abgemeldet</p><p class="kpi-num" id="mail-nl-lost" style="color:#C0392B;">—</p><p class="kpi-note">Abmeldungen im Zeitraum</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">Netto</p><p class="kpi-num" id="mail-nl-net">—</p><p class="kpi-note" id="mail-nl-net-note">Gewinn / Verlust</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">Aktuell im Newsletter</p><p class="kpi-num" id="mail-nl-now">—</p><p class="kpi-note" id="mail-nl-now-note">Stand heute</p></div>
       </div>
     </div>
 
     <div class="section" data-tab="email">
-      <h2 class="section-title">Sequenzen</h2>
-      <p class="section-sub">Automatische E-Mail-Serien für dieses Projekt</p>
-      <div id="mail-sequences"><div class="chart-empty">wird geladen…</div></div>
+      <h2 class="section-title">💌 Strecke 1 · Angemeldete (Reminder)</h2>
+      <p class="section-sub" id="mail-ang-sub">Workshop-Anmelder Juli · wird geladen…</p>
+      <div class="kpi-grid">
+        <div class="kpi-card highlight"><p class="kpi-label">Unique Empfänger</p><p class="kpi-num" id="mail-ang-unique">—</p><p class="kpi-note">größter Einzelversand der Strecke</p></div>
+        <div class="kpi-card"><p class="kpi-label">Ø Öffnungsrate</p><p class="kpi-num" id="mail-ang-open">—</p><p class="kpi-note">gewichtet über gesendete Mails</p></div>
+        <div class="kpi-card"><p class="kpi-label">Ø Klickrate</p><p class="kpi-num" id="mail-ang-click">—</p><p class="kpi-note">gewichtet über gesendete Mails</p></div>
+        <div class="kpi-card"><p class="kpi-label">Abmeldungen</p><p class="kpi-num" id="mail-ang-unsub" style="color:#C0392B;">—</p><p class="kpi-note">über diese Strecke</p></div>
+      </div>
+      <div id="mail-ang-table"><div class="chart-empty">wird geladen…</div></div>
     </div>
 
     <div class="section" data-tab="email">
-      <h2 class="section-title">Broadcasts</h2>
-      <p class="section-sub">Workshop-Reminder + Aktivierungs-/Launch-Mails an die Gesamtliste · gesendete zuerst</p>
-      <div id="mail-broadcasts"><div class="chart-empty">wird geladen…</div></div>
+      <h2 class="section-title">📣 Strecke 2 · Nicht-Angemeldete (Aktivierung + ReInvite)</h2>
+      <p class="section-sub" id="mail-nic-sub">Bestandsliste ohne Anmelder/Käufer + ReInvite an Juni-Teilnehmerinnen · wird geladen…</p>
+      <div class="kpi-grid">
+        <div class="kpi-card highlight"><p class="kpi-label">Unique Empfänger</p><p class="kpi-num" id="mail-nic-unique">—</p><p class="kpi-note">größter Einzelversand der Strecke</p></div>
+        <div class="kpi-card"><p class="kpi-label">Ø Öffnungsrate</p><p class="kpi-num" id="mail-nic-open">—</p><p class="kpi-note">gewichtet über gesendete Mails</p></div>
+        <div class="kpi-card"><p class="kpi-label">Ø Klickrate</p><p class="kpi-num" id="mail-nic-click">—</p><p class="kpi-note">gewichtet über gesendete Mails</p></div>
+        <div class="kpi-card"><p class="kpi-label">Abmeldungen</p><p class="kpi-num" id="mail-nic-unsub" style="color:#C0392B;">—</p><p class="kpi-note">über diese Strecke</p></div>
+      </div>
+      <div id="mail-nic-table"><div class="chart-empty">wird geladen…</div></div>
     </div>
 
     <!-- ===== A/B-TEST TAB ===== -->
@@ -1953,54 +1966,61 @@
   }
   function renderEmailStats(d) {
     var stand = document.getElementById('mail-stand');
-    function set(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
+    function set(id, v, cls) { var el = document.getElementById(id); if (el) { el.textContent = v; if (cls !== undefined) el.style.color = cls; } }
     if (d.error) { if (stand) stand.textContent = 'Kit: ' + d.error; return; }
+    var nf = function(n) { return Number(n || 0).toLocaleString('de-DE'); };
+    var pct = function(x) { return (x === null || x === undefined) ? '—' : (Number(x).toLocaleString('de-DE', { maximumFractionDigits: 1 }) + ' %'); };
+    var dt = function(iso) { if (!iso) return ''; try { return new Date(iso).toLocaleString('de-DE', { timeZone: 'Europe/Berlin', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } };
+    if (stand) stand.textContent = 'Stand: ' + new Date(d.ts).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
 
-    // Zustellbarkeit
-    var dl = d.deliverability || {};
-    set('mail-recipients', dl.total_recipients ? dl.total_recipients.toLocaleString('de-DE') : '—');
-    set('mail-sent-note', (dl.sent_broadcasts || 0) + ' gesendete Mails');
-    set('mail-open', fmtRate(dl.avg_open_rate));
-    set('mail-click', fmtRate(dl.avg_click_rate));
-    set('mail-unsub', fmtRate(dl.unsubscribe_rate));
-    set('mail-unsub-abs', (dl.total_unsubscribes || 0).toLocaleString('de-DE'));
-    if (stand) stand.textContent = (dl.sent_broadcasts || 0) > 0 ? 'Aktualisiert' : 'Noch keine Mails gesendet';
-
-    // Sequenzen
-    var seqEl = document.getElementById('mail-sequences');
-    if (seqEl) {
-      var seqs = d.sequences || [];
-      seqEl.innerHTML = seqs.length ? seqs.map(function(s) {
-        return '<div class="mail-seq-card"><div><div class="mail-seq-name">' + escH(s.name) + '</div>' +
-          '<div class="mail-seq-meta">' + s.email_count + ' E-Mail(s) · ' + (s.active ? 'aktiv' : 'pausiert') + '</div></div>' +
-          '<div style="text-align:right;"><div class="mail-seq-num">' + Number(s.subscriber_count || 0).toLocaleString('de-DE') + '</div>' +
-          '<div class="mail-seq-meta">Subscriber</div></div></div>';
-      }).join('') : '<div class="chart-empty">Keine Projekt-Sequenzen gefunden.</div>';
+    // ---- Newsletter-Bilanz ----
+    var nl = d.newsletter;
+    if (nl) {
+      var sub = document.getElementById('mail-nl-sub');
+      if (sub) sub.textContent = 'Ganze Liste: Zugänge vs. Abmeldungen · ' + nl.starting.split('-').reverse().join('.') + ' bis ' + nl.ending.split('-').reverse().join('.') + (nl.campaign_running ? ' (Kampagne läuft noch)' : ' (Kampagne beendet)');
+      set('mail-nl-start', nf(nl.start_count));
+      set('mail-nl-new', '+' + nf(nl.new_subscribers));
+      set('mail-nl-lost', '−' + nf(nl.cancellations));
+      var net = nl.net || 0;
+      set('mail-nl-net', (net > 0 ? '+' : (net < 0 ? '−' : '')) + nf(Math.abs(net)), net >= 0 ? '#2E7D54' : '#C0392B');
+      var nn = document.getElementById('mail-nl-net-note');
+      if (nn) nn.textContent = net >= 0 ? 'Netto-Gewinn' : 'Netto-Verlust (' + pct(nl.start_count ? Math.abs(net) / nl.start_count * 100 : null) + ' der Liste)';
+      set('mail-nl-now', nf(nl.current));
     }
 
-    // Broadcasts
-    var bcEl = document.getElementById('mail-broadcasts');
-    if (bcEl) {
-      var bcs = d.broadcasts || [];
-      if (!bcs.length) { bcEl.innerHTML = '<div class="chart-empty">Keine Projekt-Broadcasts gefunden.</div>'; return; }
-      var labels = { completed: 'Gesendet', sending: 'Läuft', scheduled: 'Geplant', draft: 'Entwurf', aborted: 'Abgebrochen' };
-      var html = '<table class="mail-table"><thead><tr><th>Betreff</th><th>Status</th><th>Empfänger</th><th>Öffnung</th><th>Klick</th><th>Abmeld.</th></tr></thead><tbody>';
-      bcs.forEach(function(b) {
+    // ---- Strecken ----
+    function strecke(g, prefix, tableId, subId, subLabel) {
+      if (!g) return;
+      set(prefix + '-unique', g.unique_recipients ? nf(g.unique_recipients) : '—');
+      set(prefix + '-open', pct(g.avg_open_rate));
+      set(prefix + '-click', pct(g.avg_click_rate));
+      set(prefix + '-unsub', nf(g.unsubs));
+      var sub = document.getElementById(subId);
+      if (sub) sub.textContent = subLabel + ' · ' + g.sent + ' von ' + g.total + ' Mails gesendet' + (g.scheduled ? ' · ' + g.scheduled + ' geplant' : '') + (g.draft ? ' · ' + g.draft + ' Entwurf' : '');
+      var el = document.getElementById(tableId);
+      if (!el) return;
+      var labels = { completed: 'Gesendet', sending: 'Läuft', scheduled: 'Geplant', draft: 'Entwurf' };
+      var html = '<table class="mail-table"><thead><tr><th>Mail</th><th>Betreff</th><th>Status</th><th>Empfänger</th><th>Öffnung</th><th>Klicks</th><th>Abmeld.</th></tr></thead><tbody>';
+      (g.mails || []).forEach(function(b) {
         var subj = (b.subject || '').replace(/\{\{[^}]*\}\}/g, '…');
-        if (subj.length > 52) subj = subj.slice(0, 52) + '…';
+        if (subj.length > 46) subj = subj.slice(0, 46) + '…';
         var sent = b.status === 'completed' || b.status === 'sending';
+        var when = sent ? dt(b.published_at || b.send_at) : (b.status === 'scheduled' ? dt(b.send_at) : '');
         html += '<tr>';
-        html += '<td style="font-weight:700;max-width:280px;">' + escH(subj) + '</td>';
-        html += '<td><span class="mail-status ' + b.status + '">' + (labels[b.status] || b.status) + '</span></td>';
-        html += '<td>' + (b.recipients ? b.recipients.toLocaleString('de-DE') : '—') + '</td>';
-        html += '<td>' + (sent ? fmtRate(b.open_rate * 100) : '—') + '</td>';
-        html += '<td>' + (sent ? fmtRate(b.click_rate * 100) : '—') + '</td>';
-        html += '<td>' + (sent ? (b.unsubscribes || 0) : '—') + '</td>';
+        html += '<td style="font-weight:700;white-space:nowrap;">' + escH(b.label) + (b.kind === 'ReInvite' ? ' <span style="font-size:9px;font-weight:800;background:rgba(71,97,96,0.12);color:#476160;border-radius:99px;padding:2px 7px;vertical-align:1px;">ReInvite</span>' : '') + '</td>';
+        html += '<td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;">' + escH(subj) + '</td>';
+        html += '<td style="white-space:nowrap;"><span class="mail-status ' + b.status + '">' + (labels[b.status] || b.status) + '</span>' + (when ? ' <span style="font-size:10px;color:#9a9087;">' + when + '</span>' : '') + '</td>';
+        html += '<td>' + (sent ? nf(b.recipients) : '—') + '</td>';
+        html += '<td>' + (sent ? pct(b.open_rate) : '—') + '</td>';
+        html += '<td>' + (sent ? nf(b.clicks) + ' · ' + pct(b.click_rate) : '—') + '</td>';
+        html += '<td>' + (sent ? nf(b.unsubs) : '—') + '</td>';
         html += '</tr>';
       });
       html += '</tbody></table>';
-      bcEl.innerHTML = html;
+      el.innerHTML = html;
     }
+    strecke(d.angemeldet, 'mail-ang', 'mail-ang-table', 'mail-ang-sub', 'Workshop-Anmelder Juli (Tag-Liste)');
+    strecke(d.nicht, 'mail-nic', 'mail-nic-table', 'mail-nic-sub', 'Bestandsliste ohne Anmelder/Käufer + ReInvite');
   }
 
   // ============================================================

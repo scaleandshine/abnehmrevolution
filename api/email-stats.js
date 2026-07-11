@@ -1,19 +1,49 @@
-// /api/email-stats — Kit E-Mail-Statistiken für dieses Projekt
-//   - Sequenzen (Abnehmrevolution): Name, aktive Subscriber, E-Mail-Anzahl
-//   - Broadcasts: Workshop-Reminder + Aktivierungs-/Launch-Mails an die Gesamtliste
-//     (Match über Betreff ODER interne description, da Aktivierungsmails kein
-//      "Abnehmrevolution" im Betreff tragen). [TEST]-Mails werden ausgeschlossen.
-//   - Zustellbarkeit: aggregiert über gesendete Broadcasts
+// /api/email-stats — E-Mail-Statistik NUR für die Kampagne zum aktuellen Workshop (18.+19.07.2026).
+// Fest verdrahtete Broadcast-IDs statt Keyword-Matching, getrennt nach den zwei Strecken:
+//   - "angemeldet":  Reminder an die Workshop-Anmelder (Tag 20703609)
+//   - "nicht":       Aktivierung an die Bestandsliste (Nicht-Angemeldete) + ReInvite (Juni-Teilnehmerinnen)
+// Unique Empfänger = größter Einzelversand der Strecke (alle Mails gehen an dieselbe Zielgruppe),
+// NICHT die Summe über alle Mails. Newsletter-Bilanz über /v4/account/growth_stats.
 const KIT_API = "https://api.kit.com/v4";
-const PROJECT_KEYWORD = "abnehmrevolution";
-// Keywords in Betreff ODER description, die einen Broadcast diesem Projekt zuordnen
-const PROJECT_KEYWORDS = ["abnehmrevolution", "aktivierung", "workshop broadcast", "reminder"];
-const EXCLUDE_KEYWORDS = ["[test]", "design-test", "branding-check"];
-function isProjectBroadcast(b) {
-  const hay = ((b.subject || "") + " " + (b.description || "")).toLowerCase();
-  if (EXCLUDE_KEYWORDS.some((k) => hay.includes(k))) return false;
-  return PROJECT_KEYWORDS.some((k) => hay.includes(k));
-}
+
+const CAMPAIGN = {
+  label: "Workshop 18.+19. Juli 2026",
+  start: "2026-07-09", // erste Kampagnen-Mail (Aktivierung 2 + ReInvite 1)
+  end: "2026-07-19",   // letzte Mail (Tag 2)
+};
+
+const MAILS = [
+  // ---- Strecke 1: Angemeldete (Reminder) ----
+  { id: 24764103, g: "angemeldet", kind: "Reminder", label: "R1 · 2 Wochen vorher" },
+  { id: 24764104, g: "angemeldet", kind: "Reminder", label: "R2 · 7 Tage vorher" },
+  { id: 24764108, g: "angemeldet", kind: "Reminder", label: "R3 · VIP-Telegram" },
+  { id: 24764111, g: "angemeldet", kind: "Reminder", label: "R4 · Agenda" },
+  { id: 24764112, g: "angemeldet", kind: "Reminder", label: "R5 · 1 Tag vorher" },
+  { id: 24764113, g: "angemeldet", kind: "Reminder", label: "R6 · 12h vorher" },
+  { id: 24764115, g: "angemeldet", kind: "Reminder", label: "R7 · 4h vorher (T1)" },
+  { id: 24764116, g: "angemeldet", kind: "Reminder", label: "R8 · 15min vorher (T1)" },
+  { id: 24830692, g: "angemeldet", kind: "Reminder", label: "R8b · 🔴 LIVE (T1)" },
+  { id: 24764118, g: "angemeldet", kind: "Reminder", label: "R9 · Pause (T1, optional)" },
+  { id: 24764121, g: "angemeldet", kind: "Reminder", label: "R10 · Abend vor Tag 2" },
+  { id: 24764125, g: "angemeldet", kind: "Reminder", label: "R11 · 4h vorher (T2)" },
+  { id: 24764128, g: "angemeldet", kind: "Reminder", label: "R12 · 15min vorher (T2)" },
+  { id: 24830693, g: "angemeldet", kind: "Reminder", label: "R12b · 🔴 LIVE (T2)" },
+  { id: 24764129, g: "angemeldet", kind: "Reminder", label: "R13 · Pause (T2, optional)" },
+  // ---- Strecke 2: Nicht-Angemeldete (Aktivierung Bestandsliste + ReInvite) ----
+  { id: 24764174, g: "nicht", kind: "Aktivierung", label: "A1 · Einladung" },
+  { id: 24764177, g: "nicht", kind: "Aktivierung", label: "A2 · Gain" },
+  { id: 24764178, g: "nicht", kind: "Aktivierung", label: "A3 · Story" },
+  { id: 24764182, g: "nicht", kind: "Aktivierung", label: "A4 · Trust" },
+  { id: 24764186, g: "nicht", kind: "Aktivierung", label: "A5 · Logic" },
+  { id: 24764187, g: "nicht", kind: "Aktivierung", label: "A6 · FOMO" },
+  { id: 24764189, g: "nicht", kind: "Aktivierung", label: "A7 · Letzte Chance" },
+  { id: 24764191, g: "nicht", kind: "Aktivierung", label: "A8 · Heute geht's los" },
+  { id: 24764192, g: "nicht", kind: "Aktivierung", label: "A9 · Ansturm (T1 live)" },
+  { id: 24764195, g: "nicht", kind: "Aktivierung", label: "A10 · Finale (T2)" },
+  { id: 24898485, g: "nicht", kind: "ReInvite", label: "RI1 · Wiedersehen" },
+  { id: 24898488, g: "nicht", kind: "ReInvite", label: "RI2 · Warum nochmal" },
+  { id: 24898489, g: "nicht", kind: "ReInvite", label: "RI3 · Last Call" },
+];
 
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -22,83 +52,77 @@ module.exports = async (req, res) => {
 
   const key = process.env.KIT_API_KEY;
   if (!key) return res.status(200).json({ error: "not_configured", ts: new Date().toISOString() });
-
   const headers = { "X-Kit-Api-Key": key, "Accept": "application/json" };
-  const out = { sequences: [], broadcasts: [], deliverability: null, ts: new Date().toISOString() };
+  const jget = (url) => fetch(url, { headers }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
 
-  try {
-    // 1) Sequenzen filtern auf Projekt-Keyword
-    const seqRes = await fetch(`${KIT_API}/sequences?per_page=100`, { headers });
-    if (seqRes.ok) {
-      const seqData = await seqRes.json();
-      out.sequences = (seqData.sequences || [])
-        .filter((s) => (s.name || "").toLowerCase().includes(PROJECT_KEYWORD))
-        .map((s) => ({
-          id: s.id, name: s.name, active: s.active,
-          email_count: s.email_count, subscriber_count: s.subscriber_count,
-        }));
-    }
-
-    // 2) Broadcasts listen + Betreff filtern
-    const bcRes = await fetch(`${KIT_API}/broadcasts?per_page=100`, { headers });
-    let candidates = [];
-    if (bcRes.ok) {
-      const bcData = await bcRes.json();
-      candidates = (bcData.broadcasts || []).filter(isProjectBroadcast);
-    }
-
-    // 3) Pro Broadcast Stats holen (nur gesendete/laufende zählen für Zustellbarkeit)
-    let sumRecip = 0, sumOpened = 0, sumClicks = 0, sumUnsub = 0, sentCount = 0;
-    for (const b of candidates.slice(0, 60)) {
-      let stats = null;
-      try {
-        const sRes = await fetch(`${KIT_API}/broadcasts/${b.id}/stats`, { headers });
-        if (sRes.ok) {
-          const sData = await sRes.json();
-          stats = (sData.broadcast && sData.broadcast.stats) || sData.stats || null;
-        }
-      } catch (e) {}
-      const st = stats || {};
-      const row = {
-        id: b.id, subject: b.subject, send_at: b.send_at, status: st.status || b.status || "draft",
-        recipients: st.recipients || 0,
-        open_rate: st.open_rate || 0,
-        click_rate: st.click_rate || 0,
-        unsubscribe_rate: st.unsubscribe_rate || 0,
-        unsubscribes: st.unsubscribes || 0,
-        total_clicks: st.total_clicks || 0,
-        emails_opened: st.emails_opened || 0,
-      };
-      out.broadcasts.push(row);
-      if (row.status === "completed" || row.status === "sending") {
-        sentCount++;
-        sumRecip += row.recipients;
-        sumOpened += row.emails_opened;
-        sumClicks += row.total_clicks;
-        sumUnsub += row.unsubscribes;
-      }
-    }
-
-    // Broadcasts: gesendete zuerst, dann nach Datum
-    out.broadcasts.sort((a, b) => {
-      const order = { sending: 0, completed: 1, scheduled: 2, draft: 3, aborted: 4 };
-      const oa = order[a.status] ?? 5, ob = order[b.status] ?? 5;
-      if (oa !== ob) return oa - ob;
-      return String(b.send_at || "").localeCompare(String(a.send_at || ""));
-    });
-
-    // 4) Zustellbarkeit aggregiert
-    out.deliverability = {
-      sent_broadcasts: sentCount,
-      total_recipients: sumRecip,
-      avg_open_rate: sumRecip > 0 ? (sumOpened / sumRecip) * 100 : null,
-      avg_click_rate: sumRecip > 0 ? (sumClicks / sumRecip) * 100 : null,
-      unsubscribe_rate: sumRecip > 0 ? (sumUnsub / sumRecip) * 100 : null,
-      total_unsubscribes: sumUnsub,
+  // 1) Broadcast-Metadaten + Stats parallel
+  const rows = await Promise.all(MAILS.map(async (m) => {
+    const [bd, sd] = await Promise.all([
+      jget(`${KIT_API}/broadcasts/${m.id}`),
+      jget(`${KIT_API}/broadcasts/${m.id}/stats`),
+    ]);
+    const b = (bd && bd.broadcast) || {};
+    const s = (sd && sd.broadcast && sd.broadcast.stats) || {};
+    const status = s.status === "completed" || s.status === "sending" ? s.status : (b.status || "draft");
+    return {
+      id: m.id, g: m.g, kind: m.kind, label: m.label,
+      subject: b.subject || "", status,
+      send_at: b.send_at || null, published_at: b.published_at || null,
+      recipients: s.recipients || 0,
+      open_rate: s.open_rate || 0, click_rate: s.click_rate || 0,
+      opens: s.emails_opened || 0, clicks: s.total_clicks || 0,
+      unsubs: s.unsubscribes || 0, unsub_rate: s.unsubscribe_rate || 0,
     };
-  } catch (e) {
-    out.error = "fetch_error";
+  }));
+
+  // 2) Gruppen-Aggregate: Unique = größter Einzelversand; Raten gewichtet über gesendete Mails
+  function agg(g) {
+    const list = rows.filter((r) => r.g === g);
+    const sent = list.filter((r) => r.status === "completed" || r.status === "sending");
+    const sumRec = sent.reduce((a, r) => a + r.recipients, 0);
+    const sumOpens = sent.reduce((a, r) => a + r.opens, 0);
+    const sumClicks = sent.reduce((a, r) => a + r.clicks, 0);
+    return {
+      mails: list,
+      unique_recipients: sent.length ? Math.max.apply(null, sent.map((r) => r.recipients)) : 0,
+      sent: sent.length,
+      scheduled: list.filter((r) => r.status === "scheduled").length,
+      draft: list.filter((r) => r.status === "draft").length,
+      total: list.length,
+      opens: sumOpens, clicks: sumClicks,
+      unsubs: sent.reduce((a, r) => a + r.unsubs, 0),
+      avg_open_rate: sumRec ? Math.round((sumOpens / sumRec) * 1000) / 10 : null,
+      avg_click_rate: sumRec ? Math.round((sumClicks / sumRec) * 1000) / 10 : null,
+    };
   }
 
-  return res.status(200).json(out);
+  // 3) Newsletter-Bilanz über den Kampagnenzeitraum (ganze Liste: Zugänge vs. Abmeldungen)
+  let newsletter = null;
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    const ending = today < CAMPAIGN.end ? today : CAMPAIGN.end;
+    const g = await jget(`${KIT_API}/account/growth_stats?starting=${CAMPAIGN.start}&ending=${ending}`);
+    if (g && g.stats) {
+      const st = g.stats;
+      const current = st.subscribers || 0;
+      const net = st.net_new_subscribers || 0;
+      newsletter = {
+        start_count: current - net,          // im Newsletter, bevor die erste Kampagnen-Mail raus ging
+        new_subscribers: st.new_subscribers || 0,
+        cancellations: Math.abs(st.cancellations || 0),
+        net: net,
+        current: current,
+        starting: CAMPAIGN.start, ending,
+        campaign_running: today < CAMPAIGN.end,
+      };
+    }
+  } catch (e) {}
+
+  return res.status(200).json({
+    campaign: CAMPAIGN,
+    angemeldet: agg("angemeldet"),
+    nicht: agg("nicht"),
+    newsletter,
+    ts: new Date().toISOString(),
+  });
 };
