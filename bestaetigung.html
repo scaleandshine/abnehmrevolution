@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Du bist dabei – Die Abnehmrevolution</title>
+  <link rel="icon" type="image/svg+xml" href="/abnehmrevolution/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="/abnehmrevolution/css/tokens.css">
+<link rel="stylesheet" href="/abnehmrevolution/css/base.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #E7DDD0; font-family: var(--ms-font-body); color: var(--ms-charcoal); overflow-x: hidden; }
+
+  @keyframes ds2Pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.025); } }
+  @keyframes ds2Ping {
+    0%   { box-shadow: 0 0 0 0 rgba(71,97,96,0.4); }
+    70%  { box-shadow: 0 0 0 14px rgba(71,97,96,0); }
+    100% { box-shadow: 0 0 0 0 rgba(71,97,96,0); }
+  }
+
+  /* HERO */
+  .d2-notice {
+    background: var(--ms-sage); color: var(--ms-white); text-align: center;
+    padding: 11px 20px; font-size: 13px; font-weight: 700; letter-spacing: 0.02em;
+  }
+  .d2-hero {
+    position: relative; overflow: hidden;
+    background:
+      radial-gradient(100% 70% at 100% 0%, var(--ms-blush) 0%, rgba(247,224,209,0) 56%),
+      linear-gradient(180deg, #F3EADE 0%, var(--ms-cream) 100%);
+    padding: 48px 20px 70px;
+  }
+  .d2-hero__inner { max-width: 720px; margin: 0 auto; text-align: center; }
+  .d2-hero__brand {
+    font-family: var(--ms-font-display); font-style: italic; font-weight: 600;
+    font-size: 24px; line-height: 1; color: var(--ms-sage); margin-bottom: 30px;
+  }
+  .d2-hero__check {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 74px; height: 74px; border-radius: var(--ms-radius-pill);
+    background: var(--ms-sage); margin-bottom: 22px; animation: ds2Ping 2.4s ease-out infinite;
+  }
+  .d2-hero__eyebrow {
+    margin: 0 0 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--ms-terracotta);
+  }
+  .d2-hero__h1 {
+    margin: 0 0 20px; font-family: var(--ms-font-display); font-weight: 600;
+    font-size: clamp(34px, 5.4vw, 52px); line-height: 1.02; color: var(--ms-charcoal);
+  }
+  .d2-hero__h1 em { font-style: italic; color: var(--ms-terracotta); }
+  .d2-hero__lead {
+    margin: 0 auto 16px; max-width: 560px; font-size: 16px; line-height: 1.65; color: #3a3530;
+  }
+  .d2-hero__sub {
+    margin: 0 auto 30px; max-width: 560px; font-size: 14.5px; line-height: 1.6; color: #6b6258;
+  }
+  .d2-hero__sub strong { color: var(--ms-sage); }
+  .d2-hero__cue {
+    margin: 0 auto 24px; max-width: 560px; font-family: var(--ms-font-display);
+    font-style: italic; font-weight: 500; font-size: clamp(18px, 2.4vw, 23px);
+    line-height: 1.35; color: var(--ms-sage);
+  }
+
+  /* VIDEO FACADE */
+  .d2-video-wrap { position: relative; max-width: 760px; margin: 0 auto 28px; }
+  .d2-video-card {
+    position: relative; border-radius: 22px; overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(12,17,20,0.08), 0 24px 60px rgba(31,26,21,0.22);
+  }
+  .video-facade { position: relative; width: 100%; aspect-ratio: 16/9; display: block; cursor: pointer; }
+  .video-facade img { width: 100%; height: 100%; object-fit: cover; display: block; background: var(--ms-charcoal); }
+  .video-facade .play-btn {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(12,17,20,0.08), rgba(12,17,20,0.44));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .video-facade .play-btn::after {
+    content: ""; width: 84px; height: 84px; border-radius: var(--ms-radius-pill);
+    background: var(--ms-terracotta) no-repeat center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 24 24' fill='%23FAF7F6'%3E%3Cpolygon points='5 3 19 12 5 21 5 3'/%3E%3C/svg%3E");
+    box-shadow: 0 12px 32px rgba(202,93,37,0.5);
+  }
+  .d2-video-badge {
+    position: absolute; left: 18px; bottom: 16px; display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(12,17,20,0.6); color: var(--ms-white); font-size: 12px; font-weight: 600;
+    padding: 7px 14px; border-radius: var(--ms-radius-pill); backdrop-filter: blur(3px);
+  }
+  .d2-video-badge span {
+    width: 6px; height: 6px; border-radius: var(--ms-radius-pill); background: var(--ms-orange);
+  }
+
+  .d2-hero__cta {
+    display: inline-flex; align-items: center; gap: 12px; background: var(--ms-orange);
+    color: var(--ms-white); font-weight: 800; font-size: 16px; letter-spacing: 0.02em;
+    text-transform: uppercase; padding: 19px 36px; border-radius: 999px;
+    text-decoration: none; box-shadow: 0 14px 32px rgba(202,93,37,0.4);
+    animation: ds2Pulse 2.6s ease-in-out infinite;
+  }
+  .d2-hero__cta:hover { background: #e35a00; }
+
+  /* REELS SECTION */
+  .d2-reels {
+    background: var(--ms-charcoal); color: var(--ms-white); padding: 74px 20px;
+  }
+  .d2-reels__inner { max-width: 1040px; margin: 0 auto; text-align: center; }
+  .d2-reels__eyebrow {
+    margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--ms-orange);
+  }
+  .d2-reels__h2 {
+    margin: 0 0 14px; font-family: var(--ms-font-display); font-weight: 600;
+    font-size: clamp(26px, 3.4vw, 40px); line-height: 1.1; color: var(--ms-white);
+  }
+  .d2-reels__sub {
+    margin: 0 auto 40px; max-width: 600px; font-size: 16px; line-height: 1.6;
+    color: rgba(239,231,221,0.78);
+  }
+  .reels-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 22px; align-items: start;
+  }
+  .reel-card {
+    background: var(--ms-white); border-radius: 18px; overflow: hidden;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.32); text-align: left; min-width: 0;
+  }
+  .reel-card__title {
+    margin: 0; padding: 16px 18px 4px; font-family: var(--ms-font-display);
+    font-weight: 700; font-size: 18px; line-height: 1.2; color: var(--ms-charcoal);
+  }
+  .reel-card .instagram-media {
+    margin: 0 auto !important; min-width: 0 !important; width: 100% !important;
+    border: 0 !important; box-shadow: none !important; border-radius: 0 0 18px 18px !important;
+  }
+  .d2-reels__cta {
+    display: inline-flex; align-items: center; gap: 10px; margin-top: 34px;
+    background: linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
+    color: var(--ms-white); font-weight: 800; font-size: 15px; padding: 15px 30px;
+    border-radius: var(--ms-radius-md); text-decoration: none;
+  }
+  .d2-reels__cta:hover { filter: brightness(1.08); }
+
+  /* BONUS BLOCK */
+  .d2-bonus { background: var(--ms-cream); padding: 80px 20px; }
+  .d2-bonus__inner { max-width: 720px; margin: 0 auto; }
+  .d2-bonus__card {
+    background: var(--ms-charcoal); border-radius: 22px; padding: 36px;
+    box-shadow: 0 20px 44px rgba(31,26,21,0.2);
+  }
+  .d2-bonus__tag {
+    display: inline-block; background: var(--ms-terracotta); color: var(--ms-white);
+    font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 6px 13px; border-radius: var(--ms-radius-pill); margin-bottom: 14px;
+  }
+  .d2-bonus__h3 {
+    margin: 0 0 12px; font-family: var(--ms-font-display); font-weight: 600;
+    font-size: clamp(22px, 2.8vw, 30px); line-height: 1.15; color: var(--ms-white);
+  }
+  .d2-bonus__p {
+    margin: 0 0 14px; font-size: 15px; line-height: 1.65; color: rgba(239,231,221,0.85);
+  }
+  .d2-bonus__hint {
+    margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--ms-orange);
+  }
+
+  /* NÄCHSTE SCHRITTE */
+  .d2-steps { background: var(--ms-white); padding: 80px 20px; }
+  .d2-steps__inner { max-width: 880px; margin: 0 auto; }
+  .d2-steps__eyebrow {
+    margin: 0 0 8px; text-align: center; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--ms-terracotta);
+  }
+  .d2-steps__h2 {
+    margin: 0 0 48px; text-align: center; font-family: var(--ms-font-display);
+    font-weight: 600; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.1; color: var(--ms-sage);
+  }
+  .d2-step { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 30px; }
+  .d2-step:last-child { margin-bottom: 0; }
+  .d2-step__num {
+    flex: none; width: 44px; height: 44px; border-radius: var(--ms-radius-pill);
+    background: var(--ms-terracotta); color: var(--ms-white); display: flex;
+    align-items: center; justify-content: center; font-family: var(--ms-font-display);
+    font-weight: 700; font-size: 20px;
+  }
+  .d2-step__body { flex: 1; min-width: 0; }
+  .d2-step__h3 {
+    margin: 0 0 10px; font-family: var(--ms-font-display); font-weight: 600;
+    font-size: 24px; line-height: 1.2; color: var(--ms-charcoal); overflow-wrap: break-word;
+  }
+  .d2-step__p { margin: 0 0 20px; font-size: 15px; line-height: 1.65; color: #4a4540; }
+  .d2-cal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .d2-cal-card { background: var(--ms-cream); border-radius: 18px; padding: 22px; text-align: center; }
+  .d2-cal-card__tag {
+    display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ms-terracotta); margin-bottom: 8px;
+  }
+  .d2-cal-card__date {
+    margin: 0 0 2px; font-family: var(--ms-font-display); font-weight: 700;
+    font-size: 21px; color: var(--ms-charcoal);
+  }
+  .d2-cal-card__time { margin: 0 0 16px; font-size: 14px; font-weight: 600; color: var(--ms-sage); }
+  .d2-cal-card__btn {
+    display: inline-flex; align-items: center; gap: 8px; background: var(--ms-white);
+    border: 1.5px solid var(--ms-sage); color: var(--ms-sage); font-weight: 700;
+    font-size: 13px; padding: 11px 20px; border-radius: var(--ms-radius-pill); text-decoration: none;
+  }
+  .d2-cal-card__btn:hover { background: var(--ms-sage); color: var(--ms-white); }
+  .d2-tg-btn {
+    display: inline-flex; align-items: center; gap: 10px; background: #229ED9;
+    color: var(--ms-white); font-weight: 800; font-size: 15px; padding: 14px 26px;
+    border-radius: 12px; text-decoration: none; box-shadow: 0 10px 24px rgba(34,158,217,0.3);
+  }
+  .d2-tg-btn:hover { background: #1c87ba; }
+  .d2-step__hint { margin: 14px 0 0; font-size: 12.5px; line-height: 1.5; color: #9a9087; }
+  .d2-ig-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
+    color: var(--ms-white); font-weight: 800; font-size: 15px; padding: 14px 26px;
+    border-radius: 12px; text-decoration: none; box-shadow: 0 10px 24px rgba(214,41,118,0.32);
+  }
+  .d2-ig-btn:hover { filter: brightness(1.08); }
+
+  /* CURRICULUM */
+  .d2-curr { background: var(--ms-cream); padding: 80px 20px; scroll-margin-top: 16px; }
+  .d2-curr__inner { max-width: 920px; margin: 0 auto; }
+  .d2-curr__head { text-align: center; max-width: 680px; margin: 0 auto 14px; }
+  .d2-curr__h2 {
+    margin: 0 0 16px; font-family: var(--ms-font-display); font-weight: 600;
+    font-size: clamp(28px, 3.6vw, 42px); line-height: 1.1; color: var(--ms-sage);
+  }
+  .d2-curr__lead { margin: 0 0 44px; font-size: 16px; line-height: 1.65; color: #4a4540; }
+  .d2-day-divider {
+    background: var(--ms-charcoal); border-radius: 16px; padding: 18px 24px;
+    margin-bottom: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+  }
+  .d2-day-divider.is-day2 { margin: 40px 0 30px; }
+  .d2-day-divider__tag {
+    background: var(--ms-terracotta); color: var(--ms-white); font-size: 12px; font-weight: 800;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 13px; border-radius: var(--ms-radius-pill);
+  }
+  .d2-day-divider__txt { font-size: 14px; font-weight: 600; color: var(--ms-cream); }
+  .d2-topics { display: flex; flex-direction: column; gap: 30px; }
+  .crow { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 36px; align-items: center; }
+  .crow.crev { grid-template-columns: 1.15fr 0.85fr; }
+  .crow.crev .cimg { order: 2; }
+  .cimg { min-width: 0; }
+  .cimg img {
+    width: 100%; max-width: 100%; aspect-ratio: 4/3; object-fit: cover;
+    border-radius: 18px; box-shadow: 0 14px 30px rgba(31,26,21,0.14); display: block;
+  }
+  .ctile {
+    aspect-ratio: 4/3; border-radius: 18px; box-shadow: 0 14px 30px rgba(31,26,21,0.16);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; padding: 24px; text-align: center;
+  }
+  .ctile.is-sage { background: linear-gradient(150deg,#5b7d79,#3A504F); }
+  .ctile.is-terra { background: linear-gradient(150deg,#d2773f,#A8431B); }
+  .ctile__label {
+    font-family: var(--ms-font-display); font-weight: 700; font-size: 20px;
+    color: var(--ms-white); line-height: 1.1;
+  }
+  .crow__num {
+    display: inline-block; background: var(--ms-sage); color: var(--ms-white);
+    font-family: var(--ms-font-display); font-weight: 700; font-size: 15px;
+    width: 40px; height: 40px; line-height: 40px; text-align: center;
+    border-radius: var(--ms-radius-pill); margin-bottom: 12px;
+  }
+  .crow__h3 {
+    margin: 0 0 10px; font-family: var(--ms-font-display); font-weight: 600;
+    font-size: clamp(21px, 2.6vw, 27px); line-height: 1.18; color: var(--ms-charcoal); overflow-wrap: break-word;
+  }
+  .crow__p { margin: 0; font-size: 15px; line-height: 1.65; color: #4a4540; }
+  .crow__note { margin: 0; font-size: 14px; font-style: italic; font-weight: 600; color: var(--ms-terracotta); }
+  .d2-curr-bonus {
+    background: var(--ms-charcoal); border-radius: 22px; padding: 36px;
+    box-shadow: 0 20px 44px rgba(31,26,21,0.2);
+  }
+  .d2-curr-bonus__tag {
+    display: inline-block; background: var(--ms-terracotta); color: var(--ms-white);
+    font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 6px 13px; border-radius: var(--ms-radius-pill); margin-bottom: 14px;
+  }
+  .d2-curr-bonus__h3 {
+    margin: 0 0 12px; font-family: var(--ms-font-display); font-weight: 600;
+    font-size: clamp(22px, 2.8vw, 30px); line-height: 1.15; color: var(--ms-white);
+  }
+  .d2-curr-bonus__p { margin: 0 0 14px; font-size: 15px; line-height: 1.65; color: rgba(239,231,221,0.85); }
+  .d2-curr-bonus__hint {
+    margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--ms-orange);
+  }
+  .d2-curr__outro { text-align: center; margin-top: 44px; }
+  .d2-curr__outro p { margin: 0 auto 22px; max-width: 560px; font-size: 16px; line-height: 1.6; color: var(--ms-charcoal); }
+  .d2-curr__cta {
+    display: inline-flex; align-items: center; gap: 12px; background: var(--ms-orange);
+    color: var(--ms-white); font-weight: 800; font-size: 16px; letter-spacing: 0.02em;
+    text-transform: uppercase; padding: 19px 36px; border-radius: 999px;
+    text-decoration: none; box-shadow: 0 14px 32px rgba(202,93,37,0.32);
+  }
+  .d2-curr__cta:hover { background: #e35a00; }
+
+  /* UPSELL-HINWEIS */
+  .d2-upsell { background: #E7DDD0; padding: 80px 20px; }
+  .d2-upsell__inner { max-width: 620px; margin: 0 auto; }
+  .d2-upsell__eyebrow {
+    margin: 0 0 8px; text-align: center; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--ms-terracotta);
+  }
+  .d2-upsell__h2 {
+    margin: 0 0 20px; text-align: center; font-family: var(--ms-font-display);
+    font-weight: 600; font-size: clamp(26px, 3.4vw, 38px); line-height: 1.12; color: var(--ms-sage);
+  }
+  .d2-upsell__lead {
+    margin: 0 0 26px; text-align: center; font-size: 15.5px; line-height: 1.65; color: #4a4540;
+  }
+  .d2-upsell__card {
+    background: var(--ms-charcoal); border-radius: 24px; padding: 36px;
+    box-shadow: 0 22px 50px rgba(31,26,21,0.22);
+  }
+  .d2-upsell__list { margin: 0 0 24px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .d2-upsell__li {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;
+    border-bottom: 1px solid rgba(239,231,221,0.12); padding-bottom: 12px;
+  }
+  .d2-upsell__li.is-last { border-bottom: none; padding-bottom: 2px; }
+  .d2-upsell__li-name { display: flex; gap: 10px; font-size: 14px; line-height: 1.4; color: var(--ms-cream); }
+  .d2-upsell__li-name svg { flex: none; margin-top: 2px; }
+  .d2-upsell__li-price { flex: none; font-weight: 800; font-size: 13.5px; color: rgba(239,231,221,0.6); }
+  .d2-upsell__summary {
+    text-align: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 18px; padding: 22px; margin-bottom: 22px;
+  }
+  .d2-upsell__summary-rows { max-width: 280px; margin: 0 auto 14px; display: flex; flex-direction: column; gap: 8px; }
+  .d2-upsell__summary-rows p { margin: 0; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .d2-upsell__row-total { font-size: 14px; color: rgba(239,231,221,0.7); }
+  .d2-upsell__row-total span:last-child { font-weight: 700; white-space: nowrap; }
+  .d2-upsell__row-normal { font-size: 14px; color: rgba(239,231,221,0.5); }
+  .d2-upsell__row-normal span:last-child { text-decoration: line-through; white-space: nowrap; }
+  .d2-upsell__today { border-top: 1px solid rgba(239,231,221,0.14); padding-top: 18px; }
+  .d2-upsell__today-label {
+    margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ms-orange);
+  }
+  .d2-upsell__price {
+    margin: 0; font-family: var(--ms-font-display); font-weight: 700;
+    font-size: 48px; line-height: 1.1; color: var(--ms-white);
+  }
+  .d2-upsell__cta {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    background: var(--ms-orange); color: var(--ms-white); font-weight: 800;
+    font-size: 15.5px; letter-spacing: 0.02em; text-transform: uppercase;
+    padding: 20px; border-radius: 999px; text-decoration: none;
+    box-shadow: 0 14px 32px rgba(202,93,37,0.4);
+  }
+  .d2-upsell__cta:hover { background: #e35a00; }
+  .d2-upsell__limit {
+    margin: 16px 0 0; text-align: center; font-size: 12px; font-weight: 800;
+    letter-spacing: 0.04em; text-transform: uppercase; color: var(--ms-orange);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 980px) {
+    .reels-grid { gap: 18px; }
+  }
+  @media (max-width: 820px) {
+    .crow, .crow.crev { grid-template-columns: 1fr; gap: 22px; }
+    .crow .cimg, .crow.crev .cimg { order: -1; }
+  }
+  @media (max-width: 760px) {
+    .reels-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+    .d2-reels, .d2-bonus, .d2-steps, .d2-curr, .d2-upsell { padding: 60px 18px; }
+    .d2-hero { padding: 40px 18px 60px; }
+  }
+  @media (max-width: 700px) {
+    .d2-cal-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .d2-hero__h1 { font-size: 34px; line-height: 1.06; }
+    .d2-reels__h2 { font-size: 26px; line-height: 1.12; }
+    .d2-bonus__card, .d2-curr-bonus, .d2-upsell__card { padding: 28px 22px; }
+    .d2-hero__cta { padding: 17px 28px; font-size: 15px; }
+    .d2-steps__h2, .d2-curr__h2 { font-size: 26px; line-height: 1.12; }
+    .d2-step__h3 { font-size: 21px; }
+    .d2-upsell__price { font-size: 40px; }
+  }
+  @media (max-width: 414px) {
+    .d2-hero__h1 { font-size: 30px; }
+    .d2-hero__brand { font-size: 21px; }
+    .d2-hero__cta, .d2-curr__cta, .d2-tg-btn, .d2-ig-btn { width: 100%; justify-content: center; }
+    .d2-cal-card__btn { width: 100%; justify-content: center; }
+    .d2-upsell__li-price { font-size: 12.5px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- TOP NOTICE -->
+  <div class="d2-notice">
+    Bitte verlasse diese Seite noch nicht - hier sind alle Infos zu deiner Abnehm-Revolution.
+  </div>
+
+  <!-- BLOCK 1 · HERO (Confirmation) -->
+  <section class="d2-hero" data-screen-label="Erfolg-Hero">
+    <div class="d2-hero__inner">
+      <div class="d2-hero__brand">Die Abnehmrevolution</div>
+
+      <span class="d2-hero__check">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </span>
+
+      <p class="d2-hero__eyebrow">Herzlichen Glückwunsch!</p>
+      <h1 class="d2-hero__h1">Du bist <em>dabei.</em></h1>
+
+      <p class="d2-hero__lead">Du hast soeben eine E-Mail mit deinem persönlichen Zoom-Link bekommen. Dort warten alle Informationen zu deiner Abnehm-Revolution auf dich.</p>
+      <p class="d2-hero__sub">Dein Platz ist reserviert. Bitte schau in dein Postfach, auch in den Spam-Ordner. Trag dir am besten gleich meine Adresse <strong>support@vanessareinthaller.de</strong> als sicheren Absender ein, damit dir keine Info verloren geht.</p>
+
+      <p class="d2-hero__cue">Bevor du diese Seite verlässt, schau dir bitte mein kurzes Video an. Hier findest du alle wichtigen Infos und Zugänge zu deiner Abnehm-Revolution.</p>
+
+      <div class="d2-video-wrap">
+        <div class="d2-video-card">
+          <div style="position:relative;width:100%;aspect-ratio:16/9;">
+            <iframe src="https://www.youtube.com/embed/I6_-k2Ibf9w?rel=0" style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:inherit;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <span class="d2-video-badge"><span></span>Deine nächsten Schritte</span>
+        </div>
+      </div>
+
+      <a href="#stream" class="d2-hero__cta">Hier geht's zum Live-Stream<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+    </div>
+  </section>
+
+  <!-- BLOCK 2 · NÄCHSTE SCHRITTE -->
+  <section class="d2-steps" data-screen-label="Nächste Schritte">
+    <div class="d2-steps__inner">
+      <p class="d2-steps__eyebrow">In drei Schritten startklar</p>
+      <h2 class="d2-steps__h2">Das sind deine nächsten Schritte</h2>
+
+      <!-- Schritt 1 -->
+      <div class="d2-step">
+        <span class="d2-step__num">1</span>
+        <div class="d2-step__body">
+          <h3 class="d2-step__h3">Erinnerung im Handy oder Kalender einrichten</h3>
+          <p class="d2-step__p">Nimm dein Handy in die Hand und trage dir die Workshop-Termine sofort in deinen Kalender ein, damit du die Vormittage nicht verpasst. Es gibt keine kostenlose Aufzeichnung. Was live passiert, bleibt live.</p>
+          <div class="d2-cal-grid">
+            <div class="d2-cal-card">
+              <span class="d2-cal-card__tag">Workshop 1</span>
+              <p class="d2-cal-card__date">Samstag, 18. Juli 2026</p>
+              <p class="d2-cal-card__time">10:00 - 12:00 Uhr</p>
+              <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Abnehm-Revolution%20-%20Workshop%20Tag%201&dates=20260718T080000Z/20260718T100000Z&details=Live%20via%20Zoom%20-%20Zugangslink%20in%20deiner%20E-Mail" target="_blank" rel="noopener" class="d2-cal-card__btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="8" y1="2.5" x2="8" y2="6.5"></line><line x1="16" y1="2.5" x2="16" y2="6.5"></line></svg>Zum Kalender hinzufügen</a>
+            </div>
+            <div class="d2-cal-card">
+              <span class="d2-cal-card__tag">Workshop 2</span>
+              <p class="d2-cal-card__date">Sonntag, 19. Juli 2026</p>
+              <p class="d2-cal-card__time">10:00 - 12:00 Uhr</p>
+              <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Abnehm-Revolution%20-%20Workshop%20Tag%202&dates=20260719T080000Z/20260719T100000Z&details=Live%20via%20Zoom%20-%20Zugangslink%20in%20deiner%20E-Mail" target="_blank" rel="noopener" class="d2-cal-card__btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="8" y1="2.5" x2="8" y2="6.5"></line><line x1="16" y1="2.5" x2="16" y2="6.5"></line></svg>Zum Kalender hinzufügen</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schritt 2 -->
+      <div class="d2-step">
+        <span class="d2-step__num">2</span>
+        <div class="d2-step__body">
+          <h3 class="d2-step__h3">Exklusivem Telegram-Kanal beitreten</h3>
+          <p class="d2-step__p">Bevor du in den Workshop kommst, gehst du bereits in die richtige Richtung. Im Telegram-Kanal bekommst du vorbereitende Impulse, die dir helfen, erste Muster zu erkennen und ein starkes Commitment für deine Reise zu setzen. Außerdem erhältst du dort alle wichtigen Updates, Geschenke und Erinnerungen, damit dir nichts entgeht.</p>
+          <a href="https://t.me/+Blq4LoeNHb43MzBi" target="_blank" rel="noopener" class="d2-tg-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="#FAF7F6"><path d="M21.9 4.3 18.7 19.4c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-4.9 9-8.1c.4-.3-.1-.5-.6-.2L6.1 13.6l-4.8-1.5c-1-.3-1-1 .2-1.5l18.7-7.2c.9-.3 1.6.2 1.3 1.4z"></path></svg>Jetzt Telegram-Kanal beitreten</a>
+          <p class="d2-step__hint">Hinweis: Tippe auf „Kanal folgen" und aktiviere danach die Benachrichtigungen über das Glocken-Symbol.</p>
+        </div>
+      </div>
+
+      <!-- Schritt 3 -->
+      <div class="d2-step">
+        <span class="d2-step__num">3</span>
+        <div class="d2-step__body">
+          <h3 class="d2-step__h3">Meine besten Reels ansehen</h3>
+          <p class="d2-step__p">Stimme dich bestmöglich auf die Abnehm-Revolution ein. Meine Reels zeigen dir schon vorab, worum es wirklich geht: der Blick hinter die reinen Ernährungstipps, auf das, was wirklich zählt.</p>
+          <a href="https://www.instagram.com/mama.spagat/" target="_blank" rel="noopener" class="d2-ig-btn"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="#FAF7F6" stroke="none"></circle></svg>Auf Instagram folgen</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCK 3 · INSTAGRAM REELS -->
+  <section class="d2-reels" data-screen-label="Reels">
+    <div class="d2-reels__inner">
+      <p class="d2-reels__eyebrow">Schon vor dem Workshop dranbleiben</p>
+      <h2 class="d2-reels__h2">Schau dir meine besten Reels an</h2>
+      <p class="d2-reels__sub">Stimme dich bestmöglich auf die Abnehm-Revolution ein. Meine Reels zeigen dir schon vorab, worum es wirklich geht: der Blick hinter die reinen Ernährungstipps, auf das, was wirklich zählt.</p>
+
+      <div class="reels-grid">
+        <!-- Reel 1 -->
+        <div class="reel-card">
+          <h3 class="reel-card__title">Die 5 größten Dickmacher zum Abendessen</h3>
+          <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DKSPsdNINmk/" data-instgrm-version="14">
+            <a href="https://www.instagram.com/reel/DKSPsdNINmk/" target="_blank" rel="noopener">Die 5 größten Dickmacher zum Abendessen auf Instagram ansehen</a>
+          </blockquote>
+        </div>
+        <!-- Reel 2 -->
+        <div class="reel-card">
+          <h3 class="reel-card__title">Das passiert, als ich Protein-Shakes getrunken habe</h3>
+          <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DGNso_Dsiyv/" data-instgrm-version="14">
+            <a href="https://www.instagram.com/reel/DGNso_Dsiyv/" target="_blank" rel="noopener">Das passiert, als ich Protein-Shakes getrunken habe auf Instagram ansehen</a>
+          </blockquote>
+        </div>
+        <!-- Reel 3 -->
+        <div class="reel-card">
+          <h3 class="reel-card__title">Gratis Rezept zum Nachmachen</h3>
+          <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DZHoziTIzJf/" data-instgrm-version="14">
+            <a href="https://www.instagram.com/reel/DZHoziTIzJf/" target="_blank" rel="noopener">Gratis Rezept auf Instagram ansehen</a>
+          </blockquote>
+        </div>
+      </div>
+
+      <a href="https://www.instagram.com/mama.spagat/" target="_blank" rel="noopener" class="d2-reels__cta"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="#FAF7F6" stroke="none"></circle></svg>Auf Instagram folgen</a>
+    </div>
+  </section>
+
+  <!-- BLOCK 4 · CURRICULUM -->
+  <section class="d2-curr" id="stream" data-screen-label="Curriculum">
+    <div class="d2-curr__inner">
+      <div class="d2-curr__head">
+        <h2 class="d2-curr__h2">Dein geballtes Abnehm-Wissen in der Abnehm-Revolution</h2>
+        <p class="d2-curr__lead">Diese zwei Abende kombinieren meine eigene Erfahrung aus 16 Kilo in 80 Tagen mit dem Inner Slim Code. So weißt du nach Donnerstagabend genau, wie du als Frau über 40 mit Diät-Vergangenheit nachhaltig abnimmst, ohne JoJo, ohne extra zu kochen, ohne dir alles auszureden.</p>
+      </div>
+
+      <!-- TAG 1 DIVIDER -->
+      <div class="d2-day-divider">
+        <span class="d2-day-divider__tag">Tag 1 · Sa, 18. Juli</span>
+        <span class="d2-day-divider__txt">10:00 - 12:00 Uhr · Das Fundament: die drei Säulen des Inner Slim Code.</span>
+      </div>
+
+      <div class="d2-topics">
+        <!-- Thema 1 -->
+        <div class="crow">
+          <div class="cimg"><img src="/abnehmrevolution/assets/vanessa-kueche.jpg" alt="Vanessa in der Küche – Ernährung im Workshop"></div>
+          <div>
+            <span class="crow__num">1</span>
+            <h3 class="crow__h3">Ernährung - warum Crash-Diäten nicht funktionieren</h3>
+            <p class="crow__p">Was in deinem Stoffwechsel passiert, wenn du nach der dritten Crash-Diät immer noch glaubst „diesmal ziehst du's durch". Warum dein Körper jedes Mal cleverer wird als du. Die Wahrheit über Kalorien zählen, Weight Watchers und Intervallfasten ab 40. Was dein Körper Ü40 wirklich braucht, damit Abnehmen überhaupt möglich wird.</p>
+          </div>
+        </div>
+
+        <!-- Thema 2 -->
+        <div class="crow crev">
+          <div class="cimg"><div class="ctile is-sage"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a3.5 3.5 0 0 0-5-5l-10 10a3.5 3.5 0 0 0 5 5Z"></path><path d="m8.5 8.5 7 7"></path></svg><span class="ctile__label">Deine Vitalstoffe</span></div></div>
+          <div>
+            <span class="crow__num">2</span>
+            <h3 class="crow__h3">Supplements - was deinem Körper wirklich Energie gibt</h3>
+            <p class="crow__p">Warum „Supplements sind nur Placebo" einer der teuersten Sätze ist, den deine Freundinnen dir je gesagt haben. Die Vitalstoffe, die bei den meisten Frauen Ü40 im roten Bereich liegen, und warum dein Heißhunger genau hier herkommt. Was hinter ständiger Müdigkeit nach dem Mittagessen und dem Energietief gegen 16 Uhr tatsächlich steckt.</p>
+          </div>
+        </div>
+
+        <!-- Thema 3 -->
+        <div class="crow">
+          <div class="cimg"><img src="/abnehmrevolution/assets/vanessa-innere-arbeit.jpg" alt="Innere Arbeit – an die Ursache statt nur ans Symptom"></div>
+          <div>
+            <span class="crow__num">3</span>
+            <h3 class="crow__h3">Innere Arbeit - ran an die Ursache statt nur das Symptom</h3>
+            <p class="crow__p" style="margin-bottom:12px;">Die Stellen in deinem Leben, an denen dein Körper Gewicht festhält wie an einem Schutzschild. Eine konkrete Mini-Übung, die du im Workshop selbst ausprobierst. Keine Esoterik. Reine Neurobiologie. Was ich mit 38 erkannt habe, das die 15 Jahre Diät davor nicht geschafft hatten.</p>
+            <p class="crow__note">Bring Taschentücher mit. Im Ernst.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAG 2 DIVIDER -->
+      <div class="d2-day-divider is-day2">
+        <span class="d2-day-divider__tag">Tag 2 · So, 19. Juli</span>
+        <span class="d2-day-divider__txt">10:00 - 12:00 Uhr · Wie der Inner Slim Code in deinen Alltag passt.</span>
+      </div>
+
+      <div class="d2-topics">
+        <!-- Thema 4 -->
+        <div class="crow crev">
+          <div class="cimg"><div class="ctile is-terra"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18"></path><path d="M12 3v8"></path><path d="M5 11a7 7 0 0 0 14 0"></path><path d="M5 19h14"></path></svg><span class="ctile__label">Die 3-Komponenten-Formel</span></div></div>
+          <div>
+            <span class="crow__num">4</span>
+            <h3 class="crow__h3">Alltagsstruktur - essen, was deinen Körper nährt</h3>
+            <p class="crow__p">Die Wahrheit über „dann muss ich für mich separat kochen": Warum das Quatsch ist. Die 3-Komponenten-Formel, die selbst bei pingeligen Kindern und dem skeptischen Ehemann durchgeht. Welche 7 Lebensmittel du immer im Kühlschrank hast, damit das 17:30-Uhr-Schultor-Szenario nie wieder in Panik endet.</p>
+          </div>
+        </div>
+
+        <!-- Thema 5 -->
+        <div class="crow">
+          <div class="cimg"><div class="ctile is-sage"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"></path></svg><span class="ctile__label">Emotionales Essen</span></div></div>
+          <div>
+            <span class="crow__num">5</span>
+            <h3 class="crow__h3">Emotionales Essen - was wirklich dahinter steckt</h3>
+            <p class="crow__p">Die drei häufigsten Trigger für Heißhunger zwischen 20 und 22 Uhr, und welche eine Frage du dir vorher stellen kannst. Die 5-Minuten-Methode aus dem Inner Slim Code, mit der die Tafel Vollmilch gar nicht erst aus dem Schrank kommt. Was dein Körper dir mit jeder Fressattacke eigentlich erzählen will.</p>
+          </div>
+        </div>
+
+        <!-- IN-CURRICULUM BONUS -->
+        <div class="d2-curr-bonus">
+          <span class="d2-curr-bonus__tag">Geheimes Bonus-Thema · nur live am Donnerstag</span>
+          <h3 class="d2-curr-bonus__h3">Der Satz, den du seit 20 Jahren über dich erzählst</h3>
+          <p class="d2-curr-bonus__p">Der Satz, der jeden Morgen im Hintergrund läuft, wenn du in den Spiegel schaust. Den du dir wahrscheinlich nie laut gesagt hast. Wo dieser Satz herkommt. Und die zwei Schritte, mit denen du ihn ab Freitag früh ersetzen kannst.</p>
+          <p class="d2-curr-bonus__hint">Nur live.</p>
+        </div>
+      </div>
+
+      <div class="d2-curr__outro">
+        <p>Die Abnehm-Revolution startet am Samstag, dem 18. Juli 2026 um 10:00 Uhr. Schon jetzt dabei und vorbereitet? Tritt dem Telegram-Kanal bei.</p>
+        <a href="https://t.me/+Blq4LoeNHb43MzBi" target="_blank" rel="noopener" class="d2-curr__cta">Jetzt Telegram-Kanal beitreten<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCK 5 · BONUS -->
+  <section class="d2-bonus" id="bonus" data-screen-label="Bonus">
+    <div class="d2-bonus__inner">
+      <div class="d2-bonus__card">
+        <span class="d2-bonus__tag">Geheimes Bonus-Thema · nur live am Donnerstag</span>
+        <h3 class="d2-bonus__h3">Der Satz, den du seit 20 Jahren über dich erzählst</h3>
+        <p class="d2-bonus__p">Der Satz, der jeden Morgen im Hintergrund läuft, wenn du in den Spiegel schaust. Den du dir wahrscheinlich nie laut gesagt hast. Wo dieser Satz herkommt. Und die zwei Schritte, mit denen du ihn ab Freitag früh ersetzen kannst.</p>
+        <p class="d2-bonus__hint">Nur live.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCK 6 · UPSELL-HINWEIS -->
+  <section class="d2-upsell" data-screen-label="Upsell-Hinweis">
+    <div class="d2-upsell__inner">
+      <p class="d2-upsell__eyebrow">Noch nicht dabei?</p>
+      <h2 class="d2-upsell__h2">Das solltest du wissen.</h2>
+      <p class="d2-upsell__lead">Auf der vorherigen Seite hattest du die Möglichkeit, dir mein Glow Starterpaket zu sichern. Falls du das noch nicht getan hast, hier nochmal kurz, was drin steckt:</p>
+
+      <div class="d2-upsell__card">
+        <ul class="d2-upsell__list">
+          <li class="d2-upsell__li"><span class="d2-upsell__li-name"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Mini Online-Kurs „Warum du bisher gescheitert bist"</span><span class="d2-upsell__li-price">179 €</span></li>
+          <li class="d2-upsell__li"><span class="d2-upsell__li-name"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Digitales Workbook zum Workshop</span><span class="d2-upsell__li-price">49 €</span></li>
+          <li class="d2-upsell__li"><span class="d2-upsell__li-name"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>VIP-Fragen vorab einreichen</span><span class="d2-upsell__li-price">Unbezahlbar</span></li>
+          <li class="d2-upsell__li"><span class="d2-upsell__li-name"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Selbsttest „Bin ich ein emotionaler Esser?"</span><span class="d2-upsell__li-price">79 €</span></li>
+          <li class="d2-upsell__li"><span class="d2-upsell__li-name"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Satt-Signal-Guide „7 Tage Hunger neu lernen"</span><span class="d2-upsell__li-price">19 €</span></li>
+          <li class="d2-upsell__li is-last"><span class="d2-upsell__li-name"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Audio-Meditation „Rückkehr zu dir"</span><span class="d2-upsell__li-price">39 €</span></li>
+        </ul>
+        <div class="d2-upsell__summary">
+          <div class="d2-upsell__summary-rows">
+            <p class="d2-upsell__row-total"><span>Gesamtwert</span><span>365 €</span></p>
+            <p class="d2-upsell__row-normal"><span>Normalerweise</span><span>97 €</span></p>
+          </div>
+          <div class="d2-upsell__today">
+            <p class="d2-upsell__today-label">Heute nur</p>
+            <p class="d2-upsell__price">19,95 €</p>
+          </div>
+        </div>
+        <a href="https://mamaspagat.tentary.com/p/glow-starterpaket/checkout" class="d2-upsell__cta">Jetzt noch mein Glow Starterpaket sichern<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+        <p class="d2-upsell__limit">Achtung: nur noch limitierte Plätze verfügbar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="ms-footer" style="background:var(--ms-charcoal); color:rgba(239,231,221,0.7); padding:44px 20px;">
+    <div style="max-width:760px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center;">
+      <div style="font-family:var(--ms-font-display); font-style:italic; font-weight:600; font-size:22px; color:var(--ms-cream);">Die Abnehmrevolution</div>
+      <div style="display:flex; gap:22px; font-size:14px;">
+        <a href="https://shop.vanessareinthaller.de/policies/legal-notice" target="_blank" rel="noopener noreferrer" style="color:rgba(239,231,221,0.8); text-decoration:none;">Impressum</a>
+        <a href="https://shop.vanessareinthaller.de/policies/privacy-policy" target="_blank" rel="noopener noreferrer" style="color:rgba(239,231,221,0.8); text-decoration:none;">Datenschutz</a>
+      </div>
+      <p style="margin:0; font-size:13px;">© 2026 Vanessa Reinthaller · Mama Spagat</p>
+      <p style="margin:0; font-size:11px; color:rgba(239,231,221,0.4); max-width:560px; line-height:1.6;">This site is not a part of the Facebook website or Facebook Inc. Additionally, this site is NOT endorsed by Facebook in any way. FACEBOOK is a trademark of FACEBOOK, Inc.</p>
+    </div>
+  </footer>
+
+  <script async src="//www.instagram.com/embed.js"></script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script src="/abnehmrevolution/js/consent.js" defer></script>
+  <script src="/abnehmrevolution/js/tracking.js" defer></script>
+  <script src="/abnehmrevolution/js/funnel.js" defer></script>
+<script>(function(){if(window.self!==window.top)return;try{var i=new Image();i.src='/abnehmrevolution/api/visit?p=bestaetigung';}catch(e){}})();</script>
+<script src="/abnehmrevolution/js/design.js" defer></script>
+</body>
+</html>

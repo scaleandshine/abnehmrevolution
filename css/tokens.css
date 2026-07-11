@@ -1,0 +1,280 @@
+/* =============================================================
+   Mama.Spagat Design System — Core Tokens
+   colors_and_type.css
+   ============================================================= */
+
+/* ---- Fonts ----
+   Brand fonts (confirmed via official Brand Kit):
+   - TAN AEGEAN   — display serif (installed: fonts/TAN-AEGEAN/, licensed .otf/.ttf)
+   - Montserrat   — body sans (Google Fonts)
+   The handwritten "Mama" signature in the logo is a raster asset (assets/logo-script*.png),
+   not a webfont — do not approximate it with a script font in running text.
+*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,700&display=swap');
+
+/* Local TAN AEGEAN — licensed font, installed in fonts/TAN-AEGEAN/. */
+@font-face {
+  font-family: 'TAN AEGEAN';
+  src: local('TAN AEGEAN'),
+       url('../assets/fonts/TAN-AEGEAN/TANAEGEAN-Regular.otf') format('opentype'),
+       url('../assets/fonts/TAN-AEGEAN/TANAEGEAN-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ===== Color — Brand core (confirmed palette, rev. 2026-06) ===== */
+  --ms-terracotta:      #CA5D25;   /* signature burnt orange — CTAs, accent */
+  --ms-orange:          #FD6500;   /* vivid orange — high-energy accent, hover, highlights */
+  --ms-terracotta-deep: #A8431B;   /* derived, pressed state */
+  --ms-sage:            #476160;   /* sage-teal — editorial accent, surfaces */
+  --ms-sage-deep:       #3A504F;   /* deep sage — pressed sage, dark editorial */
+
+  /* ===== Color — Neutrals ===== */
+  --ms-ink:             #0C1114;   /* near-black — display type */
+  --ms-charcoal:        #1B2020;   /* dark charcoal — body text */
+  --ms-muted:           #7A6F63;   /* derived — secondary / caption */
+  --ms-cream:           #EFE7DD;   /* cream — page background, subtitle pill */
+  --ms-blush:           #F7E0D1;   /* soft blush — tints, capsules, warm fills */
+  --ms-white:           #FAF7F6;   /* near-white — card surface */
+  --ms-bone:            #EFE7DD;   /* alias of cream — page bg */
+  --ms-warm-white:      #FAF7F6;   /* alias of white — card surface */
+
+  /* ===== Color — Supporting (derived / aliases) ===== */
+  --ms-sage-soft:       #8AA09D;   /* derived lighter sage */
+  --ms-peach:           #F7E0D1;   /* alias of blush */
+  --ms-terracotta-soft: #F7E0D1;   /* alias of blush — hover wash */
+  --ms-sand:            #EFE7DD;   /* alias of cream — borders, low-contrast fills */
+  --ms-gold:            #CA5D25;   /* alias of terracotta — premium/protein */
+  --ms-ember:           #FD6500;   /* alias of vivid orange */
+
+  /* ===== Color — Semantic ===== */
+  --ms-fg-1:            var(--ms-ink);
+  --ms-fg-2:            var(--ms-charcoal);
+  --ms-fg-3:            var(--ms-muted);
+  --ms-bg-page:         var(--ms-cream);
+  --ms-bg-card:         var(--ms-white);
+  --ms-bg-subtle:       var(--ms-blush);
+  --ms-accent:          var(--ms-terracotta);
+  --ms-accent-fg:       #EFE7DD;
+  --ms-border:          rgba(12, 17, 20, 0.08);
+  --ms-border-strong:   rgba(12, 17, 20, 0.18);
+
+  /* ===== Type — Families =====
+     TAN AEGEAN for display (uppercase ebook-cover titles, hero serifs).
+     Montserrat for body & UI. */
+  --ms-font-display:    'TAN AEGEAN', 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --ms-font-script:     'TAN AEGEAN', 'Cormorant Garamond', cursive; /* logo "Mama" is a raster; this is only a text fallback */
+  --ms-font-body:       'Montserrat', 'Inter', system-ui, -apple-system, sans-serif;
+  --ms-font-ui:         'Montserrat', system-ui, sans-serif;
+
+  /* ===== Type — Scale (fluid-friendly px) ===== */
+  --ms-text-xs:    12px;
+  --ms-text-sm:    14px;
+  --ms-text-base:  16px;
+  --ms-text-md:    18px;
+  --ms-text-lg:    20px;
+  --ms-text-xl:    24px;
+  --ms-text-2xl:   32px;
+  --ms-text-3xl:   44px;
+  --ms-text-4xl:   60px;
+  --ms-text-5xl:   84px;
+
+  /* ===== Spacing (8pt base) ===== */
+  --ms-space-1: 4px;
+  --ms-space-2: 8px;
+  --ms-space-3: 12px;
+  --ms-space-4: 16px;
+  --ms-space-5: 24px;
+  --ms-space-6: 32px;
+  --ms-space-7: 48px;
+  --ms-space-8: 64px;
+  --ms-space-9: 96px;
+  --ms-space-10:128px;
+
+  /* ===== Radii ===== */
+  --ms-radius-sm:   6px;
+  --ms-radius-md:   14px;
+  --ms-radius-lg:   28px;
+  --ms-radius-xl:   40px;
+  --ms-radius-pill: 999px;
+
+  /* ===== Shadows ===== */
+  --ms-shadow-soft:  0 2px 8px rgba(31, 26, 21, 0.06);
+  --ms-shadow-card:  0 6px 18px rgba(31, 26, 21, 0.08);
+  --ms-shadow-lift:  0 12px 32px rgba(31, 26, 21, 0.10);
+  --ms-shadow-hero:  0 24px 48px rgba(31, 26, 21, 0.18);
+
+  /* ===== Motion ===== */
+  --ms-ease:     cubic-bezier(0.22, 0.61, 0.36, 1); /* @kind other */
+  --ms-dur-fast: 150ms; /* @kind other */
+  --ms-dur:      280ms; /* @kind other */
+  --ms-dur-slow: 500ms; /* @kind other */
+}
+
+/* =============================================================
+   Semantic type classes — use these in components
+   ============================================================= */
+
+.ms-display-xl {
+  font-family: var(--ms-font-display);
+  font-weight: 800;
+  font-size: var(--ms-text-5xl);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--ms-ink);
+  text-transform: uppercase;
+}
+.ms-display {
+  font-family: var(--ms-font-display);
+  font-weight: 700;
+  font-size: var(--ms-text-4xl);
+  line-height: 1.02;
+  letter-spacing: -0.005em;
+  color: var(--ms-ink);
+  text-transform: uppercase;
+}
+.ms-h1 {
+  font-family: var(--ms-font-display);
+  font-weight: 700;
+  font-size: var(--ms-text-3xl);
+  line-height: 1.1;
+  color: var(--ms-ink);
+}
+.ms-h2 {
+  font-family: var(--ms-font-display);
+  font-weight: 600;
+  font-size: var(--ms-text-2xl);
+  line-height: 1.2;
+  color: var(--ms-ink);
+}
+.ms-h3 {
+  font-family: var(--ms-font-body);
+  font-weight: 700;
+  font-size: var(--ms-text-xl);
+  line-height: 1.3;
+  color: var(--ms-ink);
+}
+.ms-script {
+  font-family: var(--ms-font-script);
+  font-weight: 400;
+  font-size: var(--ms-text-4xl);
+  color: var(--ms-terracotta);
+  line-height: 0.9;
+}
+.ms-eyebrow {
+  font-family: var(--ms-font-body);
+  font-weight: 600;
+  font-size: var(--ms-text-sm);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ms-terracotta);
+}
+.ms-subtitle-pill {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: var(--ms-radius-pill);
+  background: var(--ms-cream);
+  font-family: var(--ms-font-body);
+  font-weight: 600;
+  font-size: var(--ms-text-sm);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ms-charcoal);
+}
+.ms-body {
+  font-family: var(--ms-font-body);
+  font-weight: 400;
+  font-size: var(--ms-text-md);
+  line-height: 1.65;
+  color: var(--ms-charcoal);
+}
+.ms-body-sm {
+  font-family: var(--ms-font-body);
+  font-weight: 400;
+  font-size: var(--ms-text-sm);
+  line-height: 1.55;
+  color: var(--ms-charcoal);
+}
+.ms-caption {
+  font-family: var(--ms-font-body);
+  font-weight: 400;
+  font-size: var(--ms-text-xs);
+  line-height: 1.5;
+  color: var(--ms-muted);
+}
+
+/* =============================================================
+   Button base
+   ============================================================= */
+.ms-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: var(--ms-radius-md);
+  font-family: var(--ms-font-body);
+  font-weight: 700;
+  font-size: var(--ms-text-md);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform var(--ms-dur-fast) var(--ms-ease),
+              background-color var(--ms-dur) var(--ms-ease),
+              box-shadow var(--ms-dur) var(--ms-ease);
+}
+.ms-btn-primary {
+  background: var(--ms-terracotta);
+  color: var(--ms-accent-fg);
+  box-shadow: var(--ms-shadow-soft);
+}
+.ms-btn-primary:hover { background: var(--ms-terracotta-deep); box-shadow: var(--ms-shadow-lift); }
+.ms-btn-primary:active { transform: scale(0.98); }
+.ms-btn-ghost {
+  background: transparent;
+  color: var(--ms-ink);
+  border: 1.5px solid var(--ms-ink);
+}
+.ms-btn-ghost:hover { background: var(--ms-ink); color: var(--ms-accent-fg); }
+
+/* =============================================================
+   Card base
+   ============================================================= */
+.ms-card {
+  background: var(--ms-bg-card);
+  border-radius: var(--ms-radius-lg);
+  box-shadow: var(--ms-shadow-card);
+  padding: var(--ms-space-6);
+}
+
+/* =============================================================
+   Circular badge (the "70 REZEPTE" disc)
+   ============================================================= */
+.ms-badge-disc {
+  width: 120px; height: 120px;
+  border-radius: 999px;
+  background: var(--ms-terracotta);
+  color: var(--ms-accent-fg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  font-family: var(--ms-font-display);
+  text-align: center;
+  box-shadow: var(--ms-shadow-lift);
+}
+.ms-badge-disc .num { font-size: 44px; font-weight: 700; line-height: 1; }
+.ms-badge-disc .lbl { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; margin-top: 4px; font-family: var(--ms-font-body); font-weight: 600; }
+
+/* =============================================================
+   Page defaults
+   ============================================================= */
+html, body {
+  margin: 0;
+  background: var(--ms-bg-page);
+  color: var(--ms-charcoal);
+  font-family: var(--ms-font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

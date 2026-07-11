@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <circle cx="256" cy="256" r="256" fill="#C15A28"/>
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#FAF7F6" stroke-opacity="0.32" stroke-width="7"/>
+  <text x="256" y="258" text-anchor="middle" dominant-baseline="central"
+        font-family="Georgia, 'Times New Roman', 'TAN AEGEAN', serif" font-weight="700"
+        font-size="330" fill="#FAF7F6">M</text>
+</svg>

@@ -1,0 +1,2784 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Funnel-Board · Die Abnehmrevolution · INTERN</title>
+<link rel="icon" type="image/svg+xml" href="/abnehmrevolution/favicon.svg">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="/abnehmrevolution/css/tokens.css">
+<link rel="stylesheet" href="/abnehmrevolution/css/base.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: var(--ms-cream); }
+  .dash-wrap { font-family: var(--ms-font-body); color: #1B2020; min-height: 100%; padding: 44px 32px 60px; }
+  .dash-inner { max-width: 1100px; margin: 0 auto; }
+
+  .intern-note {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #1B2020; color: #FAF7F6;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 6px 13px; border-radius: 999px; margin-bottom: 22px;
+  }
+  .intern-note .dot { width: 8px; height: 8px; border-radius: 999px; background: #CA5D25; }
+
+  .section { background: #FAF7F6; border-radius: 22px; padding: 28px 30px; box-shadow: 0 6px 22px rgba(31,26,21,0.08); margin-bottom: 22px; }
+  .section-title { font-family: var(--ms-font-display); font-weight: 600; font-size: 20px; color: #1B2020; margin: 0 0 6px; }
+  .section-sub { font-size: 12px; color: #9a9087; margin: 0 0 22px; }
+
+  /* KPI grid */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+  .kpi-card { background: rgba(27,32,32,0.04); border-radius: 16px; padding: 18px 20px; }
+  .kpi-card.highlight { background: #1B2020; }
+  .kpi-card.orange { background: #CA5D25; }
+  .kpi-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #7A6F63; margin: 0 0 8px; }
+  .kpi-card.highlight .kpi-label { color: rgba(239,231,221,0.6); }
+  .kpi-card.orange .kpi-label { color: rgba(250,247,246,0.75); }
+  .kpi-num { font-family: var(--ms-font-display); font-weight: 700; font-size: 32px; line-height: 1; color: #1B2020; margin: 0; }
+  .kpi-card.highlight .kpi-num { color: #FAF7F6; }
+  .kpi-card.orange .kpi-num { color: #FAF7F6; }
+  .kpi-note { font-size: 11.5px; color: #7A6F63; margin: 7px 0 0; }
+  .kpi-card.highlight .kpi-note { color: rgba(239,231,221,0.55); }
+  .kpi-card.orange .kpi-note { color: rgba(250,247,246,0.7); }
+
+  /* Live chip */
+  .live-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(46,125,84,0.12); color: #2E7D54; font-size: 10.5px; font-weight: 800; padding: 3px 10px; border-radius: 999px; margin-left: 10px; vertical-align: middle; }
+  .live-chip .dot { width: 6px; height: 6px; border-radius: 999px; background: #2E7D54; }
+
+  /* Manual fields grid */
+  .fields-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px 18px; }
+  .field-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .field-label { font-size: 12px; font-weight: 700; color: #1B2020; }
+  .field-sub { font-size: 10.5px; color: #9a9087; }
+  .field-input-row { display: flex; align-items: center; gap: 6px; background: #fff; border: 1.5px solid rgba(27,32,32,0.12); border-radius: 10px; padding: 9px 13px; }
+  .field-input-row input { flex: 1; border: none; outline: none; background: transparent; font-family: var(--ms-font-body); font-size: 15px; font-weight: 700; color: #1B2020; width: 100%; }
+  .field-input-row span { font-size: 12px; color: #9a9087; }
+  .field-input-row input:focus { color: #CA5D25; }
+
+  /* Calculated KPI table */
+  .calc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .calc-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; background: rgba(27,32,32,0.04); border-radius: 12px; padding: 12px 14px; }
+  .calc-name { font-size: 12.5px; font-weight: 700; color: #1B2020; }
+  .calc-val { font-family: var(--ms-font-display); font-weight: 700; font-size: 19px; color: #476160; }
+  .calc-val.dash { color: #C7BBA9; }
+
+  /* Wächter */
+  .waechter-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  /* ROI rechner inherited from dashboard.js */
+  .roi-grid { display: grid; grid-template-columns: minmax(300px, 360px) minmax(0, 1fr); gap: 20px; }
+  .roi-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px 16px; }
+  .roi-kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .roi-chain { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 11px; }
+  .roi-kpi-num { font-family: var(--ms-font-display); font-weight: 700; font-size: clamp(24px, 2.4vw, 32px); line-height: 1.02; overflow-wrap: anywhere; }
+  .roi-num { -moz-appearance: textfield; }
+  .roi-num::-webkit-outer-spin-button, .roi-num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  .save-btn { display: inline-flex; align-items: center; gap: 7px; background: #1B2020; color: #FAF7F6; font-family: var(--ms-font-body); font-size: 13px; font-weight: 800; padding: 10px 20px; border-radius: 999px; border: none; cursor: pointer; margin-top: 18px; }
+  .save-btn:hover { background: #CA5D25; }
+  .save-note { font-size: 11px; color: #9a9087; margin-top: 8px; }
+
+  @media (max-width: 980px) { .roi-grid { grid-template-columns: minmax(0, 1fr); } .waechter-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 760px) { .dash-wrap { padding: 28px 18px 44px; } .section { padding: 20px 18px; } }
+  @media (max-width: 560px) { .roi-kpis { grid-template-columns: minmax(0, 1fr); } .roi-fields { grid-template-columns: minmax(0, 1fr); } .roi-chain { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 414px) { .dash-wrap { padding: 22px 12px 40px; } }
+
+  /* ---- Zeit-Filter ---- */
+  .tf-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+  .tf-pills { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; min-width: 0; }
+  .tf-btn { font-family: var(--ms-font-body); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 999px; border: 1.5px solid transparent; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .tf-btn:not(.tf-active) { background: rgba(27,32,32,0.07); color: #7A6F63; }
+  .tf-btn:not(.tf-active):hover { background: rgba(27,32,32,0.13); color: #1B2020; }
+  .tf-btn.tf-active { background: #1B2020; color: #FAF7F6; border-color: #1B2020; }
+  .tf-custom-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 12px 16px; background: rgba(27,32,32,0.05); border-radius: 14px; margin-bottom: 16px; }
+  .tf-date { font-family: var(--ms-font-body); font-size: 13px; font-weight: 600; color: #1B2020; background: #fff; border: 1.5px solid rgba(27,32,32,0.15); border-radius: 9px; padding: 7px 11px; outline: none; }
+  .tf-date:focus { border-color: #CA5D25; }
+  .tf-apply { font-family: var(--ms-font-body); font-size: 12px; font-weight: 800; padding: 8px 18px; background: #CA5D25; color: #FAF7F6; border: none; border-radius: 999px; cursor: pointer; }
+  .tf-apply:hover { background: #b54d1f; }
+  .refresh-btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--ms-font-body); font-size: 12px; font-weight: 800; padding: 8px 16px; background: rgba(27,32,32,0.07); color: #1B2020; border: 1.5px solid rgba(27,32,32,0.14); border-radius: 999px; cursor: pointer; transition: all 0.15s; white-space: nowrap; flex: none; }
+  .refresh-btn:hover { background: #1B2020; color: #FAF7F6; border-color: #1B2020; }
+  .refresh-btn:disabled { opacity: 0.5; cursor: default; pointer-events: none; }
+  .refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---- UTM Link Builder ---- */
+  .utm-fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px 16px; }
+  .utm-preview { display: flex; align-items: center; gap: 10px; background: rgba(71,97,96,0.08); border: 1.5px solid rgba(71,97,96,0.2); border-radius: 12px; padding: 12px 16px; flex-wrap: wrap; margin-top: 16px; }
+  .utm-preview-url { font-size: 12px; color: #476160; word-break: break-all; flex: 1; min-width: 0; text-decoration: none; font-family: monospace; }
+  .utm-preview-url:hover { color: #CA5D25; }
+  .utm-copy-btn { flex: none; background: none; border: 1.5px solid rgba(27,32,32,0.18); border-radius: 8px; padding: 5px 12px; font-size: 11.5px; font-weight: 700; font-family: var(--ms-font-body); color: #1B2020; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+  .utm-copy-btn:hover, .utm-copy-btn.copied { background: #1B2020; color: #FAF7F6; border-color: #1B2020; }
+  .utm-activate-btn { display: inline-flex; align-items: center; gap: 7px; background: #2E7D54; color: #FAF7F6; font-family: var(--ms-font-body); font-size: 13px; font-weight: 800; padding: 10px 22px; border-radius: 999px; border: none; cursor: pointer; margin-top: 14px; }
+  .utm-activate-btn:hover { background: #24613f; }
+  .utm-links-header { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9a9087; padding-bottom: 10px; border-bottom: 1px solid rgba(27,32,32,0.1); margin-bottom: 12px; }
+  .utm-link-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: rgba(27,32,32,0.04); border-radius: 14px; margin-bottom: 10px; }
+  .utm-link-info { flex: 1; min-width: 0; }
+  .utm-link-label { font-size: 13px; font-weight: 700; color: #1B2020; margin-bottom: 3px; }
+  .utm-link-url { font-size: 11px; color: #7A6F63; text-decoration: none; word-break: break-all; display: block; }
+  .utm-link-url:hover { color: #CA5D25; }
+  .utm-link-meta { display: flex; align-items: center; gap: 10px; flex: none; }
+  .utm-link-count { display: flex; flex-direction: column; align-items: center; min-width: 44px; }
+  .utm-count-num { font-family: var(--ms-font-display); font-weight: 700; font-size: 22px; color: #1B2020; line-height: 1; }
+  .utm-count-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9a9087; margin-top: 2px; }
+  .utm-btn { width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid rgba(27,32,32,0.14); background: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: #7A6F63; transition: all 0.15s; }
+  .utm-btn:hover { background: #1B2020; color: #FAF7F6; border-color: #1B2020; }
+  .utm-btn-delete:hover { background: #C0392B !important; border-color: #C0392B !important; }
+  @media (max-width: 560px) { .utm-fields { grid-template-columns: repeat(2, 1fr); } }
+
+  /* Live ROI */
+  .lr-data-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+  .lr-field { background: rgba(27,32,32,0.04); border-radius: 12px; padding: 12px 14px; }
+  .lr-field-input { background: rgba(71,97,96,0.07); border: 1.5px solid rgba(71,97,96,0.22); }
+  .lr-field-header { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
+  .lr-label { font-size: 11.5px; font-weight: 700; color: #1B2020; }
+  .lr-badge { font-size: 9.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.05em; white-space: nowrap; }
+  .lr-badge.live { background: rgba(46,125,84,0.12); color: #2E7D54; }
+  .lr-badge.manual { background: rgba(202,93,37,0.12); color: #CA5D25; }
+  .lr-badge.calc { background: rgba(71,97,96,0.12); color: #476160; }
+  .lr-value { font-family: var(--ms-font-display); font-weight: 700; font-size: 24px; line-height: 1.1; color: #1B2020; }
+  .lr-sub { font-size: 10.5px; color: #9a9087; margin-top: 4px; }
+  .lr-benchmark { margin: 18px 0 16px; padding: 16px 18px; background: rgba(27,32,32,0.03); border-radius: 14px; }
+  .lr-benchmark-title { font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #9a9087; margin-bottom: 14px; }
+  .lr-slider-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px 24px; }
+  .lr-slider-row { display: flex; align-items: center; gap: 12px; }
+  .lr-sl-label { font-size: 12px; font-weight: 700; color: #1B2020; flex: 0 0 130px; }
+  .lr-slider-row input[type=range] { flex: 1; accent-color: #476160; }
+  .lr-sl-val { font-size: 12px; font-weight: 800; color: #476160; min-width: 42px; text-align: right; }
+  .lr-chain { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+  .lr-chain-item { display: flex; flex-direction: column; align-items: center; min-width: 52px; }
+  .lr-chain-num { font-family: var(--ms-font-display); font-weight: 700; font-size: 20px; color: #1B2020; line-height: 1; }
+  .lr-chain-lbl { font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9a9087; margin-top: 3px; }
+  .lr-chain-sep { font-size: 16px; color: #C7BBA9; }
+  @media (max-width: 560px) { .lr-slider-grid { grid-template-columns: 1fr; } .lr-sl-label { flex: 0 0 110px; } }
+
+  /* Ziel-Rechner Toggle */
+  .zr-toggle { display: inline-flex; background: rgba(27,32,32,0.06); border-radius: 10px; padding: 4px; }
+  .zr-tab { font-family: var(--ms-font-body); font-size: 12.5px; font-weight: 800; padding: 8px 16px; border: none; background: none; color: #7A6F63; border-radius: 7px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .zr-tab.active { background: #FAF7F6; color: #1B2020; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  .lr-field-input #zr-ziel, .lr-field-input #zr-leads { font-size: 20px; font-weight: 800; }
+
+  /* UTM Breakdown Table */
+  .utm-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .utm-table th { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #9a9087; text-align: left; padding: 0 10px 10px; }
+  .utm-table td { font-size: 13px; color: #1B2020; padding: 9px 10px; border-top: 1px solid rgba(27,32,32,0.07); vertical-align: middle; }
+  .utm-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .utm-bar-seg { height: 6px; border-radius: 3px; background: #476160; min-width: 3px; display: inline-block; }
+  .utm-bar-seg.paid { background: #CA5D25; }
+  .utm-type-pill { display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 999px; letter-spacing: 0.04em; white-space: nowrap; }
+  .utm-type-pill.organic { background: rgba(46,125,84,0.12); color: #2E7D54; }
+  .utm-type-pill.paid { background: rgba(202,93,37,0.12); color: #CA5D25; }
+  .utm-type-pill.email { background: rgba(71,97,96,0.14); color: #476160; }
+  .utm-type-pill.direct { background: rgba(46,125,84,0.13); color: #2E7D54; }
+  .utm-type-pill.followup { background: rgba(202,93,37,0.13); color: #CA5D25; }
+  .utm-type-pill.unbekannt { background: rgba(27,32,32,0.08); color: #9a9087; }
+  /* Organic / Paid split */
+  .split-row { display: flex; align-items: center; gap: 20px; margin-bottom: 18px; flex-wrap: wrap; }
+  .split-bar-wrap { flex: 1; min-width: 160px; }
+  .split-bar-track { height: 8px; border-radius: 4px; background: rgba(202,93,37,0.15); overflow: hidden; }
+  .split-bar-fill { height: 100%; background: #476160; border-radius: 4px; transition: width 0.4s; }
+  .split-labels { display: flex; justify-content: space-between; font-size: 10.5px; font-weight: 700; color: #9a9087; margin-top: 5px; }
+  /* Ads placeholder */
+  .ads-placeholder { display: flex; align-items: center; gap: 10px; background: rgba(27,32,32,0.04); border-radius: 12px; padding: 14px 18px; font-size: 13px; color: #9a9087; margin-top: 14px; }
+  .ads-placeholder code { font-size: 12px; background: rgba(27,32,32,0.07); padding: 1px 5px; border-radius: 4px; }
+
+  /* ---- Tabs ---- */
+  .tab-nav { display: flex; gap: 6px; margin-bottom: 22px; background: rgba(27,32,32,0.05); padding: 5px; border-radius: 14px; width: fit-content; max-width: 100%; flex-wrap: wrap; }
+  .tab-btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--ms-font-body); font-size: 13.5px; font-weight: 800; padding: 10px 22px; border-radius: 10px; border: none; background: none; color: #7A6F63; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .tab-btn:hover { color: #1B2020; }
+  .tab-btn.active { background: #FAF7F6; color: #1B2020; box-shadow: 0 2px 8px rgba(31,26,21,0.1); }
+  .tab-btn .tab-badge { font-size: 10px; font-weight: 800; padding: 1px 7px; border-radius: 999px; background: rgba(202,93,37,0.14); color: #CA5D25; }
+  .ws-switch { display: flex; align-items: stretch; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .ws-switch__label { align-self: center; font-size: 10.5px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #9a9087; margin-right: 4px; }
+  .ws-btn { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; font-family: var(--ms-font-body); font-size: 14px; font-weight: 800; padding: 9px 18px; border-radius: 11px; border: 1.5px solid rgba(27,32,32,0.12); background: #FAF7F6; color: #7A6F63; cursor: pointer; transition: all 0.15s; }
+  .ws-btn:hover { color: #1B2020; border-color: rgba(27,32,32,0.28); }
+  .ws-btn.active { background: #1B2020; color: #FAF7F6; border-color: #1B2020; }
+  .ws-btn__sub { font-size: 10.5px; font-weight: 600; opacity: 0.6; letter-spacing: 0.02em; }
+  .lt-btn { font-family: var(--ms-font-body); font-size: 12.5px; font-weight: 700; padding: 7px 14px; border-radius: 9px; border: 1.5px solid rgba(27,32,32,0.12); background: #FAF7F6; color: #7A6F63; cursor: pointer; transition: all 0.15s; }
+  .lt-btn:hover { color: #1B2020; border-color: rgba(27,32,32,0.25); }
+  .lt-btn.active { background: #1B2020; color: #FAF7F6; border-color: #1B2020; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: tab-fade 0.25s ease; }
+  @keyframes tab-fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ---- Zeitverlauf-Chart ---- */
+  .chart-legend { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .chart-toggle { display: inline-flex; align-items: center; gap: 9px; padding: 9px 15px; border-radius: 12px; border: 1.5px solid rgba(27,32,32,0.12); background: #fff; cursor: pointer; transition: all 0.15s; user-select: none; }
+  .chart-toggle.off { opacity: 0.4; }
+  .chart-toggle .ct-dot { width: 11px; height: 11px; border-radius: 3px; flex: none; }
+  .chart-toggle .ct-name { font-size: 12.5px; font-weight: 700; color: #1B2020; }
+  .chart-toggle .ct-sum { font-family: var(--ms-font-display); font-weight: 700; font-size: 15px; color: #1B2020; }
+  .chart-box { position: relative; width: 100%; }
+  .chart-box svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .chart-tip { position: absolute; pointer-events: none; background: #1B2020; color: #FAF7F6; font-size: 11.5px; line-height: 1.5; padding: 9px 12px; border-radius: 10px; opacity: 0; transition: opacity 0.12s; white-space: nowrap; z-index: 5; box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+  .chart-tip b { font-family: var(--ms-font-display); }
+  .chart-empty { padding: 40px 20px; text-align: center; font-size: 13px; color: #9a9087; }
+
+  /* ---- KPI split (organic/paid unter Anmeldungen) ---- */
+  .kpi-split { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .kpi-card.highlight .kpi-split { color: rgba(239,231,221,0.7); }
+  .kpi-split b { color: #FAF7F6; font-weight: 800; }
+  .kpi-dot { display: inline-block; width: 8px; height: 8px; border-radius: 999px; margin-right: 5px; vertical-align: middle; }
+
+  /* ---- Benchmark-Vergleich (Upsell) ---- */
+  .bench-wrap { margin-top: 10px; }
+  .bench-track { position: relative; height: 7px; border-radius: 4px; background: rgba(250,247,246,0.25); }
+  .bench-fill { height: 100%; border-radius: 4px; background: #FAF7F6; transition: width 0.45s; }
+  .bench-marker { position: absolute; top: -3px; width: 2px; height: 13px; background: #1B2020; border-radius: 1px; }
+  .bench-text { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 10.5px; font-weight: 800; }
+  .bench-text #bench-delta { color: #FAF7F6; }
+  .bench-bm { color: rgba(250,247,246,0.7); }
+
+  /* ---- Prognose-Funnel ---- */
+  .fc-row { display: flex; align-items: center; gap: 14px; margin-bottom: 9px; }
+  .fc-label { flex: 0 0 148px; font-size: 12.5px; font-weight: 700; color: #1B2020; }
+  .fc-bar-wrap { flex: 1; min-width: 80px; background: rgba(27,32,32,0.05); border-radius: 9px; height: 36px; overflow: hidden; }
+  .fc-bar { height: 100%; border-radius: 9px; display: flex; align-items: center; justify-content: flex-end; padding: 0 13px; min-width: 46px; transition: width 0.5s; }
+  .fc-bar-val { font-family: var(--ms-font-display); font-weight: 700; font-size: 16px; color: #FAF7F6; white-space: nowrap; }
+  .fc-sub { flex: 0 0 140px; font-size: 11px; color: #9a9087; }
+  @media (max-width: 620px) {
+    .fc-row { flex-wrap: wrap; gap: 6px 12px; }
+    .fc-label { flex: 0 0 100%; }
+    .fc-sub { flex: 0 0 100%; text-align: right; }
+  }
+
+  /* ---- A/B-Test Tab ---- */
+  .ab-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .ab-col { background: rgba(27,32,32,0.04); border-radius: 16px; padding: 20px; border: 2px solid transparent; position: relative; min-width: 0; }
+  .ab-col.winner { border-color: #2E7D54; background: rgba(46,125,84,0.06); }
+  .ab-col-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+  .ab-col-tag { font-family: var(--ms-font-display); font-weight: 700; font-size: 22px; color: #1B2020; }
+  .ab-win-badge { font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 999px; background: #2E7D54; color: #FAF7F6; letter-spacing: 0.05em; text-transform: uppercase; }
+  .ab-col-desc { font-size: 12px; color: #7A6F63; line-height: 1.45; margin-bottom: 16px; min-height: 34px; }
+  .ab-metric { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 11px 0; border-top: 1px solid rgba(27,32,32,0.08); }
+  .ab-metric-label { font-size: 12px; font-weight: 700; color: #7A6F63; }
+  .ab-metric-val { font-family: var(--ms-font-display); font-weight: 700; font-size: 22px; color: #1B2020; }
+  .ab-metric-val.hl { color: #476160; }
+  .ab-hint { margin-top: 16px; padding: 14px 18px; border-radius: 12px; background: rgba(27,32,32,0.04); font-size: 13px; line-height: 1.55; color: #1B2020; }
+  .ab-hint b { color: #2E7D54; }
+  @media (max-width: 620px) { .ab-compare { grid-template-columns: 1fr; } }
+
+  /* A/B Variante: Live-Link + Vorschau-Thumbnail + Lightbox */
+  .ab-actions { display: flex; align-items: center; gap: 12px; margin: 14px 0 0; flex-wrap: wrap; }
+  .ab-live-link { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 800; color: #476160; text-decoration: none; border: 1.5px solid rgba(71,97,96,0.3); border-radius: 8px; padding: 6px 12px; }
+  .ab-live-link:hover { background: #476160; color: #FAF7F6; border-color: #476160; }
+  .ab-preview { position: relative; width: 100%; height: 180px; margin-top: 12px; border-radius: 12px; overflow: hidden; border: 1.5px solid rgba(27,32,32,0.12); cursor: pointer; background: #F3EADE; }
+  .ab-preview iframe { width: 1280px; height: 800px; border: 0; transform: scale(0.28); transform-origin: top left; pointer-events: none; }
+  .ab-preview-badge { position: absolute; right: 8px; bottom: 8px; background: rgba(27,32,32,0.82); color: #FAF7F6; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 7px; display: flex; align-items: center; gap: 5px; }
+  .ab-preview:hover .ab-preview-badge { background: #CA5D25; }
+  .ab-lightbox { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(12,17,20,0.82); backdrop-filter: blur(3px); align-items: center; justify-content: center; padding: 24px; }
+  .ab-lightbox.is-open { display: flex; }
+  .ab-lightbox-inner { position: relative; width: 430px; max-width: 95vw; height: 88vh; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  .ab-lightbox-inner iframe { width: 100%; height: 100%; border: 0; }
+  .ab-lightbox-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; background: #1B2020; }
+  .ab-lightbox-bar span { color: #FAF7F6; font-size: 13px; font-weight: 700; }
+  .ab-lightbox-bar a { color: #E8915E; font-size: 12px; font-weight: 700; text-decoration: none; }
+  .ab-lightbox-close { width: 30px; height: 30px; border-radius: 999px; border: none; background: rgba(255,255,255,0.15); color: #fff; font-size: 18px; line-height: 1; cursor: pointer; }
+  .ab-lightbox-frame-wrap { height: calc(88vh - 50px); }
+  .ab-lightbox-frame-wrap iframe { width: 100%; height: 100%; border: 0; }
+
+  /* Testing-Board */
+  .ab-idea { display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; background: rgba(27,32,32,0.04); border-radius: 14px; margin-bottom: 10px; }
+  .ab-impact { flex: 0 0 auto; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; margin-top: 2px; }
+  .ab-impact.hoch { background: rgba(46,125,84,0.14); color: #2E7D54; }
+  .ab-impact.mittel { background: rgba(202,93,37,0.14); color: #CA5D25; }
+  .ab-impact.niedrig { background: rgba(27,32,32,0.08); color: #9a9087; }
+  .ab-idea-body { flex: 1; min-width: 0; }
+  .ab-idea-title { font-size: 14px; font-weight: 700; color: #1B2020; margin-bottom: 3px; }
+  .ab-idea-hyp { font-size: 12px; color: #7A6F63; line-height: 1.5; }
+  .ab-idea-status { flex: 0 0 auto; font-size: 10.5px; font-weight: 800; color: #9a9087; margin-top: 2px; white-space: nowrap; }
+  .ab-idea-status.live { color: #2E7D54; }
+
+  /* ---- Funnel-Performance ---- */
+  .fn-step { margin-bottom: 4px; }
+  .fn-row { display: flex; align-items: center; gap: 14px; }
+  .fn-label { flex: 0 0 195px; font-size: 13px; font-weight: 700; color: #1B2020; }
+  .fn-bar-wrap { flex: 1; min-width: 80px; background: rgba(27,32,32,0.05); border-radius: 9px; height: 38px; overflow: hidden; }
+  .fn-bar { height: 100%; border-radius: 9px; display: flex; align-items: center; justify-content: flex-end; padding: 0 13px; min-width: 44px; transition: width 0.5s; }
+  .fn-bar-val { font-family: var(--ms-font-display); font-weight: 700; font-size: 16px; color: #FAF7F6; white-space: nowrap; }
+  .fn-pct { flex: 0 0 58px; text-align: right; font-size: 13px; font-weight: 800; color: #476160; white-space: nowrap; }
+  .fn-drop { margin: 2px 0 8px 209px; font-size: 11.5px; font-weight: 700; color: #C0392B; }
+  .fn-sub .fn-label { flex-basis: 181px; padding-left: 14px; font-weight: 600; color: #7A6F63; }
+  @media (max-width: 620px) { .fn-label { flex-basis: 120px; } .fn-sub .fn-label { flex-basis: 106px; } .fn-drop { margin-left: 0; } }
+
+  /* ---- E-Mail Tab ---- */
+  .mail-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .mail-table th { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #9a9087; text-align: left; padding: 0 12px 10px; }
+  .mail-table td { font-size: 13px; color: #1B2020; padding: 11px 12px; border-top: 1px solid rgba(27,32,32,0.07); vertical-align: middle; }
+  .mail-status { display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 9px; border-radius: 999px; letter-spacing: 0.04em; white-space: nowrap; text-transform: uppercase; }
+  .mail-status.completed { background: rgba(46,125,84,0.13); color: #2E7D54; }
+  .mail-status.sending { background: rgba(202,93,37,0.13); color: #CA5D25; }
+  .mail-status.scheduled { background: rgba(71,97,96,0.13); color: #476160; }
+  .mail-status.draft { background: rgba(27,32,32,0.07); color: #9a9087; }
+  .mail-seq-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: rgba(27,32,32,0.04); border-radius: 14px; padding: 16px 20px; margin-bottom: 10px; }
+  .mail-seq-name { font-size: 14px; font-weight: 700; color: #1B2020; }
+  .mail-seq-meta { font-size: 11.5px; color: #9a9087; margin-top: 3px; }
+  .mail-seq-num { font-family: var(--ms-font-display); font-weight: 700; font-size: 26px; color: #476160; line-height: 1; }
+</style>
+</head>
+<body>
+<div class="dash-wrap">
+  <div class="dash-inner">
+
+    <div class="intern-note"><span class="dot"></span>INTERN — nicht öffentlich</div>
+
+    <div style="margin-bottom:28px;">
+      <div style="font-family:var(--ms-font-display); font-style:italic; font-weight:600; font-size:20px; color:#476160; margin-bottom:8px;">Die Abnehmrevolution</div>
+      <h1 style="margin:0 0 6px; font-family:var(--ms-font-display); font-weight:600; font-size:clamp(26px,3.6vw,40px); line-height:1.04; color:#1B2020;">Funnel-Board · Echtdaten</h1>
+      <p style="margin:0; font-size:13px; color:#9a9087;">Leads, Besucher, Glow-Käufe & E-Mail-Stats kommen live aus Kit + PostHog. Nur Ad-Spend und Workshop-Teilnahme trägst du manuell ein.</p>
+    </div>
+
+    <!-- Workshop-Auswahl -->
+    <div class="ws-switch">
+      <span class="ws-switch__label">Workshop</span>
+      <button class="ws-btn" data-ws="20481004" onclick="switchWorkshop(20481004)">Juni 2026<span class="ws-btn__sub">24.+25.06.</span></button>
+      <button class="ws-btn" data-ws="20703609" onclick="switchWorkshop(20703609)">Juli 2026<span class="ws-btn__sub">18.+19.07.</span></button>
+    </div>
+
+    <!-- Tab-Navigation -->
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="overview" onclick="switchTab('overview')">Übersicht</button>
+      <button class="tab-btn" data-tab="leads" onclick="switchTab('leads')">Leads</button>
+      <button class="tab-btn" data-tab="aufzeichnung" onclick="switchTab('aufzeichnung')">Aufzeichnung</button>
+      <button class="tab-btn" data-tab="metaads" onclick="switchTab('metaads')">Meta Ads</button>
+      <button class="tab-btn" data-tab="abtest" onclick="switchTab('abtest')">A/B-Test</button>
+      <button class="tab-btn" data-tab="email" onclick="switchTab('email')">E-Mail</button>
+      <button class="tab-btn" data-tab="rechner" onclick="switchTab('rechner')">Rechner</button>
+    </div>
+
+    <!-- Zeit-Filter + Refresh -->
+    <div id="tf-wrap">
+    <div class="tf-bar">
+      <div class="tf-pills">
+        <button class="tf-btn tf-active" data-range="all"       onclick="setRange(this)">Gesamt</button>
+        <button class="tf-btn"           data-range="today"     onclick="setRange(this)">Heute</button>
+        <button class="tf-btn"           data-range="yesterday" onclick="setRange(this)">Gestern</button>
+        <button class="tf-btn"           data-range="7d"        onclick="setRange(this)">7 Tage</button>
+        <button class="tf-btn"           data-range="14d"       onclick="setRange(this)">14 Tage</button>
+        <button class="tf-btn"           data-range="30d"       onclick="setRange(this)">30 Tage</button>
+        <button class="tf-btn"           data-range="custom"    onclick="setRange(this)">Individuell</button>
+      </div>
+      <button class="refresh-btn" id="refresh-btn" onclick="refreshAll()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+        Aktualisieren
+      </button>
+    </div>
+    <div id="tf-custom-row" class="tf-custom-row" style="display:none;">
+      <span style="font-size:12px;font-weight:700;color:#7A6F63;">Von</span>
+      <input type="date" id="tf-from" class="tf-date">
+      <span style="font-size:12px;font-weight:700;color:#7A6F63;">Bis</span>
+      <input type="date" id="tf-to" class="tf-date">
+      <button class="tf-apply" onclick="applyCustomRange()">Anwenden</button>
+      <span id="tf-custom-note" style="font-size:11.5px;color:#9a9087;"></span>
+    </div>
+    </div><!-- /tf-wrap -->
+
+    <!-- ===== 1. LIVE KPIs ===== -->
+    <div class="section" data-tab="overview">
+      <h2 class="section-title">Live-Daten <span class="live-chip"><span class="dot"></span>LIVE</span></h2>
+      <p class="section-sub" id="live-stand">Stand: wird geladen…</p>
+      <div class="kpi-grid">
+        <!-- 1 Besucher -->
+        <div class="kpi-card highlight">
+          <p class="kpi-label">Besucher</p>
+          <p class="kpi-num" id="kpi-visitors">…</p>
+          <p class="kpi-note" id="kpi-visitors-note">PostHog server_visit</p>
+        </div>
+        <!-- 2 Anmeldungen (+ organic / paid) -->
+        <div class="kpi-card highlight">
+          <p class="kpi-label">Anmeldungen</p>
+          <p class="kpi-num" id="kpi-leads">…</p>
+          <p class="kpi-note kpi-split">
+            <span><span class="kpi-dot" style="background:#5BB98B"></span>organic <b id="kpi-organic">—</b></span>
+            <span><span class="kpi-dot" style="background:#E8915E"></span>paid <b id="kpi-paid">—</b></span>
+          </p>
+          <p class="kpi-note" id="kpi-unsub" style="margin-top:4px;">echte Anmeldungen · <b id="kpi-active">—</b> aktiv · <b id="kpi-unsub-n" style="color:#E8915E;">—</b> wieder abgemeldet</p>
+        </div>
+        <!-- 3 Conversion Rate Landingpage -->
+        <div class="kpi-card highlight">
+          <p class="kpi-label">Conversion-Rate LP</p>
+          <p class="kpi-num" id="kpi-cr">—</p>
+          <p class="kpi-note">Anmeldungen ÷ Besucher</p>
+        </div>
+        <!-- 4 Glow-Käufer -->
+        <div class="kpi-card highlight">
+          <p class="kpi-label">Glow-Käufe</p>
+          <p class="kpi-num" id="kpi-glow">…</p>
+          <p class="kpi-note" id="kpi-glow-note">Kit · wird geladen…</p>
+        </div>
+        <!-- 5 Upsell-Rate + Benchmark -->
+        <div class="kpi-card orange">
+          <p class="kpi-label">Upsell-Rate</p>
+          <p class="kpi-num" id="kpi-upsell">—</p>
+          <div class="bench-wrap" id="kpi-upsell-bench">
+            <div class="bench-track"><div class="bench-fill" id="bench-fill" style="width:0%"></div><div class="bench-marker" id="bench-marker" style="left:50%"></div></div>
+            <div class="bench-text"><span id="bench-delta">—</span><span class="bench-bm">Ø 10 %</span></div>
+          </div>
+        </div>
+        <!-- 6 Ad-Kosten -->
+        <div class="kpi-card highlight">
+          <p class="kpi-label">Ad-Kosten</p>
+          <p class="kpi-num" id="kpi-adspend">—</p>
+          <p class="kpi-note" id="kpi-adspend-note">Meta · live</p>
+        </div>
+        <!-- 7 Lead-Preis (Paid) -->
+        <div class="kpi-card">
+          <p class="kpi-label">Lead-Preis (Paid)</p>
+          <p class="kpi-num" id="kpi-cpl" style="color:#CA5D25;">—</p>
+          <p class="kpi-note" id="kpi-cpl-note">Meta · Spend ÷ Leads</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 1a0. LIVE-VERLAUF ===== -->
+    <div class="section" data-tab="overview">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div>
+          <h2 class="section-title">Verlauf</h2>
+          <p class="section-sub" id="livetrend-sub">Tagesverlauf — wähle die Kennzahl.</p>
+        </div>
+        <div id="livetrend-filters" style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="lt-btn active" data-m="leads" onclick="setLiveTrend('leads')">Leads</button>
+          <button class="lt-btn" data-m="umsatz" onclick="setLiveTrend('umsatz')">Umsatz</button>
+          <button class="lt-btn" data-m="cr" onclick="setLiveTrend('cr')">Conversion-Rate</button>
+          <button class="lt-btn" data-m="cpl" onclick="setLiveTrend('cpl')">Cost / Lead</button>
+        </div>
+      </div>
+      <div id="livetrend-chart" style="margin-top:14px;"><div class="chart-empty">wird geladen…</div></div>
+    </div>
+
+    <!-- ===== 1a1. FUNNEL-PERFORMANCE ===== -->
+    <div class="section" data-tab="overview">
+      <h2 class="section-title">Funnel-Performance</h2>
+      <p class="section-sub" id="funnel-stand">Seite für Seite — wie viele weiterkommen und wo wir Besucher verlieren</p>
+      <div id="funnel-steps"><div class="chart-empty">wird geladen…</div></div>
+    </div>
+
+    <!-- ===== 1a2. PROGNOSE WORKSHOP — Hochrechnung vs. Ist ===== -->
+    <div class="section" data-tab="overview">
+      <h2 class="section-title">Prognose Workshop · Hochrechnung vs. Ist</h2>
+      <p class="section-sub">Links die Benchmark-Hochrechnung (Anmeldungen × Raten), rechts die echten Workshop-Zahlen. Ist-Werte &amp; Raten im Tab „Rechner" anpassbar.</p>
+      <div id="forecast-funnel"><div class="chart-empty">wird geladen…</div></div>
+    </div>
+
+    <!-- ===== 1a2b. ANMELDUNGS-SCHWELLEN ===== -->
+    <div class="section" data-tab="overview">
+      <h2 class="section-title">Anmeldungs-Schwellen · Project You</h2>
+      <p class="section-sub" id="thr-sub">Wie viele Anmeldungen es laut Benchmark braucht, bis das nächste Project-You-Paket (1.997 €) verkauft ist.</p>
+      <div id="thr-headline" style="margin:6px 0 16px;"></div>
+      <div id="threshold-chart"><div class="chart-empty">wird geladen…</div></div>
+    </div>
+
+    <!-- ===== 1a. ZEITVERLAUF ===== -->
+    <div class="section" data-tab="overview">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:4px;">
+        <h2 class="section-title" style="margin:0;">Zeitverlauf</h2>
+        <span id="chart-range-note" style="font-size:11.5px;color:#9a9087;"></span>
+      </div>
+      <p class="section-sub" style="margin-bottom:16px;">Besucher · Anmeldungen · Umsatz pro Tag — Layer ein-/ausblenden</p>
+      <div class="chart-legend" id="chart-legend"></div>
+      <div class="chart-box" id="chart-box">
+        <div class="chart-empty" id="chart-empty">wird geladen…</div>
+      </div>
+    </div>
+
+    <!-- ===== 1b. ANMELDUNGEN NACH QUELLE ===== -->
+    <div class="section" data-tab="overview">
+      <h2 class="section-title">Anmeldungen nach Quelle</h2>
+      <p class="section-sub" id="utm-table-stand">Aufschlüsselung nach UTM · wird geladen…</p>
+      <div class="split-row" id="split-row" style="display:none;">
+        <div>
+          <div style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#2E7D54;margin-bottom:4px;">Organic</div>
+          <div style="font-family:var(--ms-font-display);font-weight:700;font-size:30px;line-height:1;color:#2E7D54;" id="split-organic">—</div>
+        </div>
+        <div class="split-bar-wrap">
+          <div class="split-bar-track"><div class="split-bar-fill" id="split-bar-fill" style="width:0%"></div></div>
+          <div class="split-labels"><span id="split-organic-pct">—</span><span id="split-paid-pct">—</span></div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#CA5D25;margin-bottom:4px;">Paid</div>
+          <div style="font-family:var(--ms-font-display);font-weight:700;font-size:30px;line-height:1;color:#CA5D25;" id="split-paid">—</div>
+        </div>
+      </div>
+      <div id="utm-breakdown-table"></div>
+    </div>
+
+    <!-- ===== 1c. GLOW-KÄUFE WANN & WOHER ===== -->
+    <div class="section" data-tab="overview">
+      <h2 class="section-title">Glow-Käufe · Wann & Woher</h2>
+      <p class="section-sub" id="glowsrc-stand">Direkt im Anmeldemoment (Danke-Seite) vs. später über die Follow-up-Mails</p>
+      <div class="kpi-grid" style="margin-bottom:16px;">
+        <div class="kpi-card highlight"><p class="kpi-label">Direkt beim Anmelden</p><p class="kpi-num" id="glowsrc-direct" style="color:#5BB98B;">—</p><p class="kpi-note">≤ 60 Min nach Anmeldung</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">Über Follow-up-Mails</p><p class="kpi-num" id="glowsrc-followup" style="color:#E8915E;">—</p><p class="kpi-note">später aus der E-Mail-Sequenz</p></div>
+      </div>
+      <div id="glowsrc-table"></div>
+    </div>
+
+    <!-- ===== ZIEL-RECHNER (Reverse) ===== -->
+    <div class="section" data-tab="rechner">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
+        <h2 class="section-title" style="margin:0;">Ziel-Rechner</h2>
+        <div class="zr-toggle">
+          <button class="zr-tab active" id="zr-tab-ziel" onclick="zrMode('ziel')">Zielbasiert</button>
+          <button class="zr-tab" id="zr-tab-fwd" onclick="zrMode('fwd')">Vorwärts</button>
+        </div>
+      </div>
+      <p class="section-sub" id="zr-sub">Umsatzziel vorgeben → der Rechner zeigt, wie viele Anmeldungen und wie viel Ad-Budget du brauchst.</p>
+
+      <div class="lr-data-grid" style="margin-bottom:16px;">
+        <div class="lr-field lr-field-input" id="zr-cell-ziel">
+          <div class="lr-field-header"><span class="lr-label">Umsatzziel</span><span class="lr-badge manual">Ziel</span></div>
+          <div class="field-input-row" style="margin-top:4px;"><input type="number" id="zr-ziel" placeholder="50000" step="1000" oninput="zrCalc()"><span class="field-unit">€</span></div>
+        </div>
+        <div class="lr-field lr-field-input" id="zr-cell-leads" style="display:none;">
+          <div class="lr-field-header"><span class="lr-label">Anmeldungen (geplant)</span><span class="lr-badge manual">Eingabe</span></div>
+          <div class="field-input-row" style="margin-top:4px;"><input type="number" id="zr-leads" placeholder="500" step="10" oninput="zrCalc()"><span class="field-unit">#</span></div>
+        </div>
+        <div class="lr-field">
+          <div class="lr-field-header"><span class="lr-label">Produktpreis</span><span class="lr-badge calc">Default 1.997</span></div>
+          <div class="field-input-row" style="margin-top:4px;"><input type="number" id="zr-produktpreis" value="1997" step="100" oninput="zrCalc()"><span class="field-unit">€</span></div>
+        </div>
+        <div class="lr-field">
+          <div class="lr-field-header"><span class="lr-label">Lead-Preis (CPL)</span><span class="lr-badge live" id="zr-cpl-badge">Benchmark</span></div>
+          <div class="field-input-row" style="margin-top:4px;"><input type="number" id="zr-cpl" step="0.5" oninput="onZrCpl()"><span class="field-unit">€</span></div>
+        </div>
+        <div class="lr-field">
+          <div class="lr-field-header"><span class="lr-label">Organische Anmeldungen</span><span class="lr-badge calc">kostenlos</span></div>
+          <div class="field-input-row" style="margin-top:4px;"><input type="number" id="zr-org" value="0" step="10" oninput="zrCalc()"><span class="field-unit">#</span></div>
+        </div>
+      </div>
+
+      <div class="lr-benchmark">
+        <div class="lr-benchmark-title">Benchmark-Raten — deine Stellschrauben</div>
+        <div class="lr-slider-grid">
+          <div class="lr-slider-row"><span class="lr-sl-label">Show-up Tag 1</span><input type="range" id="zr-su1" min="0" max="100" step="1" value="25" oninput="zrSlider('su1',this.value)"><span class="lr-sl-val" id="zr-su1-val">25 %</span></div>
+          <div class="lr-slider-row"><span class="lr-sl-label">Show-up Tag 2</span><input type="range" id="zr-su2" min="0" max="100" step="1" value="20" oninput="zrSlider('su2',this.value)"><span class="lr-sl-val" id="zr-su2-val">20 %</span></div>
+          <div class="lr-slider-row"><span class="lr-sl-label">Termin-Quote</span><input type="range" id="zr-tq" min="0" max="100" step="1" value="10" oninput="zrSlider('tq',this.value)"><span class="lr-sl-val" id="zr-tq-val">10 %</span></div>
+          <div class="lr-slider-row"><span class="lr-sl-label">Abschlussquote</span><input type="range" id="zr-aq" min="0" max="100" step="1" value="80" oninput="zrSlider('aq',this.value)"><span class="lr-sl-val" id="zr-aq-val">80 %</span></div>
+          <div class="lr-slider-row"><span class="lr-sl-label">Glow-Upsell-Rate</span><input type="range" id="zr-glow" min="0" max="40" step="1" value="10" oninput="zrSlider('glow',this.value)"><span class="lr-sl-val" id="zr-glow-val">10 %</span></div>
+        </div>
+      </div>
+
+      <div class="kpi-grid" id="zr-result" style="margin-top:16px;"></div>
+      <div style="margin-top:16px;padding:14px 18px;background:rgba(27,32,32,0.03);border-radius:14px;">
+        <div style="font-size:10.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#9a9087;margin-bottom:2px;" id="zr-chain-title">Benötigte Funnel-Mengen</div>
+        <div class="lr-chain" id="zr-chain"></div>
+      </div>
+    </div>
+
+    <!-- ===== 2. DATEN EINTRAGEN ===== -->
+    <div class="section" data-tab="rechner">
+      <h2 class="section-title">Daten eintragen</h2>
+      <p class="section-sub">Trage die echten Zahlen ein — sie werden automatisch im Browser gespeichert.</p>
+      <div class="fields-grid">
+        <div class="field-wrap">
+          <div class="field-label">Werbebudget (Ad-Spend)</div>
+          <div class="field-sub">Meta Ads gesamt</div>
+          <div class="field-input-row"><input type="number" id="f-adspend" placeholder="0" min="0" step="100"><span>€</span></div>
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Besucher Landingpage</div>
+          <div class="field-sub">Organic + Paid gesamt</div>
+          <div class="field-input-row"><input type="number" id="f-besucher" placeholder="0" min="0" step="10"></div>
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Cost per Lead (CPL)</div>
+          <div class="field-sub">aus Meta Ads Manager</div>
+          <div class="field-input-row"><input type="number" id="f-cpl" placeholder="0.00" min="0" step="0.01"><span>€</span></div>
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Workshop Tag 1 — Live dabei</div>
+          <div class="field-sub">Zoom Peak-Teilnehmer</div>
+          <div class="field-input-row"><input type="number" id="f-live1" placeholder="0" min="0" step="1"></div>
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Workshop Tag 2 — Live dabei</div>
+          <div class="field-sub">Zoom Peak-Teilnehmer</div>
+          <div class="field-input-row"><input type="number" id="f-live2" placeholder="0" min="0" step="1"></div>
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Project You / VIP Käufe</div>
+          <div class="field-sub">Tentary · 27 €</div>
+          <div class="field-input-row"><input type="number" id="f-py" placeholder="0" min="0" step="1"></div>
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Notiz</div>
+          <div class="field-sub">Auffälligkeiten, Besonderheiten</div>
+          <div class="field-input-row" style="align-items:flex-start; padding:9px 13px;"><input type="text" id="f-notiz" placeholder="z.B. Zoom-Probleme Tag 1" style="font-size:13px; font-weight:400;"></div>
+        </div>
+      </div>
+      <button class="save-btn" onclick="saveData()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        Speichern
+      </button>
+      <p class="save-note" id="save-note">Gespeichert im Browser (localStorage). Kein Deploy nötig.</p>
+    </div>
+
+    <!-- Berechnete Kennzahlen: in Rechner-Tab (Live ROI) zusammengeführt, calc-grid versteckt erhalten -->
+    <div class="calc-grid" id="calc-grid" style="display:none;"></div>
+
+    <!-- ===== 3b. META ADS ===== -->
+    <div class="section" data-tab="metaads" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
+        <h2 class="section-title" style="margin:0;">Meta Ads</h2>
+        <span id="ads-status-chip" style="font-size:11px;font-weight:800;padding:4px 12px;border-radius:999px;background:rgba(27,32,32,0.07);color:#9a9087;letter-spacing:0.06em;text-transform:uppercase;">Token fehlt</span>
+      </div>
+      <p class="section-sub" id="ads-stand">Live aus dem Werbekonto · nur Abnehmrevolution-Kampagnen</p>
+      <div class="kpi-grid">
+        <div class="kpi-card"><p class="kpi-label">Ad-Spend</p><p class="kpi-num" id="ads-spend">—</p><p class="kpi-note">€ ausgegeben</p></div>
+        <div class="kpi-card"><p class="kpi-label">Reichweite</p><p class="kpi-num" id="ads-reach">—</p><p class="kpi-note">Personen erreicht</p></div>
+        <div class="kpi-card"><p class="kpi-label">Impressionen</p><p class="kpi-num" id="ads-impressions">—</p><p class="kpi-note">Anzeigen gesamt</p></div>
+        <div class="kpi-card"><p class="kpi-label">Klicks</p><p class="kpi-num" id="ads-clicks">—</p><p class="kpi-note">Link-Klicks</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">Leads (Meta)</p><p class="kpi-num" id="ads-leads">—</p><p class="kpi-note">Meta-Attribution</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">Kosten / Lead</p><p class="kpi-num" id="ads-cpl" style="color:#FAF7F6;">—</p><p class="kpi-note">Spend ÷ Leads (Meta)</p></div>
+        <div class="kpi-card"><p class="kpi-label">CTR</p><p class="kpi-num" id="ads-ctr">—</p><p class="kpi-note">Click-through Rate</p></div>
+        <div class="kpi-card"><p class="kpi-label">CPM</p><p class="kpi-num" id="ads-cpm">—</p><p class="kpi-note">Kosten / 1000 Imp.</p></div>
+        <div class="kpi-card"><p class="kpi-label">CPC</p><p class="kpi-num" id="ads-cpc">—</p><p class="kpi-note">Kosten / Klick</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">ROAS (Ads)</p><p class="kpi-num" id="ads-roas">—</p><p class="kpi-note">Umsatz ÷ Ad-Spend</p></div>
+      </div>
+      <div class="ads-placeholder" id="ads-placeholder">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Lade Live-Daten aus dem Werbekonto…
+      </div>
+      <div style="margin-top:20px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#9a9087;">Pro Kampagne</div>
+      <div id="ads-campaign-table" style="margin-top:8px;"></div>
+
+      <!-- Funnelguru-Tracking-Tabelle -->
+      <div style="margin-top:30px;display:flex;gap:10px;flex-wrap:wrap;">
+        <div class="kpi-card" style="flex:1;min-width:150px;"><p class="kpi-label">Budget</p><div style="display:flex;align-items:center;gap:5px;margin-top:4px;"><input id="ads-budget" type="number" step="100" placeholder="15000" oninput="onAdsTrk('budget',this.value)" style="width:100%;font-family:inherit;font-size:18px;font-weight:700;color:#1B2020;border:1.5px solid rgba(27,32,32,0.14);border-radius:8px;padding:6px 9px;background:#FAF7F6;"><span style="color:#9a9087;">€</span></div></div>
+        <div class="kpi-card" style="flex:1;min-width:150px;"><p class="kpi-label">Ausgegeben</p><p class="kpi-num" id="ads-spent2" style="font-size:24px;">—</p><p class="kpi-note">Meta · live</p></div>
+        <div class="kpi-card highlight" style="flex:1;min-width:150px;"><p class="kpi-label">Rest</p><p class="kpi-num" id="ads-rest" style="font-size:24px;">—</p><p class="kpi-note">Budget − Ausgegeben</p></div>
+        <div class="kpi-card" style="flex:1;min-width:150px;"><p class="kpi-label">Ziel-CPL</p><div style="display:flex;align-items:center;gap:5px;margin-top:4px;"><input id="ads-zielcpl" type="number" step="0.5" value="20" oninput="onAdsTrk('zielcpl',this.value)" style="width:100%;font-family:inherit;font-size:18px;font-weight:700;color:#1B2020;border:1.5px solid rgba(27,32,32,0.14);border-radius:8px;padding:6px 9px;background:#FAF7F6;"><span style="color:#9a9087;">€</span></div></div>
+      </div>
+
+      <div style="margin-top:24px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#9a9087;">Tägliches Tracking</div>
+      <p class="section-sub" style="margin-top:2px;">CPL-Zellen grün = unter Ziel-CPL, rot = darüber. Leads = Meta-Attribution · Anmeldungen = Kit · Upsell = Glow.</p>
+      <div id="ads-daily-table" style="margin-top:8px;"><div class="chart-empty">wird geladen…</div></div>
+
+      <div style="margin-top:24px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#9a9087;">Wochen-Übersicht (KW)</div>
+      <div id="ads-weekly-table" style="margin-top:8px;"></div>
+    </div>
+
+    <!-- ===== 4. TRACKING-LINKS ===== -->
+    <div class="section" data-tab="overview">
+      <h2 class="section-title">Tracking-Links</h2>
+      <p class="section-sub">UTM-Links bauen · aktivieren · Lead-Performance tracken. <b>Campaign</b> ist immer fixiert als <code style="background:rgba(27,32,32,0.07);padding:1px 6px;border-radius:5px;font-size:11px;">abnehmrevolution</code>.</p>
+
+      <div class="utm-fields">
+        <div class="field-wrap">
+          <div class="field-label">Source</div>
+          <div class="field-sub">Plattform / Herkunft</div>
+          <div class="field-input-row"><input type="text" id="utm-source" placeholder="instagram" list="utm-src-list" oninput="updateUtmPreview()"></div>
+          <datalist id="utm-src-list"><option value="instagram"><option value="whatsapp"><option value="facebook"><option value="tiktok"><option value="email"></datalist>
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Medium</div>
+          <div class="field-sub">Format / Kanal</div>
+          <div class="field-input-row"><input type="text" id="utm-medium" placeholder="story" list="utm-med-list" oninput="updateUtmPreview()"></div>
+          <datalist id="utm-med-list"><option value="story"><option value="status"><option value="reel"><option value="post"><option value="bio"><option value="link-in-bio"><option value="email"><option value="mc"><option value="dm"></datalist>
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Campaign</div>
+          <div class="field-sub">fixiert — nicht änderbar</div>
+          <div class="field-input-row" style="opacity:0.45;pointer-events:none;"><input type="text" value="abnehmrevolution" readonly tabindex="-1" style="color:#7A6F63;font-weight:400;"></div>
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Content</div>
+          <div class="field-sub">Account / Motiv</div>
+          <div class="field-input-row"><input type="text" id="utm-content" placeholder="funnelguru" list="utm-cnt-list" oninput="updateUtmPreview()"></div>
+          <datalist id="utm-cnt-list"><option value="funnelguru"><option value="mamaspagat"></datalist>
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Term</div>
+          <div class="field-sub">optional</div>
+          <div class="field-input-row"><input type="text" id="utm-term" placeholder="optional" oninput="updateUtmPreview()"></div>
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">Label</div>
+          <div class="field-sub">Anzeigename im Dashboard</div>
+          <div class="field-input-row"><input type="text" id="utm-label" placeholder="IG Story · FunnelGuru"></div>
+        </div>
+      </div>
+
+      <div class="utm-preview">
+        <a id="utm-url-link" href="#" target="_blank" rel="noopener" class="utm-preview-url">—</a>
+        <button class="utm-copy-btn" id="utm-copy-btn" onclick="copyUtmUrl()">Kopieren</button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <button class="utm-activate-btn" onclick="activateLink()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Link aktivieren
+        </button>
+        <span id="utm-activate-note" style="font-size:12px;color:#9a9087;"></span>
+      </div>
+
+      <div id="utm-links-container" style="margin-top:24px;"></div>
+    </div>
+
+    <!-- ===== 5. WÄCHTER ===== -->
+    <div class="section" data-tab="overview">
+      <h2 class="section-title">Wächter</h2>
+      <p class="section-sub">Promo · Conversion (täglich per launchd)</p>
+      <div class="waechter-grid" id="waechter-grid">
+        <div style="background:rgba(27,32,32,0.04); border-radius:14px; padding:18px 20px;">
+          <p style="margin:0 0 10px; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#7A6F63;">Promo-Wächter</p>
+          <div id="promo-status" style="font-size:14px; line-height:1.6; color:#1B2020;">lädt…</div>
+        </div>
+        <div style="background:rgba(27,32,32,0.04); border-radius:14px; padding:18px 20px;">
+          <p style="margin:0 0 10px; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#7A6F63;">Conversion-Wächter</p>
+          <div id="conv-status" style="font-size:14px; line-height:1.6; color:#1B2020;">lädt…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LIVE ROI ===== -->
+    <div class="section" data-tab="rechner">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
+        <h2 class="section-title" style="margin:0;">Live ROI · Echt-Daten</h2>
+        <span id="lr-live-count" style="font-size:11px;font-weight:800;padding:4px 12px;border-radius:999px;background:rgba(71,97,96,0.1);color:#476160;letter-spacing:0.06em;text-transform:uppercase;">wird geladen…</span>
+      </div>
+      <p class="section-sub" style="margin-bottom:18px;">Füllt sich automatisch aus Kit + UTM-Daten — nur Ad-Spend musst du eintragen</p>
+
+      <div class="lr-data-grid">
+        <div class="lr-field">
+          <div class="lr-field-header"><span class="lr-label">Leads gesamt</span><span class="lr-badge live">Live · Kit</span></div>
+          <div class="lr-value" id="lr-leads">…</div>
+        </div>
+        <div class="lr-field">
+          <div class="lr-field-header"><span class="lr-label">davon Paid</span><span class="lr-badge live">Live · UTM</span></div>
+          <div class="lr-value" id="lr-paid">…</div>
+          <div class="lr-sub">cpc / pmax / paid_social</div>
+        </div>
+        <div class="lr-field">
+          <div class="lr-field-header"><span class="lr-label">davon Organic</span><span class="lr-badge live">Live · UTM</span></div>
+          <div class="lr-value" id="lr-organic">…</div>
+          <div class="lr-sub">kein paid medium</div>
+        </div>
+        <div class="lr-field">
+          <div class="lr-field-header"><span class="lr-label">Glow-Käufe</span><span class="lr-badge live">Live · Kit</span></div>
+          <div class="lr-value" id="lr-glow-d">…</div>
+          <div class="lr-sub" id="lr-glow-rate">—</div>
+        </div>
+        <div class="lr-field lr-field-input">
+          <div class="lr-field-header"><span class="lr-label">Ad-Spend</span><span class="lr-badge live">Live · Meta</span></div>
+          <div class="field-input-row" style="margin-top:4px;">
+            <input type="number" id="lr-adspend-input" placeholder="0" min="0" step="50" oninput="onLrAdspend()">
+            <span class="field-unit">€</span>
+          </div>
+          <div class="lr-sub" style="margin-top:6px;">kommt live aus Meta — Feld nur als manueller Fallback</div>
+        </div>
+        <div class="lr-field">
+          <div class="lr-field-header"><span class="lr-label">Lead-Preis (paid)</span><span class="lr-badge calc">Berechnet</span></div>
+          <div class="lr-value" id="lr-cpl">—</div>
+          <div class="lr-sub">Ad-Spend ÷ Paid-Leads</div>
+        </div>
+      </div>
+
+      <div class="lr-benchmark">
+        <div class="lr-benchmark-title">Benchmark-Raten (nach Workshop mit Ist-Werten anpassen)</div>
+        <div class="lr-slider-grid">
+          <div class="lr-slider-row"><span class="lr-sl-label">Show-up Tag 1</span><input type="range" id="lr-su1" min="0" max="100" step="1" value="25" oninput="onLrSlider('su1',this.value)"><span class="lr-sl-val" id="lr-su1-val">25 %</span></div>
+          <div class="lr-slider-row"><span class="lr-sl-label">Show-up Tag 2</span><input type="range" id="lr-su2" min="0" max="100" step="1" value="20" oninput="onLrSlider('su2',this.value)"><span class="lr-sl-val" id="lr-su2-val">20 %</span></div>
+          <div class="lr-slider-row"><span class="lr-sl-label">Termin-Quote</span><input type="range" id="lr-tq" min="0" max="100" step="1" value="10" oninput="onLrSlider('tq',this.value)"><span class="lr-sl-val" id="lr-tq-val">10 %</span></div>
+          <div class="lr-slider-row"><span class="lr-sl-label">Abschlussquote</span><input type="range" id="lr-aq" min="0" max="100" step="1" value="80" oninput="onLrSlider('aq',this.value)"><span class="lr-sl-val" id="lr-aq-val">80 %</span></div>
+        </div>
+      </div>
+
+      <div class="lr-benchmark" style="background:rgba(202,93,37,0.06);">
+        <div class="lr-benchmark-title" style="color:#CA5D25;">Ist-Zahlen (final) — überschreiben die Benchmark-Schätzung</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;">
+          <label style="font-size:12px;font-weight:700;color:#1B2020;">Teilnehmer Tag 1<br><input type="number" min="0" id="ist-t1" placeholder="—" oninput="onIst('t1',this.value)" style="margin-top:4px;width:100px;font-family:inherit;font-size:14px;padding:8px 10px;border:1.5px solid rgba(27,32,32,0.14);border-radius:9px;background:#FAF7F6;"></label>
+          <label style="font-size:12px;font-weight:700;color:#1B2020;">Teilnehmer Tag 2<br><input type="number" min="0" id="ist-t2" placeholder="—" oninput="onIst('t2',this.value)" style="margin-top:4px;width:100px;font-family:inherit;font-size:14px;padding:8px 10px;border:1.5px solid rgba(27,32,32,0.14);border-radius:9px;background:#FAF7F6;"></label>
+          <label style="font-size:12px;font-weight:700;color:#1B2020;">Termine gebucht<br><input type="number" min="0" id="ist-termine" placeholder="—" oninput="onIst('termine',this.value)" style="margin-top:4px;width:100px;font-family:inherit;font-size:14px;padding:8px 10px;border:1.5px solid rgba(27,32,32,0.14);border-radius:9px;background:#FAF7F6;"></label>
+          <label style="font-size:12px;font-weight:700;color:#1B2020;">Project-You-Verkäufe<br><input type="number" min="0" id="ist-sales" placeholder="—" oninput="onIst('sales',this.value)" style="margin-top:4px;width:130px;font-family:inherit;font-size:14px;padding:8px 10px;border:1.5px solid rgba(27,32,32,0.14);border-radius:9px;background:#FAF7F6;"></label>
+        </div>
+        <p style="margin:10px 0 0;font-size:11.5px;color:#9a9087;">Leer lassen = Benchmark-Schätzung. Befüllt = echte Workshop-Zahlen (überschreiben Show-up &amp; Sales in Prognose, Umsatz &amp; ROAS).</p>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card"><p class="kpi-label">Glow-Umsatz</p><p class="kpi-num" id="lr-glow-rev" style="color:#476160;">—</p><p class="kpi-note">Käufe × 19,95 €</p></div>
+        <div class="kpi-card"><p class="kpi-label">Produkt-Sales (Prog.)</p><p class="kpi-num" id="lr-sales">—</p><p class="kpi-note">Abschlüsse aus Pipeline</p></div>
+        <div class="kpi-card"><p class="kpi-label">Produkt-Umsatz (Prog.)</p><p class="kpi-num" id="lr-produkt-rev" style="color:#476160;">—</p><p class="kpi-note">Sales × 1.997 €</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">Gesamt-Umsatz (Prog.)</p><p class="kpi-num" id="lr-total-rev">—</p><p class="kpi-note">Glow + Produkt</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">ROAS</p><p class="kpi-num" id="lr-roas">—</p><p class="kpi-note">Umsatz ÷ Ad-Spend</p></div>
+        <div class="kpi-card"><p class="kpi-label">Gewinn (Prog.)</p><p class="kpi-num" id="lr-gewinn">—</p><p class="kpi-note">Umsatz − Ad-Spend</p></div>
+      </div>
+
+      <div style="margin-top:16px;padding:14px 18px;background:rgba(27,32,32,0.03);border-radius:14px;">
+        <div style="font-size:10.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#9a9087;margin-bottom:2px;">Rechenkette (Echt-Leads × Benchmark)</div>
+        <div class="lr-chain">
+          <div class="lr-chain-item"><span class="lr-chain-num" id="lr-t1">—</span><span class="lr-chain-lbl">Live T1</span></div>
+          <div class="lr-chain-sep">→</div>
+          <div class="lr-chain-item"><span class="lr-chain-num" id="lr-t2">—</span><span class="lr-chain-lbl">Live T2</span></div>
+          <div class="lr-chain-sep">→</div>
+          <div class="lr-chain-item"><span class="lr-chain-num" id="lr-termine">—</span><span class="lr-chain-lbl">Termine</span></div>
+          <div class="lr-chain-sep">→</div>
+          <div class="lr-chain-item"><span class="lr-chain-num" id="lr-sales-chain">—</span><span class="lr-chain-lbl">Sales</span></div>
+          <div class="lr-chain-sep">→</div>
+          <div class="lr-chain-item"><span class="lr-chain-num" id="lr-sales-rev-chain" style="color:#476160;">—</span><span class="lr-chain-lbl">Umsatz</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 5. ROI-RECHNER ===== -->
+    <div class="roi-rechner section" data-tab="rechner">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:6px;">
+        <h2 style="margin:0; font-family:var(--ms-font-display); font-weight:600; font-size:24px; color:#1B2020;">ROI-Rechner · Planung</h2>
+        <span style="font-size:12px; color:#9a9087;">Szenarien durchrechnen · Benchmarks aus Vorlage</span>
+      </div>
+      <p style="margin:0 0 22px; font-size:13px; color:#7A6F63; max-width:760px;">Zum Durchspielen von Szenarien. Unabhängig von den Echtdaten oben.</p>
+
+      <div class="roi-grid">
+        <div style="background:rgba(27,32,32,0.04); border-radius:16px; padding:20px;">
+          <div style="display:inline-flex; align-items:center; gap:7px; background:#1B2020; color:#FAF7F6; font-size:11px; font-weight:800; padding:5px 11px; border-radius:7px; margin-bottom:18px;">Deine Angaben</div>
+          <div class="roi-fields">
+            <div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:3px 6px; margin-bottom:6px;"><span style="flex:1 1 100%; font-size:11.5px; font-weight:700; color:#1B2020; line-height:1.2;">Produkt-Preis</span><span style="white-space:nowrap; font-size:9.5px; font-weight:700; color:#9a9087;">Ø 4.000 €</span><span id="dev-produktPreis" style="white-space:nowrap; font-size:9.5px; font-weight:800; color:#9a9087;"></span></div>
+              <div style="display:flex; align-items:center; gap:5px; background:#fff; border:1px solid rgba(27,32,32,0.12); border-radius:9px; padding:8px 11px;"><input class="roi-num" data-field="produktPreis" value="4000" type="number" style="flex:1; min-width:0; width:100%; border:none; outline:none; background:transparent; font-family:var(--ms-font-body); font-size:14px; font-weight:700; color:#1B2020;"><span style="font-size:12px; color:#9a9087;">€</span></div>
+            </div>
+            <div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:3px 6px; margin-bottom:6px;"><span style="flex:1 1 100%; font-size:11.5px; font-weight:700; color:#1B2020; line-height:1.2;">Erfolgspaket-Preis</span><span style="white-space:nowrap; font-size:9.5px; font-weight:700; color:#9a9087;">Ø 19,95 €</span><span id="dev-erfolgspaketPreis" style="white-space:nowrap; font-size:9.5px; font-weight:800; color:#9a9087;"></span></div>
+              <div style="display:flex; align-items:center; gap:5px; background:#fff; border:1px solid rgba(27,32,32,0.12); border-radius:9px; padding:8px 11px;"><input class="roi-num" data-field="erfolgspaketPreis" value="19.95" type="number" step="0.05" style="flex:1; min-width:0; width:100%; border:none; outline:none; background:transparent; font-family:var(--ms-font-body); font-size:14px; font-weight:700; color:#1B2020;"><span style="font-size:12px; color:#9a9087;">€</span></div>
+            </div>
+            <div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:3px 6px; margin-bottom:6px;"><span style="flex:1 1 100%; font-size:11.5px; font-weight:700; color:#1B2020; line-height:1.2;">Ad-Spend</span><span style="white-space:nowrap; font-size:9.5px; font-weight:700; color:#9a9087;">Ø 2.000 €</span><span id="dev-adSpend" style="white-space:nowrap; font-size:9.5px; font-weight:800; color:#9a9087;"></span></div>
+              <div style="display:flex; align-items:center; gap:5px; background:#fff; border:1px solid rgba(27,32,32,0.12); border-radius:9px; padding:8px 11px;"><input class="roi-num" data-field="adSpend" value="2000" type="number" step="100" style="flex:1; min-width:0; width:100%; border:none; outline:none; background:transparent; font-family:var(--ms-font-body); font-size:14px; font-weight:700; color:#1B2020;"><span style="font-size:12px; color:#9a9087;">€</span></div>
+            </div>
+            <div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:3px 6px; margin-bottom:6px;"><span style="flex:1 1 100%; font-size:11.5px; font-weight:700; color:#1B2020; line-height:1.2;">Lead-Preis</span><span style="white-space:nowrap; font-size:9.5px; font-weight:700; color:#9a9087;">Ø 15,00 €</span><span id="dev-leadPreis" style="white-space:nowrap; font-size:9.5px; font-weight:800; color:#9a9087;"></span></div>
+              <div style="display:flex; align-items:center; gap:5px; background:#fff; border:1px solid rgba(27,32,32,0.12); border-radius:9px; padding:8px 11px;"><input class="roi-num" data-field="leadPreis" value="15" type="number" step="0.5" style="flex:1; min-width:0; width:100%; border:none; outline:none; background:transparent; font-family:var(--ms-font-body); font-size:14px; font-weight:700; color:#1B2020;"><span style="font-size:12px; color:#9a9087;">€</span></div>
+            </div>
+            <div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:3px 6px; margin-bottom:6px;"><span style="flex:1 1 100%; font-size:11.5px; font-weight:700; color:#1B2020; line-height:1.2;">Leads organisch</span><span style="white-space:nowrap; font-size:9.5px; font-weight:700; color:#9a9087;">Ø 100</span><span id="dev-leadsOrg" style="white-space:nowrap; font-size:9.5px; font-weight:800; color:#9a9087;"></span></div>
+              <div style="display:flex; align-items:center; gap:5px; background:#fff; border:1px solid rgba(27,32,32,0.12); border-radius:9px; padding:8px 11px;"><input class="roi-num" data-field="leadsOrg" value="100" type="number" step="1" style="flex:1; min-width:0; width:100%; border:none; outline:none; background:transparent; font-family:var(--ms-font-body); font-size:14px; font-weight:700; color:#1B2020;"><span style="font-size:12px; color:#9a9087;">#</span></div>
+            </div>
+            <div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:3px 6px; margin-bottom:6px;"><span style="flex:1 1 100%; font-size:11.5px; font-weight:700; color:#1B2020; line-height:1.2;">Erfolgspaket verkauft</span><span style="white-space:nowrap; font-size:9.5px; font-weight:700; color:#9a9087;">Ø 10 %</span><span id="dev-erfolgspaket" style="white-space:nowrap; font-size:9.5px; font-weight:800; color:#9a9087;"></span></div>
+              <div style="display:flex; align-items:center; gap:6px; background:#fff; border:1px solid rgba(27,32,32,0.12); border-radius:9px; padding:8px 11px;"><input class="roi-num" data-field="erfolgspaketVerkauft" value="30" type="number" step="1" style="flex:1; min-width:0; width:100%; border:none; outline:none; background:transparent; font-family:var(--ms-font-body); font-size:14px; font-weight:700; color:#1B2020;"><span id="roi-erfQuote" style="flex:none; font-size:11px; font-weight:800; color:#CA5D25; white-space:nowrap;"></span></div>
+            </div>
+            <div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:3px 6px; margin-bottom:6px;"><span style="flex:1 1 100%; font-size:11.5px; font-weight:700; color:#1B2020; line-height:1.2;">Show-up Tag 1</span><span style="white-space:nowrap; font-size:9.5px; font-weight:700; color:#9a9087;">Ø 25 %</span><span id="dev-showUp1" style="white-space:nowrap; font-size:9.5px; font-weight:800; color:#9a9087;"></span></div>
+              <div style="display:flex; align-items:center; gap:9px;"><input data-field="showUp1" value="25" type="range" min="0" max="100" step="1" style="flex:1; min-width:0; accent-color:#CA5D25;"><span id="val-showUp1" style="flex:none; width:42px; text-align:right; font-size:13px; font-weight:800; color:#CA5D25;">25 %</span></div>
+            </div>
+            <div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:3px 6px; margin-bottom:6px;"><span style="flex:1 1 100%; font-size:11.5px; font-weight:700; color:#1B2020; line-height:1.2;">Show-up Tag 2</span><span style="white-space:nowrap; font-size:9.5px; font-weight:700; color:#9a9087;">Ø 20 %</span><span id="dev-showUp2" style="white-space:nowrap; font-size:9.5px; font-weight:800; color:#9a9087;"></span></div>
+              <div style="display:flex; align-items:center; gap:9px;"><input data-field="showUp2" value="20" type="range" min="0" max="100" step="1" style="flex:1; min-width:0; accent-color:#CA5D25;"><span id="val-showUp2" style="flex:none; width:42px; text-align:right; font-size:13px; font-weight:800; color:#CA5D25;">20 %</span></div>
+            </div>
+            <div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:3px 6px; margin-bottom:6px;"><span style="flex:1 1 100%; font-size:11.5px; font-weight:700; color:#1B2020; line-height:1.2;">Termin-Quote</span><span style="white-space:nowrap; font-size:9.5px; font-weight:700; color:#9a9087;">Ø 10 %</span><span id="dev-terminQuote" style="white-space:nowrap; font-size:9.5px; font-weight:800; color:#9a9087;"></span></div>
+              <div style="display:flex; align-items:center; gap:9px;"><input data-field="terminQuote" value="10" type="range" min="0" max="100" step="1" style="flex:1; min-width:0; accent-color:#476160;"><span id="val-terminQuote" style="flex:none; width:42px; text-align:right; font-size:13px; font-weight:800; color:#476160;">10 %</span></div>
+            </div>
+            <div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:3px 6px; margin-bottom:6px;"><span style="flex:1 1 100%; font-size:11.5px; font-weight:700; color:#1B2020; line-height:1.2;">Abschlussquote</span><span style="white-space:nowrap; font-size:9.5px; font-weight:700; color:#9a9087;">Ø 80 %</span><span id="dev-abschluss" style="white-space:nowrap; font-size:9.5px; font-weight:800; color:#9a9087;"></span></div>
+              <div style="display:flex; align-items:center; gap:9px;"><input data-field="abschluss" value="80" type="range" min="0" max="100" step="1" style="flex:1; min-width:0; accent-color:#476160;"><span id="val-abschluss" style="flex:none; width:42px; text-align:right; font-size:13px; font-weight:800; color:#476160;">80 %</span></div>
+            </div>
+            <div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:3px 6px; margin-bottom:6px;"><span style="flex:1 1 100%; font-size:11.5px; font-weight:700; color:#1B2020; line-height:1.2;">Cashflow-Quote</span><span style="white-space:nowrap; font-size:9.5px; font-weight:700; color:#9a9087;">Ø 30 %</span><span id="dev-cashflowQuote" style="white-space:nowrap; font-size:9.5px; font-weight:800; color:#9a9087;"></span></div>
+              <div style="display:flex; align-items:center; gap:9px;"><input data-field="cashflowQuote" value="30" type="range" min="0" max="100" step="1" style="flex:1; min-width:0; accent-color:#476160;"><span id="val-cashflowQuote" style="flex:none; width:42px; text-align:right; font-size:13px; font-weight:800; color:#476160;">30 %</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:18px;">
+          <div class="roi-kpis">
+            <div style="background:#1B2020; border-radius:16px; padding:18px 20px;">
+              <p style="margin:0 0 6px; font-size:10.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(239,231,221,0.6);">Auftragsvolumen</p>
+              <p id="roi-auftrag" class="roi-kpi-num" style="margin:0; color:#FAF7F6;"></p>
+            </div>
+            <div style="background:#CA5D25; border-radius:16px; padding:18px 20px;">
+              <p style="margin:0 0 6px; font-size:10.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(250,247,246,0.78);">Gewinn</p>
+              <p id="roi-gewinn" class="roi-kpi-num" style="margin:0; color:#FAF7F6;"></p>
+            </div>
+            <div style="background:#fff; border:1px solid rgba(27,32,32,0.08); border-radius:16px; padding:18px 20px;">
+              <p style="margin:0 0 6px; font-size:10.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#7A6F63;">ROAS</p>
+              <p id="roi-roas-calc" class="roi-kpi-num" style="margin:0; color:#476160;"></p>
+            </div>
+            <div style="background:#fff; border:1px solid rgba(27,32,32,0.08); border-radius:16px; padding:18px 20px;">
+              <p style="margin:0 0 6px; font-size:10.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#7A6F63;">Cashflow</p>
+              <p id="roi-cashflow" class="roi-kpi-num" style="margin:0; color:#CA5D25;"></p>
+            </div>
+          </div>
+          <div style="background:rgba(27,32,32,0.04); border-radius:16px; padding:20px;">
+            <div style="display:inline-flex; align-items:center; gap:7px; background:#476160; color:#FAF7F6; font-size:11px; font-weight:800; padding:5px 11px; border-radius:7px; margin-bottom:16px;">Rechenkette</div>
+            <div class="roi-chain">
+              <div style="background:#fff; border-radius:11px; padding:12px 14px;"><div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;"><span style="font-size:12px; font-weight:700; color:#1B2020;">Leads (paid)</span><span id="roi-leadsPaid" style="font-family:var(--ms-font-display); font-weight:700; font-size:19px; color:#1B2020;"></span></div><p style="margin:4px 0 0; font-family:'SF Mono',ui-monospace,monospace; font-size:10px; color:#9a9087;">Ad-Spend ÷ Lead-Preis</p></div>
+              <div style="background:#fff; border-radius:11px; padding:12px 14px;"><div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;"><span style="font-size:12px; font-weight:700; color:#1B2020;">Leads gesamt</span><span id="roi-leadsGes" style="font-family:var(--ms-font-display); font-weight:700; font-size:19px; color:#1B2020;"></span></div><p style="margin:4px 0 0; font-family:'SF Mono',ui-monospace,monospace; font-size:10px; color:#9a9087;">paid + organisch (<span id="roi-leadsOrg"></span>)</p></div>
+              <div style="background:#fff; border-radius:11px; padding:12px 14px;"><div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;"><span style="font-size:12px; font-weight:700; color:#1B2020;">Erfolgspaket-Sales</span><span id="roi-erfSales" style="font-family:var(--ms-font-display); font-weight:700; font-size:19px; color:#1B2020;"></span></div><p style="margin:4px 0 0; font-family:'SF Mono',ui-monospace,monospace; font-size:10px; color:#9a9087;">Leads × Erfolgspaket-Quote</p></div>
+              <div style="background:#fff; border-radius:11px; padding:12px 14px;"><div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;"><span style="font-size:12px; font-weight:700; color:#1B2020;">Umsatz Erfolgspaket</span><span id="roi-umsatzErf" style="font-family:var(--ms-font-display); font-weight:700; font-size:19px; color:#476160;"></span></div><p style="margin:4px 0 0; font-family:'SF Mono',ui-monospace,monospace; font-size:10px; color:#9a9087;">Sales × Preis</p></div>
+              <div style="background:#fff; border-radius:11px; padding:12px 14px;"><div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;"><span style="font-size:12px; font-weight:700; color:#1B2020;">Show-up T1 / T2</span><span style="font-family:var(--ms-font-display); font-weight:700; font-size:19px; color:#1B2020;"><span id="roi-showT1"></span> / <span id="roi-showT2"></span></span></div><p style="margin:4px 0 0; font-family:'SF Mono',ui-monospace,monospace; font-size:10px; color:#9a9087;">Leads × Show-up-Rate</p></div>
+              <div style="background:#fff; border-radius:11px; padding:12px 14px;"><div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;"><span style="font-size:12px; font-weight:700; color:#1B2020;">Termine</span><span id="roi-termine" style="font-family:var(--ms-font-display); font-weight:700; font-size:19px; color:#1B2020;"></span></div><p style="margin:4px 0 0; font-family:'SF Mono',ui-monospace,monospace; font-size:10px; color:#9a9087;">Show-up T2 × Termin-Quote</p></div>
+              <div style="background:#fff; border-radius:11px; padding:12px 14px;"><div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;"><span style="font-size:12px; font-weight:700; color:#1B2020;">Sales</span><span id="roi-sales" style="font-family:var(--ms-font-display); font-weight:700; font-size:19px; color:#CA5D25;"></span></div><p style="margin:4px 0 0; font-family:'SF Mono',ui-monospace,monospace; font-size:10px; color:#9a9087;">Termine × Abschlussquote</p></div>
+              <div style="background:#fff; border-radius:11px; padding:12px 14px;"><div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;"><span style="font-size:12px; font-weight:700; color:#1B2020;">Umsatz Produkt</span><span id="roi-umsatzProdukt" style="font-family:var(--ms-font-display); font-weight:700; font-size:19px; color:#476160;"></span></div><p style="margin:4px 0 0; font-family:'SF Mono',ui-monospace,monospace; font-size:10px; color:#9a9087;">Sales × Produkt-Preis</p></div>
+              <div style="background:#fff; border-radius:11px; padding:12px 14px;"><div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;"><span style="font-size:12px; font-weight:700; color:#1B2020;">ROAS (Plan)</span><span id="roi-roasChain" style="font-family:var(--ms-font-display); font-weight:700; font-size:19px; color:#476160;"></span></div><p style="margin:4px 0 0; font-family:'SF Mono',ui-monospace,monospace; font-size:10px; color:#9a9087;">Auftragsvolumen ÷ Ad-Spend</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== E-MAIL TAB ===== -->
+    <div class="section" data-tab="email">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
+        <h2 class="section-title" style="margin:0;">Zustellbarkeit</h2>
+        <span id="mail-stand" style="font-size:11.5px;color:#9a9087;">wird geladen…</span>
+      </div>
+      <p class="section-sub">Aggregiert über gesendete Projekt-Broadcasts (Betreff „Abnehmrevolution")</p>
+      <div class="kpi-grid">
+        <div class="kpi-card highlight"><p class="kpi-label">Empfänger gesamt</p><p class="kpi-num" id="mail-recipients">—</p><p class="kpi-note" id="mail-sent-note">gesendete Mails</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">Ø Öffnungsrate</p><p class="kpi-num" id="mail-open">—</p><p class="kpi-note">Opens ÷ Empfänger</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">Ø Klickrate</p><p class="kpi-num" id="mail-click">—</p><p class="kpi-note">Klicks ÷ Empfänger</p></div>
+        <div class="kpi-card"><p class="kpi-label">Abmelderate</p><p class="kpi-num" id="mail-unsub" style="color:#C0392B;">—</p><p class="kpi-note"><span id="mail-unsub-abs">—</span> Abmeldungen</p></div>
+      </div>
+    </div>
+
+    <div class="section" data-tab="email">
+      <h2 class="section-title">Sequenzen</h2>
+      <p class="section-sub">Automatische E-Mail-Serien für dieses Projekt</p>
+      <div id="mail-sequences"><div class="chart-empty">wird geladen…</div></div>
+    </div>
+
+    <div class="section" data-tab="email">
+      <h2 class="section-title">Broadcasts</h2>
+      <p class="section-sub">Workshop-Reminder + Aktivierungs-/Launch-Mails an die Gesamtliste · gesendete zuerst</p>
+      <div id="mail-broadcasts"><div class="chart-empty">wird geladen…</div></div>
+    </div>
+
+    <!-- ===== A/B-TEST TAB ===== -->
+    <div class="section" data-tab="abtest">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
+        <h2 class="section-title" style="margin:0;">Aktiver A/B-Test</h2>
+        <span id="ab-test-name" style="font-size:11px;font-weight:800;padding:4px 12px;border-radius:999px;background:rgba(71,97,96,0.1);color:#476160;letter-spacing:0.06em;text-transform:uppercase;">—</span>
+      </div>
+      <p class="section-sub" id="ab-stand">50/50 Traffic-Split · gemessen wird Besucher → Conversion-Rate → Upsell-Rate</p>
+      <div class="ab-compare" id="ab-compare"><div class="chart-empty">wird geladen…</div></div>
+      <div class="ab-hint" id="ab-hint"></div>
+    </div>
+
+    <!-- ===== AUFZEICHNUNG ===== -->
+    <div class="section" data-tab="aufzeichnung" style="display:none;">
+      <h2 class="section-title">Aufzeichnungsseite</h2>
+      <p class="section-sub" id="aufz-stand">Besucher, Video-Watch-Time (Tag 1 &amp; 2) und Calendly-Klicks auf <code style="background:rgba(27,32,32,0.07);padding:1px 6px;border-radius:5px;font-size:11px;">/aufzeichnung</code></p>
+      <div class="kpi-grid" style="margin-top:14px;">
+        <div class="kpi-card highlight"><p class="kpi-label">Besucher</p><p class="kpi-num" id="aufz-visitors">…</p><p class="kpi-note">Aufrufe der Aufzeichnungsseite</p></div>
+        <div class="kpi-card orange"><p class="kpi-label">Calendly-Klicks</p><p class="kpi-num" id="aufz-calendly">…</p><p class="kpi-note" id="aufz-calendly-note">„Gespräch buchen"</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">Watch-Time Tag 1</p><p class="kpi-num" id="aufz-watch1">…</p><p class="kpi-note" id="aufz-watch1-note">gesamt · ⌀ pro Start</p></div>
+        <div class="kpi-card highlight"><p class="kpi-label">Watch-Time Tag 2</p><p class="kpi-num" id="aufz-watch2">…</p><p class="kpi-note" id="aufz-watch2-note">gesamt · ⌀ pro Start</p></div>
+        <div class="kpi-card"><p class="kpi-label">Video-Starts Tag 1</p><p class="kpi-num" id="aufz-play1">…</p><p class="kpi-note">Plays</p></div>
+        <div class="kpi-card"><p class="kpi-label">Video-Starts Tag 2</p><p class="kpi-num" id="aufz-play2">…</p><p class="kpi-note">Plays</p></div>
+      </div>
+      <p class="section-sub" style="margin-top:12px;font-size:11.5px;">Watch-Time = real abgespielte Zeit (YouTube-Player). Calendly-CTR = Klicks ÷ Besucher.</p>
+
+      <div style="margin:22px 0 6px;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#9a9087;">Einzelne Views · welches Gerät welches Video wie lange</div>
+      <div id="aufz-views"><div class="chart-empty">wird geladen…</div></div>
+    </div>
+
+    <!-- ===== LEADS ===== -->
+    <div class="section" data-tab="leads" style="display:none;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div>
+          <h2 class="section-title">Leadboard</h2>
+          <p class="section-sub">Jeder Lead mit Quelle, A/B-Variante, Glow-Kauf, Workshop-Show-up & Termin. <span id="leads-stand" style="color:#9a9087;"></span></p>
+        </div>
+        <input id="leads-search" type="text" placeholder="Suche Name / E-Mail…" oninput="renderLeads()" style="font-family:inherit;font-size:13px;padding:9px 14px;border:1.5px solid rgba(27,32,32,0.14);border-radius:10px;background:#FAF7F6;min-width:220px;">
+      </div>
+
+      <div style="margin:18px 0 6px;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#9a9087;">ROAS pro Ad-Text · Back-End</div>
+      <p class="section-sub" style="margin-top:0;">Welche Anzeige bringt nicht nur billige Leads, sondern Show-ups, Termine &amp; Käufe. <span id="roas-coverage" style="color:#9a9087;"></span></p>
+      <div id="roas-ad-table"><div class="chart-empty">wird geladen…</div></div>
+
+      <div style="margin:22px 0 6px;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#9a9087;">Alle Leads</div>
+      <div id="leads-summary" class="kpi-grid" style="margin:6px 0 4px;"></div>
+      <div id="leads-table" style="margin-top:10px;"><div class="chart-empty">wird geladen…</div></div>
+      <p class="section-sub" style="margin-top:10px;font-size:11.5px;">
+        <b>Show-up Tag 1/Tag 2</b> &amp; <b>Termin</b> werden automatisch befüllt, sobald die Workshop-Teilnahme (Zoom) bzw. Terminbuchungen als Kit-Tag eingespeist sind — siehe Hinweis unten. Bis dahin steht „—".
+      </p>
+    </div>
+
+    <!-- A/B Live-Vorschau Lightbox -->
+    <div class="ab-lightbox" id="ab-lightbox" onclick="abLightboxClose(event)">
+      <div class="ab-lightbox-inner" onclick="event.stopPropagation()">
+        <div class="ab-lightbox-bar">
+          <span id="ab-lightbox-title">Live-Vorschau</span>
+          <span><a id="ab-lightbox-open" href="#" target="_blank" rel="noopener">In neuem Tab öffnen ↗</a> &nbsp; <button class="ab-lightbox-close" onclick="abLightboxClose(event)">×</button></span>
+        </div>
+        <div class="ab-lightbox-frame-wrap"><iframe id="ab-lightbox-frame" src="about:blank"></iframe></div>
+      </div>
+    </div>
+
+    <div class="section" data-tab="abtest">
+      <h2 class="section-title">Testing-Board</h2>
+      <p class="section-sub">Micro-Test-Ideen (immer nur EINE Komponente ändern) — Bewertung nach Impact</p>
+      <div id="ab-ideas"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var GLOW_PREIS = 19.95;
+  var PY_PREIS = 27;
+  var LS_KEY = 'ar_dash_v1';
+  var liveLeads = null;
+  var liveUnsub = null;
+  var liveActive = null;
+  var liveVisitors = null;
+  var liveGlow = null;
+  var liveOrganic = null;
+  var livePaid = null;
+  var liveAdSpend = null;
+  var liveAdLeads = null;
+  var liveAdCpl = null;
+  var liveAdSpendWs = null; // Meta-Gesamtspend über das Workshop-Zeitfenster (filter-unabhängig)
+  var currentRange = 'all';
+  var LR_KEY = 'ar_lroi_v1';
+  // ---- Workshop-Auswahl ----
+  var WS_DEFAULT = 20481004; // Juni 2026
+  var WORKSHOPS = [
+    { tag: 20481004, label: 'Juni 2026', sub: '24.+25.06.', from: '2026-06-01T00:00:00Z', to: '2026-06-28T23:59:59Z' },
+    { tag: 20703609, label: 'Juli 2026', sub: '18.+19.07.', from: '2026-06-28T00:00:00Z', to: '2026-07-21T23:59:59Z' }
+  ];
+  var currentWs = (function() { try { var v = parseInt(localStorage.getItem('ar_ws') || '', 10); return (v === 20481004 || v === 20703609) ? v : WS_DEFAULT; } catch (e) { return WS_DEFAULT; } })();
+  function wsWin() { for (var i = 0; i < WORKSHOPS.length; i++) { if (WORKSHOPS[i].tag === currentWs) return WORKSHOPS[i]; } return WORKSHOPS[0]; }
+  var UPSELL_BENCHMARK = 10; // % Glow-Upsell Benchmark (Ø aus ROI-Vorlage)
+  var PRODUKT_PREIS = 1997;
+  var customFrom = null, customTo = null;
+
+  // ---- Zeit-Filter Helpers ----
+  function getDateRange() {
+    var now = new Date();
+    var todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    if (currentRange === 'today') {
+      return { from: todayStart.toISOString(), to: null };
+    } else if (currentRange === 'yesterday') {
+      var y = new Date(todayStart); y.setDate(y.getDate() - 1);
+      return { from: y.toISOString(), to: todayStart.toISOString() };
+    } else if (currentRange === '7d') {
+      var d7 = new Date(todayStart); d7.setDate(d7.getDate() - 6);
+      return { from: d7.toISOString(), to: null };
+    } else if (currentRange === '14d') {
+      var d14 = new Date(todayStart); d14.setDate(d14.getDate() - 13);
+      return { from: d14.toISOString(), to: null };
+    } else if (currentRange === '30d') {
+      var d30 = new Date(todayStart); d30.setDate(d30.getDate() - 29);
+      return { from: d30.toISOString(), to: null };
+    } else if (currentRange === 'custom') {
+      return { from: customFrom, to: customTo };
+    }
+    // 'Gesamt' = das Zeitfenster des aktuell aktiven Workshops (trennt Besucher/Ads/Glow/CR pro Workshop)
+    var w = wsWin();
+    return { from: w.from, to: w.to };
+  }
+
+  function buildQ() {
+    var r = getDateRange(), p = [];
+    if (r.from) p.push('from=' + encodeURIComponent(r.from));
+    if (r.to)   p.push('to='   + encodeURIComponent(r.to));
+    p.push('ws=' + currentWs);
+    return p.length ? '?' + p.join('&') : '';
+  }
+
+  window.setRange = function(btn) {
+    currentRange = btn.getAttribute('data-range');
+    document.querySelectorAll('.tf-btn').forEach(function(b) { b.classList.remove('tf-active'); });
+    btn.classList.add('tf-active');
+    var row = document.getElementById('tf-custom-row');
+    if (row) row.style.display = currentRange === 'custom' ? 'flex' : 'none';
+    if (currentRange !== 'custom') refreshAll();
+  };
+
+  window.applyCustomRange = function() {
+    var f = document.getElementById('tf-from'), t = document.getElementById('tf-to');
+    var note = document.getElementById('tf-custom-note');
+    if (!f || !f.value) { if (note) note.textContent = '⚠ Bitte Von-Datum wählen'; return; }
+    customFrom = new Date(f.value).toISOString();
+    customTo   = t && t.value ? new Date(t.value + 'T23:59:59').toISOString() : null;
+    if (note) note.textContent = '';
+    refreshAll();
+  };
+
+  window.refreshAll = function() {
+    var btn = document.getElementById('refresh-btn');
+    if (btn) { btn.disabled = true; btn.classList.add('spinning'); }
+    var done = function() { if (btn) { btn.disabled = false; btn.classList.remove('spinning'); } };
+    Promise.all([
+      fetchLive(),
+      fetchUtmStats(),
+      fetchPurchases(),
+      fetchTimeseries(),
+      fetchAds(),
+      fetchGlowSource(),
+      fetchFunnel(),
+      abLoaded ? fetchAbtest() : Promise.resolve(),
+    ]).then(done, done);
+  };
+
+  window.switchWorkshop = function(tag) {
+    tag = parseInt(tag, 10);
+    if (tag !== 20481004 && tag !== 20703609) return;
+    currentWs = tag;
+    try { localStorage.setItem('ar_ws', String(tag)); } catch (e) {}
+    document.querySelectorAll('.ws-btn').forEach(function(b) { b.classList.toggle('active', parseInt(b.getAttribute('data-ws'), 10) === tag); });
+    setIstInputs();
+    leadsLoaded = false; aufzLoaded = false; emailLoaded = false;
+    liveAdSpendWs = null;
+    refreshAll();
+    fetchAdsWsTotal();
+    if (activeTab === 'leads') { leadsLoaded = true; fetchLeads(); fetchAdRoas(); }
+    if (activeTab === 'aufzeichnung') { aufzLoaded = true; fetchAufzeichnung(); }
+    if (activeTab === 'email') { emailLoaded = true; fetchEmailStats(); }
+  };
+
+  // ---- localStorage helpers ----
+  function load() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch(e) { return {}; }
+  }
+  function save(d) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(d)); } catch(e) {}
+  }
+  function loadLr() { try { return JSON.parse(localStorage.getItem(LR_KEY) || '{}'); } catch(e) { return {}; } }
+  function saveLr(d) { try { localStorage.setItem(LR_KEY, JSON.stringify(d)); } catch(e) {} }
+
+  // ---- Ist-Zahlen (final), PRO Workshop — überschreiben die Benchmark-Schätzung ----
+  var IST_DEFAULTS = { '20481004': { t1: '45', t2: '33', termine: '1', sales: '1' } }; // Juni-Workshop: echte Endzahlen
+  function istKey(field) { return 'ist_' + currentWs + '_' + field; }
+  function istNum(field) {
+    var el = document.getElementById('ist-' + field);
+    if (el && el.value !== '') { var v = parseInt(el.value, 10); return isNaN(v) ? null : v; }
+    return null;
+  }
+  window.onIst = function(field, val) { var d = loadLr(); d[istKey(field)] = val; saveLr(d); updateLiveRoi(); };
+  function setIstInputs() {
+    var d = loadLr();
+    ['t1', 't2', 'termine', 'sales'].forEach(function(f) {
+      var el = document.getElementById('ist-' + f); if (!el) return;
+      var stored = d[istKey(f)];
+      if (stored !== undefined) el.value = stored;
+      else { var def = (IST_DEFAULTS[String(currentWs)] || {})[f]; el.value = (def !== undefined ? def : ''); }
+    });
+  }
+
+  // ---- Number helpers ----
+  function n(v) { var x = parseFloat(v); return isNaN(x) ? 0 : x; }
+  function fmt(x) { return Math.round(x).toLocaleString('de-DE'); }
+  function fmtEur(x) { return Math.round(x).toLocaleString('de-DE') + ' €'; }
+  function fmtPct(x) {
+    return (Math.round(x * 10) / 10).toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+  }
+  function fmtRoas(x) {
+    return (Math.round(x * 10) / 10).toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '×';
+  }
+
+  // ---- Restore saved values ----
+  function restoreInputs() {
+    var d = load();
+    ['adspend','besucher','cpl','live1','live2','glow','py','notiz'].forEach(function(k) {
+      var el = document.getElementById('f-' + k);
+      if (el && d[k] !== undefined) el.value = d[k];
+    });
+  }
+
+  // ---- Save handler ----
+  window.saveData = function() {
+    var d = {};
+    ['adspend','besucher','cpl','live1','live2','glow','py','notiz'].forEach(function(k) {
+      var el = document.getElementById('f-' + k);
+      if (el) d[k] = el.value;
+    });
+    save(d);
+    updateCalc();
+    var note = document.getElementById('save-note');
+    note.textContent = 'Gespeichert um ' + new Date().toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'}) + ' Uhr.';
+  };
+
+  // ---- updateCalc: rebuild calculated KPIs ----
+  function updateCalc() {
+    var d = load();
+    var leads = liveLeads !== null ? liveLeads : 0;
+    // Live visitor count takes priority over manual input
+    var besucher = liveVisitors !== null ? liveVisitors : n(d.besucher);
+    var adspend = liveAdSpend !== null ? liveAdSpend : n(d.adspend);
+    var glow = liveGlow !== null ? liveGlow : n(d.glow);
+    var py = n(d.py);
+    var live1 = n(d.live1);
+    var live2 = n(d.live2);
+
+    // top KPIs
+    function set(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+
+    // Leads + Visitors: from live
+    set('kpi-leads', liveLeads !== null ? leads.toLocaleString('de-DE') : '—');
+    set('kpi-active', liveActive !== null ? liveActive.toLocaleString('de-DE') : '—');
+    set('kpi-unsub-n', liveUnsub !== null ? liveUnsub.toLocaleString('de-DE') : '—');
+    set('kpi-visitors', liveVisitors !== null ? liveVisitors.toLocaleString('de-DE') : '—');
+    set('kpi-visitors-note', liveVisitors !== null ? 'PostHog · server_visit' : 'POSTHOG_PERSONAL_KEY fehlt');
+    set('kpi-glow', liveGlow !== null ? liveGlow.toLocaleString('de-DE') : (glow > 0 ? glow.toLocaleString('de-DE') : '—'));
+    set('kpi-glow-note', liveGlow !== null ? (eur2(glow * GLOW_PREIS) + ' Umsatz') : 'Kit · buy-glow-starterpaket');
+    set('kpi-py', py > 0 ? py.toLocaleString('de-DE') : '—');
+
+    var umsatz = glow * GLOW_PREIS + py * PY_PREIS;
+    set('kpi-umsatz', (glow > 0 || py > 0) ? fmtEur(umsatz) : '—');
+
+    var roas = adspend > 0 && umsatz > 0 ? umsatz / adspend : null;
+    set('kpi-roas', roas !== null ? fmtRoas(roas) : '—');
+
+    var cr = besucher > 0 && leads > 0 ? (leads / besucher) * 100 : null;
+    set('kpi-cr', cr !== null ? fmtPct(cr) : '—');
+
+    // Ad-Kosten: große Zahl = Ausgaben im gewählten Filter-Zeitraum;
+    // Note = Gesamtausgaben über das Zeitfenster des gewählten Workshops (filter-unabhängig).
+    set('kpi-adspend', liveAdSpend !== null ? eur2(liveAdSpend) : (adspend > 0 ? eur2(adspend) : '—'));
+    if (liveAdSpend !== null) {
+      set('kpi-adspend-note', liveAdSpendWs !== null
+        ? ('Gesamt ' + wsWin().label + ': ' + eur2(liveAdSpendWs) + ' · Meta')
+        : 'Meta · live');
+    } else {
+      set('kpi-adspend-note', adspend > 0 ? 'manuell eingetragen' : 'Token/Eingabe fehlt');
+    }
+    var paidLeads = livePaid !== null ? livePaid : 0;
+    // Kosten/Anmeldung: Metas eigener Lead-Wert (deckt sich mit Ads Manager); Fallback = Spend ÷ Paid-UTM-Leads
+    var cpl = liveAdCpl !== null ? liveAdCpl : ((adspend > 0 && paidLeads > 0) ? adspend / paidLeads : null);
+    set('kpi-cpl', cpl !== null ? eur2(cpl) : '—');
+    set('kpi-cpl-note', liveAdCpl !== null
+      ? ('Meta · ' + (liveAdSpend !== null ? eur2(liveAdSpend) : '—') + ' ÷ ' + (liveAdLeads !== null ? liveAdLeads : '—') + ' Leads')
+      : 'Ad-Spend ÷ Paid-Anmeldungen');
+
+    // Upsell-Rate (Glow ÷ Anmeldungen) + Benchmark-Vergleich
+    var upsell = leads > 0 ? (glow / leads) * 100 : null;
+    set('kpi-upsell', upsell !== null ? fmtPct(upsell) : '—');
+    (function() {
+      var scaleMax = UPSELL_BENCHMARK * 2;
+      var fillEl = document.getElementById('bench-fill');
+      var markEl = document.getElementById('bench-marker');
+      var deltaEl = document.getElementById('bench-delta');
+      if (markEl) markEl.style.left = (UPSELL_BENCHMARK / scaleMax * 100) + '%';
+      if (fillEl) fillEl.style.width = (upsell === null ? 0 : Math.min(upsell / scaleMax * 100, 100)) + '%';
+      if (deltaEl) {
+        if (upsell === null) { deltaEl.textContent = '—'; }
+        else {
+          var diff = upsell - UPSELL_BENCHMARK;
+          var rounded = Math.round(Math.abs(diff) * 10) / 10;
+          var ppd = rounded.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+          deltaEl.textContent = (diff >= 0 ? '▲ +' : '▼ −') + ppd + ' pp ' + (diff >= 0 ? 'über Ø' : 'unter Ø');
+        }
+      }
+    })();
+
+    // Calc grid
+    var rows = [
+      { name: 'Opt-in CR', val: cr !== null ? fmtPct(cr) : null, note: 'Leads ÷ Besucher' },
+      { name: 'Cost per Lead', val: (adspend > 0 && leads > 0) ? fmtEur(adspend / leads) : null, note: 'Ad-Spend ÷ Leads' },
+      { name: 'Show-up Rate Tag 1', val: (leads > 0 && live1 > 0) ? fmtPct(live1 / leads * 100) : null, note: 'Live T1 ÷ Leads' },
+      { name: 'Show-up Rate Tag 2', val: (leads > 0 && live2 > 0) ? fmtPct(live2 / leads * 100) : null, note: 'Live T2 ÷ Leads' },
+      { name: 'Glow Upsell-Rate', val: (leads > 0 && glow > 0) ? fmtPct(glow / leads * 100) : null, note: 'Glow ÷ Leads' },
+      { name: 'VIP Buy-Rate', val: (live2 > 0 && py > 0) ? fmtPct(py / live2 * 100) : null, note: 'VIP ÷ Live T2' },
+      { name: 'Glow-Umsatz', val: glow > 0 ? fmtEur(glow * GLOW_PREIS) : null, note: glow + ' × 19,95 €' },
+      { name: 'VIP-Umsatz', val: py > 0 ? fmtEur(py * PY_PREIS) : null, note: py + ' × 27 €' },
+      { name: 'Umsatz gesamt', val: umsatz > 0 ? fmtEur(umsatz) : null, note: 'Glow + VIP' },
+      { name: 'ROAS', val: roas !== null ? fmtRoas(roas) : null, note: 'Umsatz ÷ Ad-Spend' },
+      { name: 'Gewinn', val: (adspend > 0 && umsatz > 0) ? fmtEur(umsatz - adspend) : null, note: 'Umsatz − Ad-Spend' },
+    ];
+    var grid = document.getElementById('calc-grid');
+    grid.innerHTML = rows.map(function(r) {
+      return '<div class="calc-row"><div><div class="calc-name">' + r.name + '</div><div style="font-size:10.5px;color:#9a9087;margin-top:2px;">' + r.note + '</div></div><div class="calc-val' + (r.val ? '' : ' dash') + '">' + (r.val || '—') + '</div></div>';
+    }).join('');
+  }
+
+  // ---- Live ROI ----
+  function updateLiveRoi() {
+    var d = loadLr();
+    var adspend = liveAdSpend !== null ? liveAdSpend : (parseFloat(d.adspend || 0) || 0);
+    var su1 = d.su1 !== undefined ? parseFloat(d.su1) : 25;
+    var su2 = d.su2 !== undefined ? parseFloat(d.su2) : 20;
+    var tq  = d.tq  !== undefined ? parseFloat(d.tq)  : 10;
+    var aq  = d.aq  !== undefined ? parseFloat(d.aq)  : 80;
+
+    var leads   = liveLeads   !== null ? liveLeads   : 0;
+    var paid    = livePaid    !== null ? livePaid    : 0;
+    var organic = liveOrganic !== null ? liveOrganic : 0;
+    var glow    = liveGlow    !== null ? liveGlow    : 0;
+
+    function setLr(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+
+    var liveCount = (liveLeads !== null ? 1 : 0) + (livePaid !== null ? 1 : 0) +
+                    (liveOrganic !== null ? 1 : 0) + (liveGlow !== null ? 1 : 0);
+    var chip = document.getElementById('lr-live-count');
+    if (chip) chip.textContent = liveCount + ' von 4 live';
+
+    setLr('lr-leads',   liveLeads   !== null ? leads.toLocaleString('de-DE')   : '—');
+    setLr('lr-paid',    livePaid    !== null ? paid.toLocaleString('de-DE')    : '—');
+    setLr('lr-organic', liveOrganic !== null ? organic.toLocaleString('de-DE') : '—');
+    setLr('lr-glow-d',  liveGlow    !== null ? glow.toLocaleString('de-DE')    : '—');
+
+    var glowRate = leads > 0 && glow >= 0 ? fmtPct(glow / leads * 100) + ' Glow-Rate' : '—';
+    setLr('lr-glow-rate', glowRate);
+
+    var cpl = paid > 0 && adspend > 0 ? adspend / paid : null;
+    setLr('lr-cpl', cpl !== null ? fmtEur(cpl) : (adspend <= 0 ? 'Ad-Spend eintragen' : '—'));
+
+    var glowRev = glow * 19.95;
+    setLr('lr-glow-rev', glow > 0 ? fmtEur(glowRev) : '—');
+
+    var t1 = Math.round(leads * su1 / 100);
+    var t2 = Math.round(leads * su2 / 100);
+    var termine = Math.round(t2 * tq / 100);
+    var sales = Math.round(termine * aq / 100);
+    var _i1 = istNum('t1'), _i2 = istNum('t2'), _it = istNum('termine'), _is = istNum('sales');
+    if (_i1 !== null) t1 = _i1;
+    if (_i2 !== null) t2 = _i2;
+    if (_it !== null) termine = _it; else if (_is !== null && termine < _is) termine = _is;
+    if (_is !== null) sales = _is;
+    var produktRev = sales * 1997;
+    var totalRev = glowRev + produktRev;
+    var roas = adspend > 0 && totalRev > 0 ? totalRev / adspend : null;
+
+    setLr('lr-t1', leads > 0 ? t1.toLocaleString('de-DE') : '—');
+    setLr('lr-t2', leads > 0 ? t2.toLocaleString('de-DE') : '—');
+    setLr('lr-termine', leads > 0 ? termine.toLocaleString('de-DE') : '—');
+    setLr('lr-sales-chain', leads > 0 ? sales.toLocaleString('de-DE') : '—');
+    setLr('lr-sales', sales > 0 ? sales.toLocaleString('de-DE') : '—');
+    setLr('lr-produkt-rev', sales > 0 ? fmtEur(produktRev) : '—');
+    setLr('lr-sales-rev-chain', (sales > 0 || glow > 0) ? fmtEur(totalRev) : '—');
+    setLr('lr-total-rev', (sales > 0 || glow > 0) ? fmtEur(totalRev) : '—');
+    setLr('lr-roas', roas !== null ? fmtRoas(roas) : (adspend <= 0 ? 'Ad-Spend eintragen' : '—'));
+    setLr('lr-gewinn', adspend > 0 && totalRev > 0 ? fmtEur(totalRev - adspend) : '—');
+    renderForecast();
+  }
+
+  // ---- Prognose Workshop: Hochrechnung vs. Ist ----
+  function renderForecast() {
+    var d = loadLr();
+    var leads = liveLeads !== null ? liveLeads : 0;
+    var glow = liveGlow !== null ? liveGlow : 0;
+    var adspend = liveAdSpend !== null ? liveAdSpend : (parseFloat(d.adspend || 0) || 0);
+    var su1 = d.su1 !== undefined ? parseFloat(d.su1) : 25;
+    var su2 = d.su2 !== undefined ? parseFloat(d.su2) : 20;
+    var tq  = d.tq  !== undefined ? parseFloat(d.tq)  : 10;
+    var aq  = d.aq  !== undefined ? parseFloat(d.aq)  : 80;
+
+    // Benchmark-Hochrechnung (rein, ohne Ist-Override)
+    var bt1 = Math.round(leads * su1 / 100);
+    var bt2 = Math.round(leads * su2 / 100);
+    var bterm = Math.round(bt2 * tq / 100);
+    var bsales = Math.round(bterm * aq / 100);
+    var bRev = bsales * PRODUKT_PREIS + glow * GLOW_PREIS;
+
+    // Ist (echte Workshop-Zahlen)
+    var i1 = istNum('t1'), i2 = istNum('t2'), iterm = istNum('termine'), isales = istNum('sales');
+    var iRev = (isales !== null) ? (isales * PRODUKT_PREIS + glow * GLOW_PREIS) : null;
+
+    var box = document.getElementById('forecast-funnel');
+    if (!box) { renderThresholdChart(); return; }
+    if (leads <= 0) { box.innerHTML = '<div class="chart-empty">Noch keine Anmeldungen für die Hochrechnung.</div>'; renderThresholdChart(); return; }
+
+    var num = function(v) { return v == null ? '<span style="color:#c4bbb0;">—</span>' : v.toLocaleString('de-DE'); };
+    var eur = function(v) { return v == null ? '<span style="color:#c4bbb0;">—</span>' : fmtEur(v); };
+    var delta = function(prog, ist, money) {
+      if (ist == null || prog == null) return '<span style="color:#c4bbb0;">—</span>';
+      var diff = ist - prog;
+      var col = diff > 0 ? '#2E7D54' : (diff < 0 ? '#C0392B' : '#9a9087');
+      var s = (diff > 0 ? '+' : '') + (money ? fmtEur(diff) : diff.toLocaleString('de-DE'));
+      return '<span style="color:' + col + ';font-weight:800;">' + s + '</span>';
+    };
+    var rows = [
+      { label: 'Anmeldungen',     prog: leads,  ist: leads,  sub: 'live' },
+      { label: 'Workshop Tag 1',  prog: bt1,    ist: i1,     sub: su1 + ' %' },
+      { label: 'Workshop Tag 2',  prog: bt2,    ist: i2,     sub: su2 + ' %' },
+      { label: 'Termine gebucht', prog: bterm,  ist: iterm,  sub: tq + ' %' },
+      { label: 'Käufe',           prog: bsales, ist: isales, sub: aq + ' %' }
+    ];
+    var html = '<div style="overflow-x:auto;"><table class="utm-table"><thead><tr>' +
+      '<th>Stufe</th><th>Prognose</th><th>Ist</th><th>Δ</th></tr></thead><tbody>';
+    rows.forEach(function(r) {
+      html += '<tr>' +
+        '<td style="font-weight:700;white-space:nowrap;">' + r.label + '</td>' +
+        '<td style="white-space:nowrap;">' + num(r.prog) + (r.sub ? ' <span style="color:#9a9087;font-size:10px;">(' + r.sub + ')</span>' : '') + '</td>' +
+        '<td style="font-weight:800;white-space:nowrap;">' + num(r.ist) + '</td>' +
+        '<td style="white-space:nowrap;">' + delta(r.prog, r.ist, false) + '</td></tr>';
+    });
+    var bGew = adspend > 0 ? bRev - adspend : null;
+    var iGew = (iRev != null && adspend > 0) ? iRev - adspend : null;
+    html += '<tr style="border-top:2px solid rgba(27,32,32,0.12);"><td style="font-weight:700;">Umsatz</td>' +
+      '<td style="white-space:nowrap;">' + eur(bRev) + '</td><td style="font-weight:800;white-space:nowrap;color:#2E7D54;">' + eur(iRev) + '</td><td style="white-space:nowrap;">' + delta(bRev, iRev, true) + '</td></tr>';
+    html += '<tr><td style="font-weight:700;">Gewinn</td>' +
+      '<td style="white-space:nowrap;">' + eur(bGew) + '</td><td style="font-weight:800;white-space:nowrap;">' + eur(iGew) + '</td><td style="white-space:nowrap;">' + delta(bGew, iGew, true) + '</td></tr>';
+    html += '</tbody></table></div>';
+    html += '<p class="section-sub" style="margin-top:8px;font-size:11.5px;">Prognose = Anmeldungen × Benchmark-Raten (Show-up ' + su1 + '/' + su2 + ' %, Termin ' + tq + ' %, Abschluss ' + aq + ' %). Ist = echte Workshop-Zahlen (Tab „Rechner"). Δ = Ist − Prognose.</p>';
+    box.innerHTML = html;
+    renderThresholdChart();
+  }
+
+  // ---- Anmeldungs-Schwellen pro Project-You-Verkauf (Benchmark) ----
+  function renderThresholdChart() {
+    var box = document.getElementById('threshold-chart');
+    if (!box) return;
+    var head = document.getElementById('thr-headline');
+    var sub = document.getElementById('thr-sub');
+    var d = loadLr();
+    var su2 = d.su2 !== undefined ? parseFloat(d.su2) : 20;
+    var tq  = d.tq  !== undefined ? parseFloat(d.tq)  : 10;
+    var aq  = d.aq  !== undefined ? parseFloat(d.aq)  : 80;
+    var rate = (su2 / 100) * (tq / 100) * (aq / 100); // Anmeldung → Kauf
+    var leads = liveLeads !== null ? liveLeads : 0;
+    if (rate <= 0) {
+      box.innerHTML = '<div class="chart-empty">Benchmark-Raten ergeben 0 % — bitte im Tab „Rechner" setzen.</div>';
+      if (head) head.innerHTML = '';
+      return;
+    }
+    var perSale = 1 / rate;
+    var salesNow = Math.floor(leads * rate);
+    var nextN = salesNow + 1;
+    var reqNext = Math.ceil(nextN / rate);
+    var needed = Math.max(reqNext - leads, 0);
+
+    if (sub) sub.innerHTML = 'Benchmark: Show-up T2 ' + su2 + ' % × Termin ' + tq + ' % × Abschluss ' + aq + ' % = <b>' +
+      (rate * 100).toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' %</b> pro Anmeldung → <b>~' +
+      Math.ceil(perSale) + ' Anmeldungen je Verkauf</b>. Raten im Tab „Rechner" anpassbar.';
+    if (head) head.innerHTML =
+      '<span style="font-family:var(--ms-font-display);font-size:32px;font-weight:700;color:#CA5D25;">' + needed + '</span>' +
+      ' <span style="font-size:13.5px;font-weight:700;color:#1B2020;">Anmeldung' + (needed === 1 ? '' : 'en') + ' bis zum ' + nextN + '. Verkauf</span>' +
+      ' <span style="font-size:12px;color:#9a9087;">· aktuell ' + leads + ' Anmeldungen · ' + salesNow + ' Verkauf' + (salesNow === 1 ? '' : 'e') + ' rechnerisch erreicht</span>';
+
+    var N = Math.max(nextN + 3, 5);
+    var rows = '';
+    for (var n = 1; n <= N; n++) {
+      var req = Math.ceil(n / rate);
+      var reached = leads >= req;
+      var isNext = (n === nextN);
+      var fill = Math.min(leads / req * 100, 100);
+      var barCol = reached ? '#2E7D54' : (isNext ? '#CA5D25' : '#c9bfb4');
+      var rightTxt = reached ? '<span style="color:#2E7D54;">✓ erreicht</span>'
+        : (isNext ? '<span style="color:#CA5D25;">noch ' + needed + '</span>' : '');
+      rows += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:9px;">' +
+        '<div style="flex:0 0 86px;font-size:12px;font-weight:700;color:' + (isNext ? '#CA5D25' : '#1B2020') + ';">' + n + '. Verkauf</div>' +
+        '<div style="flex:1;position:relative;height:26px;background:rgba(27,32,32,0.06);border-radius:8px;overflow:hidden;' + (isNext ? 'box-shadow:0 0 0 2px rgba(202,93,37,0.4);' : '') + '">' +
+          '<div style="position:absolute;top:0;left:0;bottom:0;width:' + fill + '%;background:' + barCol + ';border-radius:8px;transition:width .4s;"></div>' +
+        '</div>' +
+        '<div style="flex:0 0 150px;text-align:right;font-size:12px;font-weight:700;color:#1B2020;white-space:nowrap;">' + req.toLocaleString('de-DE') + ' Anm. ' + rightTxt + '</div>' +
+        '</div>';
+    }
+    box.innerHTML = rows;
+  }
+
+  function restoreLr() {
+    var d = loadLr();
+    var el = document.getElementById('lr-adspend-input');
+    if (el && d.adspend) el.value = d.adspend;
+    ['su1','su2','tq','aq'].forEach(function(k) {
+      var slider = document.getElementById('lr-' + k);
+      var label  = document.getElementById('lr-' + k + '-val');
+      if (d[k] !== undefined) {
+        if (slider) slider.value = d[k];
+        if (label)  label.textContent = d[k] + ' %';
+      }
+    });
+  }
+
+  window.onLrAdspend = function() {
+    var el = document.getElementById('lr-adspend-input');
+    var d = loadLr(); d.adspend = el ? el.value : '0'; saveLr(d);
+    updateLiveRoi();
+  };
+  window.onLrSlider = function(key, val) {
+    var d = loadLr(); d[key] = val; saveLr(d);
+    var label = document.getElementById('lr-' + key + '-val');
+    if (label) label.textContent = val + ' %';
+    updateLiveRoi();
+  };
+
+  // ---- Live data fetch (leads + visitors parallel) ----
+  function fetchLive() {
+    var q = buildQ();
+    var stand = document.getElementById('live-stand');
+    return Promise.all([
+      fetch('https://abnehmrevolution-funnel.vercel.app/api/stats' + q, { cache: 'no-store' }).then(function(r) { return r.json(); }).catch(function() { return {}; }),
+      fetch('https://abnehmrevolution-funnel.vercel.app/api/analytics' + q, { cache: 'no-store' }).then(function(r) { return r.json(); }).catch(function() { return {}; }),
+    ]).then(function(results) {
+      var stats = results[0], analytics = results[1];
+      if (stats.leads !== null && stats.leads !== undefined) liveLeads = stats.leads;
+      liveUnsub = (stats.unsub !== undefined && stats.unsub !== null) ? stats.unsub : null;
+      liveActive = (stats.active !== undefined && stats.active !== null) ? stats.active : null;
+      if (analytics.visitors !== null && analytics.visitors !== undefined) liveVisitors = analytics.visitors;
+      var now = new Date();
+      var ts = now.toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric' }) + ' · ' + now.toLocaleTimeString('de-DE', { hour:'2-digit', minute:'2-digit' }) + ' Uhr';
+      var notes = [];
+      if (stats.error) notes.push('Kit: ' + stats.error);
+      if (analytics.error) notes.push('Visitors: ' + analytics.error);
+      if (stand) stand.textContent = 'Stand: ' + ts + (notes.length ? ' (' + notes.join(' · ') + ')' : '');
+      updateCalc();
+      updateLiveRoi();
+    });
+  }
+
+  // ---- Wächter (Promo + Conversion) ----
+  var lv = { expired: '#C0392B', critical: '#C0392B', warn: '#CA5D25', info: '#2E7D54', error: '#C0392B' };
+  fetch('https://abnehmrevolution-funnel.vercel.app/config/promos.json', { cache: 'no-cache' }).then(function(r) { return r.json(); }).then(function(d) {
+    var t = new Date().toISOString().slice(0, 10), el = document.getElementById('promo-status'), out = [];
+    (d.promos || []).forEach(function(p) {
+      if (!p.end) return;
+      var days = Math.ceil((new Date(p.end) - new Date(t)) / 86400000);
+      var active = (!p.start || p.start <= t) && t <= p.end;
+      var color = days < 0 ? lv.expired : (days <= 3 ? lv.warn : '#2E7D54');
+      out.push('<div style="margin-bottom:6px;"><b style="color:' + color + '">' + p.id + '</b> — ' + (days < 0 ? ('abgelaufen seit ' + (-days) + ' T → Evergreen aktiv') : (active ? (days + ' Tage bis Ende (' + p.end + ')') : ('startet ' + p.start))) + (days >= 0 && days <= 3 ? ' ⚠ entscheiden: verlängern/ersetzen?' : '') + '</div>');
+    });
+    el.innerHTML = out.join('') || 'Keine Promos konfiguriert.';
+  }).catch(function() { document.getElementById('promo-status').textContent = 'config/promos.json nicht erreichbar.'; });
+
+  fetch('https://abnehmrevolution-funnel.vercel.app/intern/alerts-conversion.json', { cache: 'no-cache' }).then(function(r) { if (!r.ok) throw 0; return r.json(); }).then(function(d) {
+    var el = document.getElementById('conv-status'), s = d.snapshot || {}, rows = [];
+    Object.keys(s).forEach(function(k) { rows.push(k + ': gestern <b>' + s[k].yesterday + '</b> | Ø ' + s[k].baselineMean + ' ±' + s[k].baselineStd); });
+    var al = (d.alerts || []).map(function(a) { return '<div style="color:' + (lv[a.level] || '#1B2020') + '">• ' + a.message + '</div>'; }).join('');
+    el.innerHTML = '<div style="font-size:12px;color:#7A6F63;margin-bottom:8px;">Stand ' + (d.day || '?') + '</div>' + rows.join('<br>') + (al ? ('<div style="margin-top:10px;">' + al + '</div>') : '<div style="margin-top:10px;color:#2E7D54;">✓ keine Auffälligkeiten</div>');
+  }).catch(function() { document.getElementById('conv-status').innerHTML = 'Noch kein Watcher-Lauf.<br><span style="font-size:12px;color:#7A6F63;">Läuft täglich 07:30 per launchd.</span>'; });
+
+  // ---- Bind input changes ----
+  ['adspend','besucher','cpl','live1','live2','glow','py'].forEach(function(k) {
+    var el = document.getElementById('f-' + k);
+    if (el) el.addEventListener('input', function() {
+      var d = load(); d[k] = el.value; save(d); updateCalc();
+    });
+  });
+
+  // ============================================================
+  // TABS
+  // ============================================================
+  var activeTab = 'overview';
+  var emailLoaded = false;
+  var abLoaded = false;
+  window.switchTab = function(name) {
+    activeTab = name;
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-tab') === name);
+    });
+    document.querySelectorAll('[data-tab]').forEach(function(el) {
+      if (el.classList.contains('tab-btn')) return;
+      el.style.display = el.getAttribute('data-tab') === name ? '' : 'none';
+    });
+    var tf = document.getElementById('tf-wrap');
+    if (tf) tf.style.display = name === 'overview' ? '' : 'none';
+    if (name === 'overview') renderChart();
+    if (name === 'email' && !emailLoaded) { emailLoaded = true; fetchEmailStats(); }
+    if (name === 'abtest' && !abLoaded) { abLoaded = true; renderTestingBoard(); fetchAbtest(); }
+    if (name === 'leads' && !leadsLoaded) { leadsLoaded = true; fetchLeads(); fetchAdRoas(); }
+    if (name === 'aufzeichnung' && !aufzLoaded) { aufzLoaded = true; fetchAufzeichnung(); }
+    if (name === 'metaads') { fetchAds(); renderAdsTracking(); }
+  };
+  var leadsLoaded = false;
+  var leadsData = [];
+
+  function fetchLeads() {
+    return fetch('https://abnehmrevolution-funnel.vercel.app/api/leads' + buildQ(), { cache: 'no-store' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        leadsData = d.leads || [];
+        var st = document.getElementById('leads-stand');
+        if (st) st.textContent = '· ' + (d.counts ? d.counts.total : leadsData.length) + ' Leads' + (d.showup_wired ? '' : ' · Show-up/Termin noch nicht verdrahtet');
+        renderLeadsSummary(d.counts || {});
+        renderLeads();
+      })
+      .catch(function() {
+        var t = document.getElementById('leads-table');
+        if (t) t.innerHTML = '<div class="chart-empty">Fehler beim Laden der Leads.</div>';
+      });
+  }
+
+  function renderLeadsSummary(c) {
+    var box = document.getElementById('leads-summary');
+    if (!box) return;
+    function card(label, val, note, hl) {
+      return '<div class="kpi-card' + (hl ? ' highlight' : '') + '"><p class="kpi-label">' + label + '</p><p class="kpi-num" style="font-size:24px;">' + val + '</p><p class="kpi-note">' + note + '</p></div>';
+    }
+    box.innerHTML =
+      card('Leads gesamt', (c.total || 0), 'im Zeitraum', false) +
+      card('Paid', (c.paid || 0), 'über Ads', false) +
+      card('Organic', (c.organic || 0), 'organisch', false) +
+      card('E-Mail', (c.email || 0), 'Re-Opt-in', false) +
+      card('Glow-Käufe', (c.glow || 0), 'Upsell', true) +
+      card('Termine', (c.termin || 0), 'gebucht', false);
+  }
+
+  function leadBadge(v) {
+    if (v === true)  return '<span style="display:inline-block;font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px;background:rgba(46,125,84,0.14);color:#2E7D54;">Ja</span>';
+    if (v === false) return '<span style="display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;background:rgba(27,32,32,0.05);color:#9a9087;">Nein</span>';
+    return '<span style="color:#c4bbb0;">—</span>';
+  }
+  function srcPill(type, label) {
+    var col = { paid: ['rgba(202,93,37,0.14)', '#CA5D25'], organic: ['rgba(46,125,84,0.13)', '#2E7D54'], email: ['rgba(71,97,96,0.13)', '#476160'], direct: ['rgba(27,32,32,0.06)', '#7A6F63'] }[type] || ['rgba(27,32,32,0.06)', '#7A6F63'];
+    return '<span style="display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;background:' + col[0] + ';color:' + col[1] + ';">' + escH(label) + '</span>';
+  }
+  function varPill(v) {
+    if (v !== 'A' && v !== 'B') return '<span style="color:#c4bbb0;">—</span>';
+    var c = v === 'A' ? ['rgba(71,97,96,0.14)', '#476160'] : ['rgba(202,93,37,0.16)', '#CA5D25'];
+    return '<span style="display:inline-block;font-size:11px;font-weight:800;width:20px;text-align:center;border-radius:6px;background:' + c[0] + ';color:' + c[1] + ';">' + v + '</span>';
+  }
+
+  function renderLeads() {
+    var el = document.getElementById('leads-table');
+    if (!el) return;
+    var q = (document.getElementById('leads-search') || {}).value || '';
+    q = q.trim().toLowerCase();
+    var rows = leadsData.filter(function(l) {
+      if (!q) return true;
+      return (l.name || '').toLowerCase().indexOf(q) !== -1 || (l.email || '').toLowerCase().indexOf(q) !== -1;
+    });
+    if (!rows.length) { el.innerHTML = '<div class="chart-empty">Keine Leads gefunden.</div>'; return; }
+    var html = '<div style="overflow-x:auto;"><table class="utm-table"><thead><tr>' +
+      '<th>Name</th><th>E-Mail</th><th>Quelle</th><th>Variante</th><th>Glow</th><th>Tag 1</th><th>Tag 2</th><th>Termin</th>' +
+      '</tr></thead><tbody>';
+    rows.forEach(function(l) {
+      html += '<tr>' +
+        '<td style="font-weight:700;white-space:nowrap;">' + escH(l.name || '—') + '</td>' +
+        '<td style="color:#7A6F63;">' + escH(l.email || '') + '</td>' +
+        '<td>' + srcPill(l.type, l.source) + (l.campaign ? '<div style="font-size:10px;color:#b3a99e;margin-top:2px;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + escH(l.campaign) + '">' + escH(l.campaign) + '</div>' : '') + '</td>' +
+        '<td>' + varPill(l.variant) + '</td>' +
+        '<td>' + leadBadge(l.glow) + '</td>' +
+        '<td>' + leadBadge(l.tag1) + '</td>' +
+        '<td>' + leadBadge(l.tag2) + '</td>' +
+        '<td>' + leadBadge(l.termin) + '</td>' +
+        '</tr>';
+    });
+    html += '</tbody></table></div>';
+    el.innerHTML = html;
+  }
+  window.renderLeads = renderLeads;
+
+  function fetchAdRoas() {
+    return fetch('https://abnehmrevolution-funnel.vercel.app/api/ad-roas' + buildQ(), { cache: 'no-store' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { renderAdRoas(d); })
+      .catch(function() { var t = document.getElementById('roas-ad-table'); if (t) t.innerHTML = '<div class="chart-empty">Fehler beim Laden.</div>'; });
+  }
+  function renderAdRoas(d) {
+    var el = document.getElementById('roas-ad-table');
+    if (!el) return;
+    var rows = d.by_ad || [];
+    var cov = document.getElementById('roas-coverage');
+    if (cov) cov.textContent = (d.ads_matched != null ? d.ads_matched + '/' + d.ads_total + ' Ads mit Meta-Spend verknüpft' : '');
+    if (!rows.length) { el.innerHTML = '<div class="chart-empty">Noch keine Paid-Leads mit Ad-Zuordnung.</div>'; return; }
+    var dash = '<span style="color:#c4bbb0;">—</span>';
+    var html = '<div style="overflow-x:auto;"><table class="utm-table"><thead><tr>' +
+      '<th>Ad-Text</th><th>Spend</th><th>Leads</th><th>CPL</th><th>Show-up T1</th><th>Show-up T2</th><th>Termine</th><th>Glow</th><th>Umsatz</th><th>ROAS</th>' +
+      '</tr></thead><tbody>';
+    rows.forEach(function(r) {
+      html += '<tr>' +
+        '<td style="font-weight:700;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + escH(r.key) + '">' + escH(r.key) + '</td>' +
+        '<td style="white-space:nowrap;">' + (r.spend != null ? eur2(r.spend) : dash) + '</td>' +
+        '<td style="font-weight:700;">' + (r.leads || 0) + '</td>' +
+        '<td style="white-space:nowrap;font-weight:700;color:#CA5D25;">' + (r.cpl != null ? eur2(r.cpl) : dash) + '</td>' +
+        '<td>' + (d.showup_wired ? (r.tag1 || 0) : dash) + '</td>' +
+        '<td>' + (d.showup_wired ? (r.tag2 || 0) : dash) + '</td>' +
+        '<td>' + (r.termine || 0) + '</td>' +
+        '<td style="font-weight:700;">' + (r.glow || 0) + '</td>' +
+        '<td style="white-space:nowrap;">' + eur2(r.umsatz || 0) + '</td>' +
+        '<td style="white-space:nowrap;font-weight:800;color:#2E7D54;">' + (r.roas != null ? (r.roas.toLocaleString('de-DE') + '×') : dash) + '</td>' +
+        '</tr>';
+    });
+    html += '</tbody></table></div>';
+    if (d.ads_matched != null && d.ads_total != null && d.ads_matched < d.ads_total) {
+      html += '<p class="section-sub" style="margin-top:8px;font-size:11.5px;">⚠ ' + (d.ads_total - d.ads_matched) + ' Ad(s) ohne Meta-Spend-Zuordnung — uneinheitliche <code>utm_content</code>-Benennung. Für lückenloses ROAS: URL-Parameter aller Adsets auf <code>utm_content={{ad.name}}</code> standardisieren.</p>';
+    }
+    el.innerHTML = html;
+  }
+  window.fetchAdRoas = fetchAdRoas;
+
+  // ---- Aufzeichnungsseite ----
+  var aufzLoaded = false;
+  function fmtDur(s) {
+    s = Math.round(s || 0);
+    var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), ss = s % 60;
+    if (h > 0) return h + ' Std ' + m + ' Min';
+    if (m > 0) return m + ' Min ' + ss + ' Sek';
+    return ss + ' Sek';
+  }
+  function fetchAufzeichnung() {
+    return fetch('https://abnehmrevolution-funnel.vercel.app/api/aufzeichnung' + buildQ(), { cache: 'no-store' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { renderAufzeichnung(d); })
+      .catch(function() { var s = document.getElementById('aufz-stand'); if (s) s.textContent = 'Fehler beim Laden'; });
+  }
+  function renderAufzeichnung(d) {
+    var set = function(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
+    set('aufz-visitors', (d.visitors || 0).toLocaleString('de-DE'));
+    set('aufz-calendly', (d.calendly || 0).toLocaleString('de-DE'));
+    var ctr = d.visitors > 0 ? Math.round(d.calendly / d.visitors * 1000) / 10 : 0;
+    set('aufz-calendly-note', '„Gespräch buchen" · ' + fmtPct(ctr) + ' CTR');
+    set('aufz-play1', (d.play1 || 0).toLocaleString('de-DE'));
+    set('aufz-play2', (d.play2 || 0).toLocaleString('de-DE'));
+    set('aufz-watch1', fmtDur(d.watch1));
+    set('aufz-watch2', fmtDur(d.watch2));
+    set('aufz-watch1-note', 'gesamt · ⌀ ' + fmtDur(d.play1 > 0 ? d.watch1 / d.play1 : 0) + ' / Start');
+    set('aufz-watch2-note', 'gesamt · ⌀ ' + fmtDur(d.play2 > 0 ? d.watch2 / d.play2 : 0) + ' / Start');
+    var st = document.getElementById('aufz-stand');
+    if (st && d.posthog_error) st.textContent = 'PostHog: ' + d.posthog_error;
+    renderAufzViews(d.views || []);
+  }
+  function renderAufzViews(views) {
+    var el = document.getElementById('aufz-views');
+    if (!el) return;
+    if (!views.length) { el.innerHTML = '<div class="chart-empty">Noch keine Views erfasst.</div>'; return; }
+    var maxSecs = Math.max.apply(null, views.map(function(v) { return v.secs || 0; }).concat([1]));
+    function fmtDT(iso) {
+      if (!iso) return '—';
+      var dt = new Date(String(iso).replace(' ', 'T'));
+      if (isNaN(dt)) return '—';
+      return dt.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + ' ' + dt.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    }
+    var html = '<div style="overflow-x:auto;"><table class="utm-table"><thead><tr>' +
+      '<th>Zeitpunkt</th><th>Gerät</th><th>Video</th><th>Watch-Time</th><th style="width:34%;">Anteil</th>' +
+      '</tr></thead><tbody>';
+    views.forEach(function(v) {
+      var isT2 = v.tag === '2';
+      var col = isT2 ? ['rgba(202,93,37,0.16)', '#CA5D25'] : ['rgba(71,97,96,0.14)', '#476160'];
+      var pillTxt = isT2 ? 'Tag 2' : (v.tag === '1' ? 'Tag 1' : 'Tag ' + (v.tag || '?'));
+      var w = Math.max((v.secs || 0) / maxSecs * 100, 2);
+      html += '<tr>' +
+        '<td style="white-space:nowrap;color:#7A6F63;">' + fmtDT(v.last) + '</td>' +
+        '<td style="font-family:\'SF Mono\',ui-monospace,monospace;font-size:11px;color:#9a9087;">…' + escH(v.viewer || '') + '</td>' +
+        '<td><span style="display:inline-block;font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px;background:' + col[0] + ';color:' + col[1] + ';">' + pillTxt + '</span></td>' +
+        '<td style="font-weight:700;white-space:nowrap;">' + fmtDur(v.secs) + '</td>' +
+        '<td><div style="background:rgba(27,32,32,0.06);border-radius:6px;height:14px;overflow:hidden;"><div style="height:100%;width:' + w + '%;background:' + col[1] + ';border-radius:6px;"></div></div></td>' +
+        '</tr>';
+    });
+    html += '</tbody></table></div>';
+    el.innerHTML = html;
+  }
+  window.fetchAufzeichnung = fetchAufzeichnung;
+
+  // ============================================================
+  // ZEITVERLAUF-CHART
+  // ============================================================
+  var tsData = [];
+  var SERIES = [
+    { key: 'visitors', label: 'Besucher',    color: '#476160', on: true, money: false },
+    { key: 'signups',  label: 'Anmeldungen', color: '#CA5D25', on: true, money: false },
+    { key: 'revenue',  label: 'Umsatz',      color: '#2E7D54', on: true, money: true }
+  ];
+
+  function fetchTimeseries() {
+    var r = getDateRange(), p = [];
+    if (r.from) p.push('from=' + encodeURIComponent(r.from));
+    if (r.to)   p.push('to='   + encodeURIComponent(r.to));
+    if (!r.from && !r.to) p.push('days=30');
+    p.push('ws=' + currentWs);
+    var q = p.length ? '?' + p.join('&') : '';
+    return fetch('https://abnehmrevolution-funnel.vercel.app/api/timeseries' + q, { cache: 'no-store' })
+      .then(function(res) { return res.json(); })
+      .then(function(d) {
+        tsData = d.days || [];
+        var note = document.getElementById('chart-range-note');
+        if (note) {
+          var errs = [];
+          if (d.posthog_error) errs.push('Besucher: ' + d.posthog_error);
+          if (d.kit_error) errs.push('Kit: ' + d.kit_error);
+          note.textContent = tsData.length ? (tsData.length + ' Tage' + (errs.length ? ' · ' + errs.join(' · ') : '')) : '';
+        }
+        if (activeTab === 'overview') renderChart();
+        renderLiveTrend();
+        renderAdsTracking();
+      }).catch(function() {});
+  }
+
+  function fmtTickEur(x) { return Math.round(x).toLocaleString('de-DE') + ' €'; }
+
+  // ---- Live-Verlauf (einzelne Kennzahl, filterbar) ----
+  var liveTrendMetric = 'leads';
+  var LT_METRICS = {
+    leads:  { label: 'Leads',           color: '#CA5D25', val: function(d) { return d.signups || 0; },
+              fmt: function(v) { return Math.round(v).toLocaleString('de-DE'); }, axis: function(v) { return Math.round(v).toLocaleString('de-DE'); }, agg: 'sum' },
+    umsatz: { label: 'Umsatz',          color: '#2E7D54', val: function(d) { return d.revenue || 0; },
+              fmt: function(v) { return eur2(v); }, axis: function(v) { return fmtTickEur(v); }, agg: 'sum' },
+    cr:     { label: 'Conversion-Rate', color: '#476160', val: function(d) { return d.visitors > 0 ? d.signups / d.visitors * 100 : 0; },
+              fmt: function(v) { return fmtPct(v); }, axis: function(v) { return fmtPct(v); }, agg: 'avg' },
+    cpl:    { label: 'Cost / Lead',     color: '#a23f17', val: function(d) { return d.signups > 0 ? (d.spend || 0) / d.signups : 0; },
+              fmt: function(v) { return eur2(v); }, axis: function(v) { return fmtTickEur(v); }, agg: 'avg' }
+  };
+  window.setLiveTrend = function(m) {
+    liveTrendMetric = m;
+    document.querySelectorAll('#livetrend-filters .lt-btn').forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-m') === m); });
+    renderLiveTrend();
+  };
+  function renderLiveTrend() {
+    var wrap = document.getElementById('livetrend-chart');
+    if (!wrap) return;
+    var M = LT_METRICS[liveTrendMetric];
+    var data = tsData || [];
+    if (!data.length) { wrap.innerHTML = '<div class="chart-empty">Noch keine Verlaufsdaten.</div>'; return; }
+    var vals = data.map(M.val);
+    var max = Math.max.apply(null, vals.concat([0]));
+    if (max <= 0) max = 1;
+    var W = 1000, H = 250, padL = 56, padR = 14, padT = 14, padB = 26;
+    var n = data.length;
+    var x = function(i) { return padL + (n <= 1 ? (W - padL - padR) / 2 : (i / (n - 1)) * (W - padL - padR)); };
+    var y = function(v) { return padT + (1 - v / max) * (H - padT - padB); };
+    var grid = '';
+    for (var g = 0; g <= 4; g++) {
+      var gv = max * g / 4, gy = y(gv);
+      grid += '<line x1="' + padL + '" y1="' + gy.toFixed(1) + '" x2="' + (W - padR) + '" y2="' + gy.toFixed(1) + '" stroke="rgba(27,32,32,0.08)" stroke-width="1"/>';
+      grid += '<text x="' + (padL - 8) + '" y="' + (gy + 3).toFixed(1) + '" text-anchor="end" font-size="11" fill="#9a9087">' + M.axis(gv) + '</text>';
+    }
+    var line = '', areaPts = '';
+    data.forEach(function(d, i) { var px = x(i), py = y(M.val(d)); line += (i ? 'L' : 'M') + px.toFixed(1) + ' ' + py.toFixed(1) + ' '; areaPts += 'L' + px.toFixed(1) + ' ' + py.toFixed(1) + ' '; });
+    var area = 'M' + x(0).toFixed(1) + ' ' + y(0).toFixed(1) + ' ' + areaPts + 'L' + x(n - 1).toFixed(1) + ' ' + y(0).toFixed(1) + ' Z';
+    var dots = data.map(function(d, i) { return '<circle cx="' + x(i).toFixed(1) + '" cy="' + y(M.val(d)).toFixed(1) + '" r="2.5" fill="' + M.color + '"><title>' + d.date.split('-').reverse().join('.') + ': ' + M.fmt(M.val(d)) + '</title></circle>'; }).join('');
+    var xl = '';
+    [0, Math.floor((n - 1) / 2), n - 1].forEach(function(i) { if (i < 0 || !data[i]) return; var dd = data[i].date.slice(5).split('-').reverse().join('.'); xl += '<text x="' + x(i).toFixed(1) + '" y="' + (H - 7) + '" text-anchor="middle" font-size="11" fill="#9a9087">' + dd + '</text>'; });
+    wrap.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto;display:block;">' +
+      grid + '<path d="' + area + '" fill="' + M.color + '" opacity="0.10"/>' +
+      '<path d="' + line + '" fill="none" stroke="' + M.color + '" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>' +
+      dots + xl + '</svg>';
+    // Zusammenfassung
+    var sub = document.getElementById('livetrend-sub');
+    if (sub) {
+      var nonZero = vals.filter(function(v) { return v > 0; });
+      var sum = vals.reduce(function(a, b) { return a + b; }, 0);
+      var avg = nonZero.length ? sum / nonZero.length : 0;
+      var last = vals[vals.length - 1];
+      if (M.agg === 'sum') sub.innerHTML = M.label + ' pro Tag · <b>Gesamt ' + M.fmt(sum) + '</b> · Ø ' + M.fmt(nonZero.length ? sum / nonZero.length : 0) + '/Tag · letzter Tag ' + M.fmt(last);
+      else sub.innerHTML = M.label + ' pro Tag · <b>Ø ' + M.fmt(avg) + '</b> · letzter Tag ' + M.fmt(last);
+    }
+  }
+
+  function renderChart() {
+    var box = document.getElementById('chart-box');
+    var legend = document.getElementById('chart-legend');
+    if (!box || !legend) return;
+
+    // Legend
+    legend.innerHTML = SERIES.map(function(s, i) {
+      var sum = tsData.reduce(function(a, r) { return a + (r[s.key] || 0); }, 0);
+      var sumTxt = s.money ? fmtTickEur(sum) : Math.round(sum).toLocaleString('de-DE');
+      return '<div class="chart-toggle' + (s.on ? '' : ' off') + '" onclick="toggleSeries(' + i + ')">' +
+             '<span class="ct-dot" style="background:' + s.color + '"></span>' +
+             '<span class="ct-name">' + s.label + '</span>' +
+             '<span class="ct-sum">' + sumTxt + '</span></div>';
+    }).join('');
+
+    var empty = document.getElementById('chart-empty');
+    if (!tsData.length) {
+      box.innerHTML = '<div class="chart-empty" id="chart-empty">Keine Daten im Zeitraum.</div>';
+      return;
+    }
+
+    var W = 720, H = 260, padL = 6, padR = 6, padT = 14, padB = 26;
+    var plotW = W - padL - padR, plotH = H - padT - padB;
+    var nPts = tsData.length;
+    var xAt = function(i) { return nPts <= 1 ? padL + plotW / 2 : padL + (i / (nPts - 1)) * plotW; };
+
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">';
+    // gridlines
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + (g / 4) * plotH;
+      svg += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (W - padR) + '" y2="' + gy + '" stroke="rgba(27,32,32,0.07)" stroke-width="1"/>';
+    }
+    // series lines (each normalized to own max)
+    SERIES.forEach(function(s) {
+      if (!s.on) return;
+      var max = 0;
+      tsData.forEach(function(r) { if ((r[s.key] || 0) > max) max = r[s.key]; });
+      if (max <= 0) max = 1;
+      var pts = tsData.map(function(r, i) {
+        var y = padT + plotH - ((r[s.key] || 0) / max) * plotH;
+        return xAt(i).toFixed(1) + ',' + y.toFixed(1);
+      }).join(' ');
+      svg += '<polyline points="' + pts + '" fill="none" stroke="' + s.color + '" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>';
+      // dots
+      tsData.forEach(function(r, i) {
+        var y = padT + plotH - ((r[s.key] || 0) / max) * plotH;
+        svg += '<circle cx="' + xAt(i).toFixed(1) + '" cy="' + y.toFixed(1) + '" r="2.2" fill="' + s.color + '"/>';
+      });
+    });
+    // x-axis date labels (max ~6)
+    var step = Math.max(1, Math.ceil(nPts / 6));
+    for (var i = 0; i < nPts; i += step) {
+      var d = tsData[i].date.slice(5).replace('-', '.');
+      svg += '<text x="' + xAt(i).toFixed(1) + '" y="' + (H - 8) + '" font-size="10" fill="#9a9087" text-anchor="middle" font-family="sans-serif">' + d + '</text>';
+    }
+    // hover capture
+    svg += '<rect x="0" y="0" width="' + W + '" height="' + H + '" fill="transparent" id="chart-hit"/>';
+    svg += '</svg>';
+    svg += '<div class="chart-tip" id="chart-tip"></div>';
+    box.innerHTML = svg;
+
+    // hover handler
+    var hit = document.getElementById('chart-hit');
+    var tip = document.getElementById('chart-tip');
+    var svgEl = box.querySelector('svg');
+    function onMove(ev) {
+      var rect = svgEl.getBoundingClientRect();
+      var clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+      var relX = (clientX - rect.left) / rect.width;
+      var idx = Math.round(relX * (nPts - 1));
+      if (idx < 0) idx = 0; if (idx > nPts - 1) idx = nPts - 1;
+      var r = tsData[idx];
+      var rows = SERIES.filter(function(s) { return s.on; }).map(function(s) {
+        var v = s.money ? fmtTickEur(r[s.key] || 0) : Math.round(r[s.key] || 0).toLocaleString('de-DE');
+        return '<span style="color:' + s.color + '">●</span> ' + s.label + ': <b>' + v + '</b>';
+      }).join('<br>');
+      tip.innerHTML = '<div style="opacity:0.7;margin-bottom:3px;">' + r.date.split('-').reverse().join('.') + '</div>' + rows;
+      tip.style.opacity = '1';
+      var leftPct = (idx / (nPts - 1)) * 100;
+      tip.style.left = Math.min(Math.max(leftPct, 12), 88) + '%';
+      tip.style.top = '0px';
+      tip.style.transform = 'translateX(-50%)';
+    }
+    if (hit) {
+      hit.addEventListener('mousemove', onMove);
+      hit.addEventListener('touchmove', onMove);
+      hit.addEventListener('mouseleave', function() { tip.style.opacity = '0'; });
+    }
+  }
+
+  window.toggleSeries = function(i) {
+    SERIES[i].on = !SERIES[i].on;
+    renderChart();
+  };
+
+  // ============================================================
+  // E-MAIL STATS
+  // ============================================================
+  function fmtRate(x) {
+    if (x === null || x === undefined) return '—';
+    return (Math.round(x * 10) / 10).toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+  }
+  function fetchEmailStats() {
+    return fetch('https://abnehmrevolution-funnel.vercel.app/api/email-stats', { cache: 'no-store' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { renderEmailStats(d); })
+      .catch(function() {
+        var s = document.getElementById('mail-stand'); if (s) s.textContent = 'Fehler beim Laden';
+      });
+  }
+  function renderEmailStats(d) {
+    var stand = document.getElementById('mail-stand');
+    function set(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
+    if (d.error) { if (stand) stand.textContent = 'Kit: ' + d.error; return; }
+
+    // Zustellbarkeit
+    var dl = d.deliverability || {};
+    set('mail-recipients', dl.total_recipients ? dl.total_recipients.toLocaleString('de-DE') : '—');
+    set('mail-sent-note', (dl.sent_broadcasts || 0) + ' gesendete Mails');
+    set('mail-open', fmtRate(dl.avg_open_rate));
+    set('mail-click', fmtRate(dl.avg_click_rate));
+    set('mail-unsub', fmtRate(dl.unsubscribe_rate));
+    set('mail-unsub-abs', (dl.total_unsubscribes || 0).toLocaleString('de-DE'));
+    if (stand) stand.textContent = (dl.sent_broadcasts || 0) > 0 ? 'Aktualisiert' : 'Noch keine Mails gesendet';
+
+    // Sequenzen
+    var seqEl = document.getElementById('mail-sequences');
+    if (seqEl) {
+      var seqs = d.sequences || [];
+      seqEl.innerHTML = seqs.length ? seqs.map(function(s) {
+        return '<div class="mail-seq-card"><div><div class="mail-seq-name">' + escH(s.name) + '</div>' +
+          '<div class="mail-seq-meta">' + s.email_count + ' E-Mail(s) · ' + (s.active ? 'aktiv' : 'pausiert') + '</div></div>' +
+          '<div style="text-align:right;"><div class="mail-seq-num">' + Number(s.subscriber_count || 0).toLocaleString('de-DE') + '</div>' +
+          '<div class="mail-seq-meta">Subscriber</div></div></div>';
+      }).join('') : '<div class="chart-empty">Keine Projekt-Sequenzen gefunden.</div>';
+    }
+
+    // Broadcasts
+    var bcEl = document.getElementById('mail-broadcasts');
+    if (bcEl) {
+      var bcs = d.broadcasts || [];
+      if (!bcs.length) { bcEl.innerHTML = '<div class="chart-empty">Keine Projekt-Broadcasts gefunden.</div>'; return; }
+      var labels = { completed: 'Gesendet', sending: 'Läuft', scheduled: 'Geplant', draft: 'Entwurf', aborted: 'Abgebrochen' };
+      var html = '<table class="mail-table"><thead><tr><th>Betreff</th><th>Status</th><th>Empfänger</th><th>Öffnung</th><th>Klick</th><th>Abmeld.</th></tr></thead><tbody>';
+      bcs.forEach(function(b) {
+        var subj = (b.subject || '').replace(/\{\{[^}]*\}\}/g, '…');
+        if (subj.length > 52) subj = subj.slice(0, 52) + '…';
+        var sent = b.status === 'completed' || b.status === 'sending';
+        html += '<tr>';
+        html += '<td style="font-weight:700;max-width:280px;">' + escH(subj) + '</td>';
+        html += '<td><span class="mail-status ' + b.status + '">' + (labels[b.status] || b.status) + '</span></td>';
+        html += '<td>' + (b.recipients ? b.recipients.toLocaleString('de-DE') : '—') + '</td>';
+        html += '<td>' + (sent ? fmtRate(b.open_rate * 100) : '—') + '</td>';
+        html += '<td>' + (sent ? fmtRate(b.click_rate * 100) : '—') + '</td>';
+        html += '<td>' + (sent ? (b.unsubscribes || 0) : '—') + '</td>';
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+      bcEl.innerHTML = html;
+    }
+  }
+
+  // ============================================================
+  // A/B-TEST
+  // ============================================================
+  var AB_VARIANTS = {
+    A: { tag: 'Variante A', desc: 'Kontrolle: „99% der Frauen über 40 sind nur eine einzige Erkenntnis davon entfernt, dauerhaft schlank zu sein."' },
+    B: { tag: 'Variante B', desc: 'Verkaufsversprechen: „Erfahre, wie du mit der Inner-Slim-Code-Methode deinen Abnehmcode entschlüsselst — ohne Sportmodus und frustrierenden Jo-Jo-Effekt."' }
+  };
+  var AB_MIN_VISITORS = 100; // Mindest-Stichprobe pro Variante für valide Aussage
+  var AB_BASE = 'https://start.vanessareinthaller.de/abnehmrevolution/';
+  function abDeep(key) { return AB_BASE + '?ab=' + key + '&preview=1'; } // preview=1 → zählt NICHT in den Test
+
+  window.abLightbox = function(key) {
+    var url = abDeep(key);
+    var f = document.getElementById('ab-lightbox-frame');
+    var open = document.getElementById('ab-lightbox-open');
+    var title = document.getElementById('ab-lightbox-title');
+    if (f) f.src = url;
+    if (open) open.href = url;
+    if (title) title.textContent = 'Live-Vorschau · Variante ' + key;
+    var lb = document.getElementById('ab-lightbox');
+    if (lb) lb.classList.add('is-open');
+    document.body.classList.add('no-scroll');
+  };
+  window.abLightboxClose = function() {
+    var lb = document.getElementById('ab-lightbox');
+    if (lb) lb.classList.remove('is-open');
+    document.body.classList.remove('no-scroll');
+    var f = document.getElementById('ab-lightbox-frame'); if (f) f.src = 'about:blank';
+  };
+
+  function fetchAbtest() {
+    return fetch('https://abnehmrevolution-funnel.vercel.app/api/abtest' + buildQ(), { cache: 'no-store' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { renderAbtest(d); })
+      .catch(function() { var s = document.getElementById('ab-stand'); if (s) s.textContent = 'Fehler beim Laden'; });
+  }
+
+  function renderAbtest(d) {
+    var nameEl = document.getElementById('ab-test-name');
+    if (nameEl) nameEl.textContent = (d.test || '—').replace(/_/g, ' ');
+    var stand = document.getElementById('ab-stand');
+    var errs = [];
+    if (d.posthog_error) errs.push('Besucher: ' + d.posthog_error);
+    if (d.kit_error) errs.push('Kit: ' + d.kit_error);
+    var since = '';
+    if (d.since) {
+      var sd = new Date(String(d.since).replace(' ', 'T'));
+      if (!isNaN(sd)) {
+        var days = Math.max(0, Math.floor((Date.now() - sd.getTime()) / 86400000));
+        since = ' · live seit ' + sd.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' (' + days + ' Tag' + (days === 1 ? '' : 'e') + ')';
+      }
+    }
+    if (stand) stand.textContent = '50/50 Traffic-Split · Besucher → Conversion-Rate → Upsell-Rate' + since + (errs.length ? ' (' + errs.join(' · ') + ')' : '');
+
+    var box = document.getElementById('ab-compare');
+    if (!box) return;
+    var A = d.A || {}, B = d.B || {};
+    // Gewinner nach Conversion-Rate (Primärmetrik), nur wenn genug Daten
+    var enough = (A.visitors >= AB_MIN_VISITORS && B.visitors >= AB_MIN_VISITORS);
+    var winner = null;
+    if (enough && A.cr !== null && B.cr !== null) winner = A.cr === B.cr ? null : (A.cr > B.cr ? 'A' : 'B');
+
+    function pct(x) { return x === null || x === undefined ? '—' : (x.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %'); }
+    function col(key, v) {
+      var meta = AB_VARIANTS[key] || { tag: 'Variante ' + key, desc: '' };
+      var win = winner === key;
+      return '<div class="ab-col' + (win ? ' winner' : '') + '">' +
+        '<div class="ab-col-head"><span class="ab-col-tag">' + meta.tag + '</span>' + (win ? '<span class="ab-win-badge">▲ Führt</span>' : '') + '</div>' +
+        '<div class="ab-col-desc">' + escH(meta.desc) + '</div>' +
+        '<div class="ab-metric"><span class="ab-metric-label">Besucher</span><span class="ab-metric-val">' + (v.visitors || 0).toLocaleString('de-DE') + '</span></div>' +
+        '<div class="ab-metric"><span class="ab-metric-label">Conversion-Rate</span><span class="ab-metric-val hl">' + pct(v.cr) + '</span></div>' +
+        '<div class="ab-metric"><span class="ab-metric-label">Anmeldungen</span><span class="ab-metric-val" style="font-size:16px;">' + (v.leads || 0).toLocaleString('de-DE') + '</span></div>' +
+        '<div class="ab-metric"><span class="ab-metric-label">Upsell-Rate</span><span class="ab-metric-val hl">' + pct(v.upsell) + '</span></div>' +
+        '<div class="ab-metric"><span class="ab-metric-label">Glow-Käufe</span><span class="ab-metric-val" style="font-size:16px;">' + (v.glow || 0).toLocaleString('de-DE') + '</span></div>' +
+        '<div class="ab-actions"><a class="ab-live-link" href="' + abDeep(key) + '" target="_blank" rel="noopener">Live ansehen ↗</a></div>' +
+        '<div class="ab-preview" onclick="abLightbox(\'' + key + '\')" title="Klick für Live-Vorschau"><iframe src="' + abDeep(key) + '" scrolling="no" tabindex="-1" loading="lazy"></iframe><div class="ab-preview-badge">🔍 Variante ' + key + ' groß ansehen</div></div>' +
+        '</div>';
+    }
+    box.innerHTML = col('A', A) + col('B', B);
+
+    var hint = document.getElementById('ab-hint');
+    if (hint) {
+      var totalV = (A.visitors || 0) + (B.visitors || 0);
+      if (totalV === 0) {
+        hint.innerHTML = 'Noch keine Besucher mit Varianten-Zuordnung erfasst. Sobald Traffic auf der Landingpage ankommt, füllt sich der Vergleich automatisch.';
+      } else if (!enough) {
+        var need = Math.max(0, AB_MIN_VISITORS - Math.min(A.visitors || 0, B.visitors || 0));
+        hint.innerHTML = '⏳ Noch zu wenig Daten für eine valide Entscheidung. Richtwert: mind. <b style="color:#CA5D25;">' + AB_MIN_VISITORS + ' Besucher pro Variante</b> (bzw. ~100 Leads). Noch ~' + need + ' Besucher bis zur schwächeren Variante.';
+      } else if (winner) {
+        var wv = winner === 'A' ? A : B, lv = winner === 'A' ? B : A;
+        var lift = lv.cr > 0 ? Math.round(((wv.cr - lv.cr) / lv.cr) * 1000) / 10 : null;
+        hint.innerHTML = '<b>Variante ' + winner + ' führt</b> bei der Conversion-Rate (' + pct(wv.cr) + ' vs. ' + pct(lv.cr) + ')' + (lift !== null ? ' — das sind <b>+' + lift.toLocaleString('de-DE') + ' %</b> relativ.' : '.') + ' Wenn der Vorsprung stabil bleibt, kannst du Variante ' + winner + ' als neuen Standard übernehmen.';
+      } else {
+        hint.innerHTML = 'Genug Daten, aber kein klarer Unterschied in der Conversion-Rate. Lass den Test weiterlaufen oder teste eine deutlichere Variante.';
+      }
+    }
+  }
+
+  function renderTestingBoard() {
+    var ideas = [
+      { t: 'Headline: Verkaufsversprechen statt Statistik', h: 'Konkretes „Workshop + Versprechen" (INNER SLIM-CODE, ohne Diät) schlägt die abstrakte 99%-Statistik bei der Eintragungsquote.', impact: 'hoch', status: 'läuft' },
+      { t: 'CTA-Button-Text', h: '„Jetzt kostenlos anmelden" vs. „Ja, ich will dauerhaft abnehmen" — handlungs- & ergebnisorientiert testen.', impact: 'hoch', status: 'geplant' },
+      { t: 'Hero-Bild', h: 'Vanessa-Porträt vs. Vorher/Nachher- oder Lifestyle-Motiv — Bild ist nach der Headline der stärkste Hebel.', impact: 'hoch', status: 'geplant' },
+      { t: 'Opt-in-Popup: Felder reduzieren', h: 'Nur E-Mail statt Vorname + E-Mail — weniger Reibung, höhere Eintragungsquote (testen ob Personalisierung leidet).', impact: 'mittel', status: 'geplant' },
+      { t: 'Social Proof über der Falz', h: 'Teilnehmerzahl / Testimonial-Zeile direkt unter die Headline — Vertrauen vor dem CTA.', impact: 'mittel', status: 'geplant' },
+      { t: 'Glow-Upsell: Preis-Anker', h: 'Auf der Danke-Seite „365 € Wert → 19,95 €" stärker visualisieren — hebt die Upsell-Rate.', impact: 'mittel', status: 'geplant' },
+      { t: 'Countdown-Dringlichkeit', h: 'Sichtbarer Countdown bis Workshop-Start im Hero — Dringlichkeit kann Eintragung pushen.', impact: 'niedrig', status: 'geplant' },
+      { t: 'Eyebrow-Zeile', h: '„Exklusiv für Frauen 40+" vs. „Kostenloser 2-Tage-Live-Workshop" — Zielgruppe vs. Format betonen.', impact: 'niedrig', status: 'geplant' }
+    ];
+    var el = document.getElementById('ab-ideas');
+    if (!el) return;
+    var order = { hoch: 0, mittel: 1, niedrig: 2 };
+    ideas.sort(function(a, b) { return order[a.impact] - order[b.impact]; });
+    el.innerHTML = ideas.map(function(i) {
+      return '<div class="ab-idea">' +
+        '<span class="ab-impact ' + i.impact + '">' + i.impact + '</span>' +
+        '<div class="ab-idea-body"><div class="ab-idea-title">' + escH(i.t) + '</div><div class="ab-idea-hyp">' + escH(i.h) + '</div></div>' +
+        '<span class="ab-idea-status' + (i.status === 'läuft' ? ' live' : '') + '">' + (i.status === 'läuft' ? '● läuft' : i.status) + '</span>' +
+        '</div>';
+    }).join('');
+  }
+
+  // ============================================================
+  // ZIEL-RECHNER (Reverse / Vorwärts mit Toggle)
+  // ============================================================
+  var ZR_KEY = 'ar_ziel_v1';
+  var zrState = 'ziel';
+  function loadZr() { try { return JSON.parse(localStorage.getItem(ZR_KEY) || '{}'); } catch (e) { return {}; } }
+  function saveZr(d) { try { localStorage.setItem(ZR_KEY, JSON.stringify(d)); } catch (e) {} }
+  function zrNum(id) { var el = document.getElementById(id); var x = parseFloat(el ? el.value : ''); return isNaN(x) ? 0 : x; }
+
+  window.zrMode = function(m) {
+    zrState = m;
+    var d = loadZr(); d.mode = m; saveZr(d);
+    var tz = document.getElementById('zr-tab-ziel'), tf = document.getElementById('zr-tab-fwd');
+    if (tz) tz.classList.toggle('active', m === 'ziel');
+    if (tf) tf.classList.toggle('active', m === 'fwd');
+    var cz = document.getElementById('zr-cell-ziel'), cl = document.getElementById('zr-cell-leads');
+    if (cz) cz.style.display = m === 'ziel' ? '' : 'none';
+    if (cl) cl.style.display = m === 'fwd' ? '' : 'none';
+    var sub = document.getElementById('zr-sub');
+    if (sub) sub.textContent = m === 'ziel'
+      ? 'Umsatzziel vorgeben → wie viele Anmeldungen und wie viel Ad-Budget du dafür brauchst.'
+      : 'Geplante Anmeldungen vorgeben → welcher Umsatz und Gewinn dabei rauskommt.';
+    var ct = document.getElementById('zr-chain-title');
+    if (ct) ct.textContent = m === 'ziel' ? 'Benötigte Funnel-Mengen' : 'Erwartete Funnel-Mengen';
+    zrCalc();
+  };
+
+  window.zrSlider = function(k, v) {
+    var d = loadZr(); d[k] = v; saveZr(d);
+    var l = document.getElementById('zr-' + k + '-val'); if (l) l.textContent = v + ' %';
+    zrCalc();
+  };
+
+  window.onZrCpl = function() {
+    var d = loadZr(); d.cpl = (document.getElementById('zr-cpl') || {}).value; saveZr(d);
+    var b = document.getElementById('zr-cpl-badge'); if (b) { b.textContent = 'manuell'; b.className = 'lr-badge manual'; }
+    zrCalc();
+  };
+
+  window.zrCalc = function() {
+    var produktpreis = zrNum('zr-produktpreis') || PRODUKT_PREIS;
+    var cpl = zrNum('zr-cpl');
+    var org = zrNum('zr-org');
+    var su1 = zrNum('zr-su1'), su2 = zrNum('zr-su2'), tq = zrNum('zr-tq'), aq = zrNum('zr-aq'), glowR = zrNum('zr-glow');
+    // Eingaben sichern
+    var d = loadZr();
+    ['ziel', 'leads', 'produktpreis', 'org'].forEach(function(k) { var el = document.getElementById('zr-' + k); if (el) d[k] = el.value; });
+    saveZr(d);
+
+    var revPerLead = (su2 / 100 * tq / 100 * aq / 100 * produktpreis) + (glowR / 100 * GLOW_PREIS);
+    var ziel = zrNum('zr-ziel');
+    var leads = zrState === 'ziel' ? (revPerLead > 0 ? Math.ceil(ziel / revPerLead) : 0) : zrNum('zr-leads');
+
+    var t1 = Math.round(leads * su1 / 100), t2 = Math.round(leads * su2 / 100);
+    var termine = Math.round(t2 * tq / 100), sales = Math.round(termine * aq / 100), glow = Math.round(leads * glowR / 100);
+    var produktUmsatz = sales * produktpreis, glowUmsatz = glow * GLOW_PREIS, total = produktUmsatz + glowUmsatz;
+    var paid = Math.max(0, leads - org), budget = paid * cpl, gewinn = total - budget;
+
+    function card(label, val, note, cls) {
+      return '<div class="kpi-card ' + (cls || '') + '"><p class="kpi-label">' + label + '</p><p class="kpi-num">' + val + '</p><p class="kpi-note">' + note + '</p></div>';
+    }
+    var res = document.getElementById('zr-result');
+    if (res) {
+      if (zrState === 'ziel') {
+        res.innerHTML =
+          card('Benötigte Anmeldungen', leads > 0 ? leads.toLocaleString('de-DE') : '—', 'für ' + fmtEur(ziel) + ' Umsatz', 'highlight') +
+          card('Benötigtes Ad-Budget', (budget > 0) ? fmtEur(budget) : '—', paid.toLocaleString('de-DE') + ' Paid × ' + eur2(cpl), 'highlight') +
+          card('Benötigte Käufe', sales > 0 ? sales.toLocaleString('de-DE') : '—', '× ' + fmtEur(produktpreis) + ' Produkt', '') +
+          card('Umsatz / Anmeldung', revPerLead > 0 ? eur2(revPerLead) : '—', 'wichtigste Hebel-Kennzahl', 'orange') +
+          card('Prognose-Gewinn', (leads > 0) ? fmtEur(gewinn) : '—', 'Umsatzziel − Ad-Budget', '');
+      } else {
+        res.innerHTML =
+          card('Gesamt-Umsatz', total > 0 ? fmtEur(total) : '—', 'Produkt + Glow', 'highlight') +
+          card('Käufe', sales > 0 ? sales.toLocaleString('de-DE') : '—', 'aus ' + leads.toLocaleString('de-DE') + ' Anmeldungen', '') +
+          card('Benötigtes Ad-Budget', (budget > 0) ? fmtEur(budget) : '—', paid.toLocaleString('de-DE') + ' Paid × ' + eur2(cpl), 'highlight') +
+          card('Umsatz / Anmeldung', revPerLead > 0 ? eur2(revPerLead) : '—', 'wichtigste Hebel-Kennzahl', 'orange') +
+          card('Gewinn', total > 0 ? fmtEur(gewinn) : '—', 'Umsatz − Ad-Budget', '');
+      }
+    }
+    var chain = document.getElementById('zr-chain');
+    if (chain) {
+      var ci = function(x, lbl) { return '<div class="lr-chain-item"><span class="lr-chain-num">' + x.toLocaleString('de-DE') + '</span><span class="lr-chain-lbl">' + lbl + '</span></div>'; };
+      var sep = '<div class="lr-chain-sep">→</div>';
+      chain.innerHTML = ci(leads, 'Anmeldungen') + sep + ci(t1, 'Tag 1') + sep + ci(t2, 'Tag 2') + sep + ci(termine, 'Termine') + sep + ci(sales, 'Käufe');
+    }
+  };
+
+  function restoreZr() {
+    var d = loadZr();
+    zrState = d.mode || 'ziel';
+    [['zr-ziel', d.ziel], ['zr-leads', d.leads], ['zr-org', d.org]].forEach(function(p) {
+      if (p[1] !== undefined && p[1] !== '' && document.getElementById(p[0])) document.getElementById(p[0]).value = p[1];
+    });
+    if (d.produktpreis !== undefined && d.produktpreis !== '') { var pp = document.getElementById('zr-produktpreis'); if (pp) pp.value = d.produktpreis; }
+    ['su1', 'su2', 'tq', 'aq', 'glow'].forEach(function(k) {
+      if (d[k] !== undefined) { var s = document.getElementById('zr-' + k), l = document.getElementById('zr-' + k + '-val'); if (s) s.value = d[k]; if (l) l.textContent = d[k] + ' %'; }
+    });
+    // CPL: manuell > live (Ad-Kosten ÷ Paid) > Benchmark 15 €
+    var cplEl = document.getElementById('zr-cpl'), badge = document.getElementById('zr-cpl-badge');
+    if (d.cpl !== undefined && d.cpl !== '') {
+      if (cplEl) cplEl.value = d.cpl;
+      if (badge) { badge.textContent = 'manuell'; badge.className = 'lr-badge manual'; }
+    } else {
+      if (cplEl) cplEl.value = liveAdCpl !== null ? liveAdCpl : 15;
+      if (badge) { badge.textContent = liveAdCpl !== null ? 'Live · Meta' : 'Benchmark'; badge.className = liveAdCpl !== null ? 'lr-badge live' : 'lr-badge calc'; }
+    }
+    zrMode(zrState);
+  }
+
+  // CPL automatisch auf Live-Meta-Wert setzen, solange nicht manuell überschrieben
+  function zrSyncLiveCpl() {
+    var d = loadZr();
+    if (d.cpl !== undefined && d.cpl !== '') return; // manueller Wert hat Vorrang
+    if (liveAdCpl === null) return;
+    var cplEl = document.getElementById('zr-cpl'), badge = document.getElementById('zr-cpl-badge');
+    if (!cplEl) return;
+    cplEl.value = liveAdCpl;
+    if (badge) { badge.textContent = 'Live · Meta'; badge.className = 'lr-badge live'; }
+    if (typeof zrCalc === 'function') zrCalc();
+  }
+
+  // ---- Init ----
+  restoreInputs();
+  restoreLr();
+  restoreZr();
+  document.querySelectorAll('.ws-btn').forEach(function(b) { b.classList.toggle('active', parseInt(b.getAttribute('data-ws'), 10) === currentWs); });
+  setIstInputs();
+  restoreAdsTrk();
+  updateLiveRoi();
+  switchTab('overview');
+  fetchLive();
+  fetchUtmStats();
+  fetchPurchases();
+  fetchTimeseries();
+  fetchAds();
+  fetchAdsWsTotal();
+  fetchGlowSource();
+  fetchFunnel();
+  setInterval(function() { fetchLive(); fetchUtmStats(); fetchPurchases(); fetchTimeseries(); fetchAds(); fetchAdsWsTotal(); fetchGlowSource(); fetchFunnel(); if (abLoaded) fetchAbtest(); }, 5 * 60 * 1000);
+
+  // ============================================================
+  // UTM Link Manager
+  // ============================================================
+  var UTM_LS = 'ar_links_v1';
+  var utmStats = {};
+
+  function getLinks() { try { return JSON.parse(localStorage.getItem(UTM_LS) || '[]'); } catch(e) { return []; } }
+  function saveLinks(arr) { try { localStorage.setItem(UTM_LS, JSON.stringify(arr)); } catch(e) {} }
+  function escH(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function buildUtmUrl(src, med, cnt, trm) {
+    var base = 'https://start.vanessareinthaller.de/abnehmrevolution';
+    var p = [];
+    if (src) p.push('utm_source=' + encodeURIComponent(src));
+    if (med) p.push('utm_medium=' + encodeURIComponent(med));
+    p.push('utm_campaign=abnehmrevolution');
+    if (cnt) p.push('utm_content=' + encodeURIComponent(cnt));
+    if (trm) p.push('utm_term=' + encodeURIComponent(trm));
+    return base + '?' + p.join('&');
+  }
+
+  function utmKey(l) {
+    return [(l.source||''), (l.medium||''), (l.campaign||'abnehmrevolution'), (l.content||''), (l.term||'')].join('|');
+  }
+
+  window.updateUtmPreview = function() {
+    var src = (document.getElementById('utm-source')||{}).value || '';
+    var med = (document.getElementById('utm-medium')||{}).value || '';
+    var cnt = (document.getElementById('utm-content')||{}).value || '';
+    var trm = (document.getElementById('utm-term')||{}).value || '';
+    var link = document.getElementById('utm-url-link');
+    if (!link) return;
+    if (!src && !med && !cnt && !trm) { link.textContent = '—'; link.href = '#'; return; }
+    var url = buildUtmUrl(src, med, cnt, trm);
+    link.textContent = url.replace('https://', '');
+    link.href = url;
+  };
+
+  window.copyUtmUrl = function() {
+    var url = (document.getElementById('utm-url-link') || {}).href || '';
+    if (!url || url === '#' || url.endsWith('#')) return;
+    var btn = document.getElementById('utm-copy-btn');
+    (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).catch(function() {
+      var t = document.createElement('textarea'); t.value = url;
+      document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t);
+    });
+    if (btn) { btn.textContent = '✓ Kopiert!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Kopieren'; btn.classList.remove('copied'); }, 1600); }
+  };
+
+  window.copyLink = function(url) {
+    (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).catch(function() {
+      var t = document.createElement('textarea'); t.value = url;
+      document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t);
+    });
+  };
+
+  window.activateLink = function() {
+    var src = (document.getElementById('utm-source') || {}).value || '';
+    var med = (document.getElementById('utm-medium') || {}).value || '';
+    var cnt = (document.getElementById('utm-content') || {}).value || '';
+    var trm = (document.getElementById('utm-term') || {}).value || '';
+    var lbl = (document.getElementById('utm-label') || {}).value || '';
+    var note = document.getElementById('utm-activate-note');
+    if (!src.trim() && !med.trim() && !cnt.trim()) {
+      if (note) note.textContent = '⚠ Bitte mindestens Source, Medium oder Content ausfüllen.';
+      return;
+    }
+    var url = buildUtmUrl(src.trim(), med.trim(), cnt.trim(), trm.trim());
+    var label = lbl.trim() || [src, med, cnt].filter(function(x) { return x.trim(); }).join(' · ');
+    var links = getLinks();
+    links.push({ id: Date.now().toString(), label: label, source: src.trim(), medium: med.trim(), campaign: 'abnehmrevolution', content: cnt.trim(), term: trm.trim(), url: url, created: new Date().toISOString() });
+    saveLinks(links);
+    renderUtmLinks();
+    ['utm-source','utm-medium','utm-content','utm-term','utm-label'].forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ''; });
+    updateUtmPreview();
+    if (note) { note.textContent = '✓ Link gespeichert!'; setTimeout(function() { note.textContent = ''; }, 2200); }
+  };
+
+  window.deleteLink = function(id) {
+    if (!confirm('Diesen Tracking-Link wirklich löschen?')) return;
+    saveLinks(getLinks().filter(function(l) { return l.id !== id; }));
+    renderUtmLinks();
+  };
+
+  function renderUtmLinks() {
+    var links = getLinks();
+    var c = document.getElementById('utm-links-container');
+    if (!c) return;
+    if (!links.length) { c.innerHTML = ''; return; }
+    c.innerHTML = '<div class="utm-links-header">Aktive Links (' + links.length + ')</div>' +
+      links.map(function(l) {
+        var key = utmKey(l);
+        var count = (utmStats && utmStats[key] !== undefined) ? Number(utmStats[key]).toLocaleString('de-DE') : '—';
+        return [
+          '<div class="utm-link-row">',
+          '  <div class="utm-link-info">',
+          '    <div class="utm-link-label">' + escH(l.label) + '</div>',
+          '    <a href="' + escH(l.url) + '" target="_blank" rel="noopener" class="utm-link-url">' + escH((l.url||'').replace('https://','')) + '</a>',
+          '  </div>',
+          '  <div class="utm-link-meta">',
+          '    <div class="utm-link-count"><span class="utm-count-num" id="ucnt-' + l.id + '">' + count + '</span><span class="utm-count-lbl">Leads</span></div>',
+          '    <button onclick="copyLink(\'' + escH(l.url) + '\')" class="utm-btn" title="URL kopieren"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>',
+          '    <button onclick="deleteLink(\'' + l.id + '\')" class="utm-btn utm-btn-delete" title="Löschen"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg></button>',
+          '  </div>',
+          '</div>'
+        ].join('');
+      }).join('');
+  }
+
+  // ---- Glow purchases from Kit ----
+  function fetchPurchases() {
+    return fetch('https://abnehmrevolution-funnel.vercel.app/api/purchases' + buildQ(), { cache: 'no-store' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.glow !== null && d.glow !== undefined) {
+          liveGlow = d.glow; // Umsatz-Note wird in updateCalc gesetzt
+        } else if (d.error) {
+          var glowEl2 = document.getElementById('kpi-glow-note');
+          if (glowEl2) glowEl2.textContent = 'Fehler: ' + d.error;
+        }
+        updateCalc();
+        updateLiveRoi();
+      }).catch(function() {});
+  }
+
+  // ---- Funnel-Performance (Seitenfluss) ----
+  function fetchFunnel() {
+    return fetch('https://abnehmrevolution-funnel.vercel.app/api/funnel' + buildQ(), { cache: 'no-store' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { renderFunnel(d); })
+      .catch(function() {});
+  }
+  function renderFunnel(d) {
+    var box = document.getElementById('funnel-steps');
+    var stand = document.getElementById('funnel-stand');
+    if (!box) return;
+    var p = d.pages || {};
+    var N1 = p.landing || 0, N3 = p.bestaetigung || 0, N4 = p.aufzeichnung || 0;
+    var leads = d.leads || 0;
+    // Danke-Seite 1 = jede Anmeldung landet dort (Kit-Quelle, zuverlässig).
+    // Der danke-Pageview-Beacon (p.danke) untererfasst stark (schneller Redirect) und wird NICHT genutzt.
+    var danke = leads;
+    var G = d.glow || 0, NB = Math.max(0, danke - G);
+    var base = Math.max(N1, danke, N3, N4, 1);
+
+    if (stand) {
+      var errs = [];
+      if (d.posthog_error) errs.push('Seiten: ' + d.posthog_error);
+      if (d.kit_error) errs.push('Kit: ' + d.kit_error);
+      stand.textContent = 'Seitenfluss · ' + N1.toLocaleString('de-DE') + ' Besucher · ' + leads.toLocaleString('de-DE') + ' Anmeldungen' + (errs.length ? ' (' + errs.join(' · ') + ')' : '');
+    }
+    if (N1 === 0 && leads === 0) {
+      box.innerHTML = '<div class="chart-empty">Noch keine Daten erfasst.</div>';
+      return;
+    }
+
+    function step(label, val, refBase, color, opts) {
+      opts = opts || {};
+      var pct = refBase > 0 ? Math.round(val / refBase * 100) : 0;
+      var w = Math.max(val / base * 100, 2);
+      return '<div class="fn-step' + (opts.sub ? ' fn-sub' : '') + '">' +
+        '<div class="fn-row">' +
+          '<div class="fn-label">' + label + '</div>' +
+          '<div class="fn-bar-wrap"><div class="fn-bar" style="width:' + w + '%;background:' + color + '"><span class="fn-bar-val">' + val.toLocaleString('de-DE') + '</span></div></div>' +
+          '<div class="fn-pct">' + pct + ' %</div>' +
+        '</div></div>';
+    }
+    function drop(fromV, toV) {
+      var lost = Math.max(0, fromV - toV);
+      if (lost <= 0 || fromV <= 0) return '';
+      var pct = Math.round(lost / fromV * 100);
+      return '<div class="fn-drop">▼ ' + lost.toLocaleString('de-DE') + ' verloren (' + pct + ' %)</div>';
+    }
+
+    var html = '';
+    html += step('Besucher (Landing)', N1, N1, '#1B2020');
+    html += drop(N1, danke);
+    html += step('Anmeldung · Danke-Seite 1', danke, N1, '#476160');
+    html += step('↳ Glow gekauft', G, danke, '#2E7D54', { sub: true });
+    html += step('↳ Nicht gekauft', NB, danke, '#9a9087', { sub: true });
+    if (N3 > 0 || N4 > 0) {
+      html += '<div style="margin:14px 0 8px;font-size:10.5px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#b3a99e;">Seiten-Tracking · Pageviews (kann untererfassen)</div>';
+      if (N3 > 0) html += step('Danke-Seite 2 (Bestätigung)', N3, N1, '#CA5D25');
+      if (N4 > 0) html += step('Aufzeichnung besucht', N4, N1, '#b8431a');
+    }
+    html += '<div style="margin-top:12px;font-size:11px;color:#9a9087;line-height:1.5;">„Anmeldung · Danke-Seite 1" = Kit-Anmeldungen (jede Opt-in landet dort) — zuverlässig. <b>Danke-Seite 2 &amp; Aufzeichnung</b> sind reine Pageview-Beacons und untererfassen oft (schnelle Weiterleitung), daher nur als grobe Orientierung.</div>';
+    box.innerHTML = html;
+  }
+
+  // ---- Glow-Käufe: Wann & Woher (direct vs. follow-up) ----
+  function fetchGlowSource() {
+    return fetch('https://abnehmrevolution-funnel.vercel.app/api/glow-source' + buildQ(), { cache: 'no-store' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { renderGlowSource(d); })
+      .catch(function() {});
+  }
+  function renderGlowSource(d) {
+    var set = function(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
+    var stand = document.getElementById('glowsrc-stand');
+    var tbl = document.getElementById('glowsrc-table');
+    if (d.error) {
+      set('glowsrc-direct', '—'); set('glowsrc-followup', '—');
+      if (stand) stand.textContent = 'Kit: ' + d.error;
+      if (tbl) tbl.innerHTML = '';
+      return;
+    }
+    set('glowsrc-direct', (d.direct || 0).toLocaleString('de-DE'));
+    set('glowsrc-followup', (d.followup || 0).toLocaleString('de-DE'));
+    var items = d.items || [];
+    var a = d.acq || {};
+    var acqTxt = ' · Akquise: ' + (a.paid || 0) + ' Paid / ' + (a.organic || 0) + ' Organic / ' + (a.email || 0) + ' E-Mail / ' + (a.direct || 0) + ' Direkt';
+    if (stand) stand.textContent = (d.total || 0) + ' Glow-Käufe · Direkt vs. Follow-up' + (d.unknown ? (' · ' + d.unknown + ' ohne Anmelde-Zeit') : '') + acqTxt;
+    if (!tbl) return;
+    if (!items.length) { tbl.innerHTML = '<div class="chart-empty">Noch keine Glow-Käufe im Zeitraum.</div>'; return; }
+    function fmtDT(iso) {
+      if (!iso) return '—';
+      var dt = new Date(iso);
+      return dt.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + ' ' + dt.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    }
+    function fmtGap(m) {
+      if (m === null || m === undefined) return '—';
+      if (m < 60) return m + ' Min';
+      if (m < 1440) return (Math.round(m / 6) / 10).toLocaleString('de-DE') + ' Std';
+      return Math.round(m / 1440) + ' Tage';
+    }
+    var labels = { direct: 'Direkt', followup: 'Follow-up', unbekannt: 'Unbekannt' };
+    var dash = '<span style="color:#c4bbb0;">—</span>';
+    var cell = function(v) { return v ? escH(v) : dash; };
+    var html = '<div style="overflow-x:auto;"><table class="utm-table"><thead><tr>' +
+      '<th>Käufer</th><th>Akquise</th><th>Variante</th><th>utm_source</th><th>utm_medium</th><th>Campaign</th><th>Content (Ad)</th><th>Term (Adset)</th><th>Kauf</th><th>Δ Zeit</th>' +
+      '</tr></thead><tbody>';
+    items.forEach(function(it) {
+      html += '<tr>';
+      html += '<td style="font-weight:700;white-space:nowrap;" title="' + escH(it.email) + '">' + escH(it.name) + '</td>';
+      html += '<td>' + srcPill(it.acq_type, it.acq_label) + '</td>';
+      html += '<td>' + varPill(it.variant) + '</td>';
+      html += '<td>' + cell(it.utm_source) + '</td>';
+      html += '<td>' + cell(it.utm_medium) + '</td>';
+      html += '<td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + escH(it.utm_campaign) + '">' + cell(it.utm_campaign) + '</td>';
+      html += '<td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + escH(it.utm_content) + '">' + cell(it.utm_content) + '</td>';
+      html += '<td>' + cell(it.utm_term) + '</td>';
+      html += '<td style="white-space:nowrap;"><span class="utm-type-pill ' + it.source + '">' + (labels[it.source] || it.source) + '</span></td>';
+      html += '<td style="white-space:nowrap;color:#7A6F63;">' + fmtGap(it.gap_min) + '</td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+    tbl.innerHTML = html;
+  }
+
+  // ---- Meta Ads (live aus Werbekonto) ----
+  function eur2(x) { return (Math.round(x * 100) / 100).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'; }
+
+  // ---- Funnelguru-Tracking-Tabelle (Tag + Woche) ----
+  function isoWeek(dt) {
+    var d = new Date(Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate()));
+    var day = d.getUTCDay() || 7; d.setUTCDate(d.getUTCDate() + 4 - day);
+    var ys = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d - ys) / 86400000) + 1) / 7);
+  }
+  window.onAdsTrk = function(key, val) { var d = loadLr(); d['adstrk_' + key] = val; saveLr(d); renderAdsTracking(); };
+  function adsTrkNum(inputId, key, def) {
+    var d = loadLr();
+    if (d['adstrk_' + key] !== undefined && d['adstrk_' + key] !== '') { var v = parseFloat(d['adstrk_' + key]); return isNaN(v) ? def : v; }
+    var el = document.getElementById(inputId);
+    if (el && el.value !== '') { var w = parseFloat(el.value); return isNaN(w) ? def : w; }
+    return def;
+  }
+  function restoreAdsTrk() {
+    var d = loadLr();
+    if (d.adstrk_budget !== undefined) { var b = document.getElementById('ads-budget'); if (b) b.value = d.adstrk_budget; }
+    if (d.adstrk_zielcpl !== undefined) { var z = document.getElementById('ads-zielcpl'); if (z) z.value = d.adstrk_zielcpl; }
+  }
+  var WD = ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'];
+  function renderAdsTracking() {
+    var daily = document.getElementById('ads-daily-table');
+    var weekly = document.getElementById('ads-weekly-table');
+    if (!daily) return;
+    var rows = (tsData || []).filter(function(r) { return (r.spend || 0) > 0 || (r.impressions || 0) > 0 || (r.metaLeads || 0) > 0 || (r.signups || 0) > 0; });
+    var zielCpl = adsTrkNum('ads-zielcpl', 'zielcpl', 20);
+    var budget = adsTrkNum('ads-budget', 'budget', null);
+
+    // Header: Ausgegeben / Rest
+    var totalSpend = (tsData || []).reduce(function(a, r) { return a + (r.spend || 0); }, 0);
+    var setT = function(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
+    setT('ads-spent2', eur2(totalSpend));
+    setT('ads-rest', budget !== null ? eur2(budget - totalSpend) : '—');
+
+    if (!rows.length) { daily.innerHTML = '<div class="chart-empty">Noch keine Ad-Tage im Zeitraum.</div>'; if (weekly) weekly.innerHTML = ''; return; }
+
+    var num = function(v) { return (v || 0).toLocaleString('de-DE'); };
+    function cell(spend, impr, clicks, leads, signups, glow) {
+      var cpm = impr > 0 ? (spend / impr * 1000) : null;
+      var cpc = clicks > 0 ? (spend / clicks) : null;
+      var ctr = impr > 0 ? (clicks / impr * 100) : null;
+      var cpl = leads > 0 ? (spend / leads) : null;
+      var cplCol = cpl === null ? '#c4bbb0' : (cpl <= zielCpl ? '#2E7D54' : '#C0392B');
+      return '<td style="white-space:nowrap;">' + eur2(spend) + '</td>' +
+        '<td>' + num(impr) + '</td>' +
+        '<td>' + (cpm !== null ? eur2(cpm) : '—') + '</td>' +
+        '<td>' + num(clicks) + '</td>' +
+        '<td style="white-space:nowrap;">' + (cpc !== null ? eur2(cpc) : '—') + '</td>' +
+        '<td>' + (ctr !== null ? fmtPct(ctr) : '—') + '</td>' +
+        '<td style="font-weight:700;">' + num(leads) + '</td>' +
+        '<td style="white-space:nowrap;font-weight:700;color:' + cplCol + ';">' + (cpl !== null ? eur2(cpl) : '—') + '</td>' +
+        '<td>' + num(signups) + '</td>' +
+        '<td>' + num(glow) + '</td>';
+    }
+    var head = '<thead><tr><th>KW</th><th>Datum</th><th>Tag</th><th>Ad-Spend</th><th>Impr.</th><th>CPM</th><th>Klicks</th><th>CPC</th><th>CTR</th><th>Leads</th><th>CPL</th><th>Anmeld.</th><th>Upsell</th></tr></thead>';
+
+    // Tages-Tabelle
+    var tot = { spend: 0, impr: 0, clicks: 0, leads: 0, signups: 0, glow: 0 };
+    var body = '';
+    rows.forEach(function(r) {
+      var dt = new Date(r.date + 'T00:00:00Z');
+      tot.spend += r.spend || 0; tot.impr += r.impressions || 0; tot.clicks += r.clicks || 0;
+      tot.leads += r.metaLeads || 0; tot.signups += r.signups || 0; tot.glow += r.glow || 0;
+      body += '<tr><td>' + isoWeek(dt) + '</td><td style="white-space:nowrap;">' + r.date.slice(8, 10) + '.' + r.date.slice(5, 7) + '.</td><td>' + WD[dt.getUTCDay()] + '</td>' +
+        cell(r.spend || 0, r.impressions || 0, r.clicks || 0, r.metaLeads || 0, r.signups || 0, r.glow || 0) + '</tr>';
+    });
+    body += '<tr style="border-top:2px solid rgba(27,32,32,0.15);font-weight:800;"><td colspan="3">Σ Gesamt</td>' +
+      cell(tot.spend, tot.impr, tot.clicks, tot.leads, tot.signups, tot.glow) + '</tr>';
+    daily.innerHTML = '<div style="overflow-x:auto;"><table class="utm-table">' + head + '<tbody>' + body + '</tbody></table></div>';
+
+    // Wochen-Tabelle
+    if (weekly) {
+      var byKw = {};
+      rows.forEach(function(r) {
+        var kw = isoWeek(new Date(r.date + 'T00:00:00Z'));
+        if (!byKw[kw]) byKw[kw] = { kw: kw, spend: 0, impr: 0, clicks: 0, leads: 0, signups: 0, glow: 0 };
+        var w = byKw[kw];
+        w.spend += r.spend || 0; w.impr += r.impressions || 0; w.clicks += r.clicks || 0;
+        w.leads += r.metaLeads || 0; w.signups += r.signups || 0; w.glow += r.glow || 0;
+      });
+      var weeks = Object.values(byKw).sort(function(a, b) { return a.kw - b.kw; });
+      var whead = '<thead><tr><th>KW</th><th>Ad-Spend</th><th>Impr.</th><th>CPM</th><th>Klicks</th><th>CPC</th><th>CTR</th><th>Leads</th><th>CPL</th><th>Anmeld.</th><th>Upsell</th></tr></thead>';
+      var wbody = weeks.map(function(w) {
+        return '<tr><td style="font-weight:700;">KW ' + w.kw + '</td>' + cell(w.spend, w.impr, w.clicks, w.leads, w.signups, w.glow) + '</tr>';
+      }).join('');
+      weekly.innerHTML = '<div style="overflow-x:auto;"><table class="utm-table">' + whead + '<tbody>' + wbody + '</tbody></table></div>';
+    }
+  }
+
+  function renderAdsCampaigns(rows) {
+    var el = document.getElementById('ads-campaign-table');
+    if (!el) return;
+    if (!rows || !rows.length) { el.innerHTML = '<div class="chart-empty">Keine Kampagnendaten.</div>'; return; }
+    var html = '<div style="overflow-x:auto;"><table class="utm-table"><thead><tr><th>Kampagne</th><th>Spend</th><th>Impr.</th><th>Klicks</th><th>CTR</th><th>CPC</th><th>Leads</th><th>CPL</th></tr></thead><tbody>';
+    rows.forEach(function (r) {
+      html += '<tr>';
+      html += '<td style="font-weight:700;max-width:230px;" title="' + escH(r.name) + '">' + escH(r.name) + '</td>';
+      html += '<td style="white-space:nowrap;">' + eur2(r.spend || 0) + '</td>';
+      html += '<td>' + (r.impressions || 0).toLocaleString('de-DE') + '</td>';
+      html += '<td>' + (r.clicks || 0).toLocaleString('de-DE') + '</td>';
+      html += '<td>' + fmtPct(r.ctr || 0) + '</td>';
+      html += '<td style="white-space:nowrap;">' + eur2(r.cpc || 0) + '</td>';
+      html += '<td style="font-weight:700;">' + (r.leads || 0).toLocaleString('de-DE') + '</td>';
+      html += '<td style="white-space:nowrap;font-weight:700;color:#CA5D25;">' + (r.cpl != null ? eur2(r.cpl) : '—') + '</td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+    el.innerHTML = html;
+  }
+  function fetchAds() {
+    return fetch('https://abnehmrevolution-funnel.vercel.app/api/ads' + buildQ(), { cache: 'no-store' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var set = function(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
+        var chip = document.getElementById('ads-status-chip');
+        var ph = document.getElementById('ads-placeholder');
+        if (d.error) {
+          liveAdSpend = null; liveAdLeads = null; liveAdCpl = null;
+          if (chip) chip.textContent = d.error === 'not_configured' ? 'Token fehlt' : 'Fehler';
+          if (ph) { ph.style.display = ''; ph.lastChild && (ph.lastChild.textContent = ' Meta: ' + (d.message || d.error)); }
+          updateCalc(); updateLiveRoi();
+          return;
+        }
+        liveAdSpend = typeof d.spend === 'number' ? d.spend : null;
+        liveAdLeads = typeof d.leads === 'number' ? d.leads : null;
+        liveAdCpl = typeof d.cpl === 'number' ? d.cpl : null;
+        set('ads-spend', eur2(d.spend || 0));
+        set('ads-reach', (d.reach || 0).toLocaleString('de-DE'));
+        set('ads-impressions', (d.impressions || 0).toLocaleString('de-DE'));
+        set('ads-clicks', (d.clicks || 0).toLocaleString('de-DE'));
+        set('ads-leads', liveAdLeads !== null ? liveAdLeads.toLocaleString('de-DE') : '—');
+        set('ads-cpl', liveAdCpl !== null ? eur2(liveAdCpl) : '—');
+        set('ads-ctr', fmtPct(d.ctr || 0));
+        set('ads-cpm', eur2(d.cpm || 0));
+        set('ads-cpc', eur2(d.cpc || 0));
+        var glow = liveGlow !== null ? liveGlow : 0;
+        var roas = d.spend > 0 ? (glow * GLOW_PREIS) / d.spend : null;
+        set('ads-roas', roas !== null ? fmtRoas(roas) : '—');
+        if (chip) { chip.textContent = '● live · ' + (d.campaigns || 0) + ' Kampagnen'; chip.style.background = 'rgba(46,125,84,0.12)'; chip.style.color = '#2E7D54'; }
+        if (ph) ph.style.display = 'none';
+        renderAdsCampaigns(d.campaignRows || []);
+        updateCalc(); updateLiveRoi();
+        if (typeof zrSyncLiveCpl === 'function') zrSyncLiveCpl();
+      }).catch(function() {});
+  }
+
+  // Gesamt-Ad-Spend über das Workshop-Zeitfenster (unabhängig vom Datumsfilter) — für die Kachel-Note.
+  function fetchAdsWsTotal() {
+    var w = wsWin();
+    var q = '?from=' + encodeURIComponent(w.from) + '&to=' + encodeURIComponent(w.to) + '&ws=' + currentWs;
+    return fetch('https://abnehmrevolution-funnel.vercel.app/api/ads' + q, { cache: 'no-store' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { liveAdSpendWs = (d && typeof d.spend === 'number') ? d.spend : null; updateCalc(); })
+      .catch(function() {});
+  }
+
+  // ---- UTM stats + breakdown table ----
+  // Klassifizierung Paid / Organic / E-Mail — robust gegen Meta-Ad-Platzierungen als Quelle
+  function utmType(source, medium) {
+    var s = (source || '').toLowerCase();
+    var m = (medium || '').toLowerCase();
+    // E-Mail / Owned (Kit-Broadcasts etc.)
+    if (m === 'email' || m === 'newsletter' || s === 'convertkit' || s === 'kit') return 'email';
+    // explizit bezahlte Medien
+    var paidMediums = ['cpc', 'ppc', 'paid', 'paid_social', 'paidsocial', 'pmax', 'cpm', 'ads', 'display', 'retargeting', 'paidsearch'];
+    if (paidMediums.indexOf(m) !== -1) return 'paid';
+    // Meta-Ad-Platzierungen als Quelle (Facebook_Mobile_Feed, Instagram_Stories/Reels, Audience Network …)
+    if (/_feed|_stories|_reels|_explore|_search|audience_network|messenger|marketplace|right_hand_column|video_feeds|profile_feed/.test(s)) return 'paid';
+    // generische Ad-Plattformen, sofern KEIN organisches Medium
+    var adSources = ['facebook', 'instagram', 'meta', 'fb', 'ig', 'an', 'tiktok', 'google', 'googleads', 'adwords', 'youtube', 'bing', 'linkedin', 'snapchat', 'pinterest'];
+    var organicMediums = ['story', 'stories', 'status', 'reel', 'reels', 'post', 'bio', 'link-in-bio', 'linkinbio', 'dm', 'mc', 'organic', 'profile', ''];
+    if (adSources.indexOf(s) !== -1 && organicMediums.indexOf(m) === -1) return 'paid';
+    return 'organic';
+  }
+
+  function fetchUtmStats() {
+    return fetch('https://abnehmrevolution-funnel.vercel.app/api/utm-stats' + buildQ(), { cache: 'no-store' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        utmStats = d.by_utm || {};
+        var total = d.total || 0;
+        // update link counts
+        getLinks().forEach(function(l) {
+          var el = document.getElementById('ucnt-' + l.id);
+          if (!el) return;
+          var key = utmKey(l);
+          el.textContent = utmStats[key] !== undefined ? Number(utmStats[key]).toLocaleString('de-DE') : '0';
+        });
+        renderUtmTable(utmStats, total);
+      }).catch(function() {});
+  }
+
+  function renderUtmTable(byUtm, total) {
+    var stand = document.getElementById('utm-table-stand');
+    var tableEl = document.getElementById('utm-breakdown-table');
+    var splitRow = document.getElementById('split-row');
+    if (!tableEl) return;
+    if (!total) {
+      if (stand) stand.textContent = 'Keine Daten für diesen Zeitraum.';
+      tableEl.innerHTML = '';
+      if (splitRow) splitRow.style.display = 'none';
+      return;
+    }
+    var rows = [], organicTotal = 0, paidTotal = 0;
+    Object.keys(byUtm).forEach(function(key) {
+      var count = byUtm[key] || 0;
+      var parts = key.split('|');
+      var src = parts[0] || '', med = parts[1] || '', camp = parts[2] || '', cont = parts[3] || '', term = parts[4] || '';
+      var type = utmType(src, med);
+      if (type === 'paid') paidTotal += count; else organicTotal += count; // organic = nicht-paid (inkl. E-Mail)
+      rows.push({ src: src, med: med, camp: camp, cont: cont, term: term, count: count, type: type });
+    });
+    rows.sort(function(a, b) { return b.count - a.count; });
+
+    // expose for Live ROI
+    liveOrganic = organicTotal;
+    livePaid = paidTotal;
+
+    // split bar
+    if (splitRow) splitRow.style.display = 'flex';
+    var orgPct = total > 0 ? Math.round(organicTotal / total * 100) : 0;
+    function setEl(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+    setEl('split-organic', organicTotal.toLocaleString('de-DE'));
+    setEl('split-paid', paidTotal.toLocaleString('de-DE'));
+    setEl('split-organic-pct', orgPct + ' % organic');
+    setEl('split-paid-pct', (100 - orgPct) + ' % paid');
+    var fill = document.getElementById('split-bar-fill');
+    if (fill) fill.style.width = orgPct + '%';
+    setEl('kpi-organic', total > 0 ? organicTotal.toLocaleString('de-DE') : '—');
+    setEl('kpi-paid', total > 0 ? paidTotal.toLocaleString('de-DE') : '—');
+
+    // table
+    function trunc(s, n) { s = (s === '' || s == null) ? '—' : s; return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+    function cell(val, n, extra) { return '<td title="' + escH(val || '') + '"' + (extra || '') + '>' + escH(trunc(val, n)) + '</td>'; }
+    var typeLabel = { paid: 'Paid', organic: 'Organic', email: 'E-Mail' };
+    var html = '<div style="overflow-x:auto;"><table class="utm-table"><thead><tr><th>Quelle</th><th>Medium</th><th>Campaign</th><th>Content</th><th>Term</th><th>Leads</th><th>Anteil</th><th>Typ</th></tr></thead><tbody>';
+    rows.forEach(function(r) {
+      var pct = total > 0 ? Math.round(r.count / total * 100) : 0;
+      html += '<tr>';
+      html += cell(r.src, 18, ' style="font-weight:700;white-space:nowrap;"');
+      html += cell(r.med, 18, ' style="color:#7A6F63;white-space:nowrap;"');
+      html += cell(r.camp, 26, ' style="color:#7A6F63;"');
+      html += cell(r.cont, 22, ' style="color:#7A6F63;"');
+      html += cell(r.term, 14, ' style="color:#7A6F63;"');
+      html += '<td style="font-weight:700;white-space:nowrap;">' + r.count.toLocaleString('de-DE') + '</td>';
+      html += '<td style="white-space:nowrap;">' + pct + ' %</td>';
+      html += '<td><span class="utm-type-pill ' + r.type + '">' + typeLabel[r.type] + '</span></td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+    tableEl.innerHTML = html;
+    if (stand) stand.textContent = 'Aufschlüsselung · ' + total.toLocaleString('de-DE') + ' Anmeldungen gesamt';
+    updateCalc();
+    updateLiveRoi();
+    if (typeof zrSyncLiveCpl === 'function') zrSyncLiveCpl();
+  }
+
+  renderUtmLinks();
+})();
+</script>
+
+<script src="/abnehmrevolution/js/dashboard.js" defer></script>
+</body>
+</html>

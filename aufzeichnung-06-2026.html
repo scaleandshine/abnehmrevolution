@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Aufzeichnung Juni 2026 · Die Abnehmrevolution</title>
+  <link rel="icon" type="image/svg+xml" href="/abnehmrevolution/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="/abnehmrevolution/css/tokens.css">
+<link rel="stylesheet" href="/abnehmrevolution/css/base.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: var(--ms-cream); color: var(--ms-charcoal); font-family: var(--ms-font-body); overflow-x: hidden; }
+
+  /* ---- Hero ---- */
+  .az-hero {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(100% 70% at 100% 0%, var(--ms-blush) 0%, rgba(247,224,209,0) 56%),
+      linear-gradient(180deg, #F3EADE 0%, var(--ms-cream) 100%);
+    padding: 46px 20px 64px;
+  }
+  .az-hero__inner { max-width: 780px; margin: 0 auto; text-align: center; }
+  .az-eyebrow {
+    font-family: var(--ms-font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 23px;
+    line-height: 1;
+    color: var(--ms-sage);
+    margin-bottom: 26px;
+  }
+  .az-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ms-charcoal);
+    color: var(--ms-white);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: var(--ms-radius-pill);
+    margin-bottom: 22px;
+  }
+  .az-h1 {
+    margin: 0 0 18px;
+    font-family: var(--ms-font-display);
+    font-weight: 600;
+    font-size: clamp(32px, 5vw, 50px);
+    line-height: 1.04;
+    color: var(--ms-charcoal);
+  }
+  .az-h1 em { font-style: italic; color: var(--ms-terracotta); }
+  .az-lead {
+    margin: 0 auto 14px;
+    max-width: 580px;
+    font-size: 16.5px;
+    line-height: 1.6;
+    color: #3a3530;
+  }
+  .az-lead--urgent {
+    margin: 0 auto 30px;
+    max-width: 560px;
+    font-size: 14.5px;
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--ms-terracotta-deep);
+  }
+
+  /* ---- Video ---- */
+  .az-video-wrap {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto 26px;
+  }
+  .az-video-frame {
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(12,17,20,0.08), 0 24px 60px rgba(31,26,21,0.22);
+  }
+  .az-video-frame .video-facade { border-radius: 0; }
+
+  /* ---- Footer ---- */
+  .az-footer {
+    background: #14191a;
+    color: rgba(239,231,221,0.6);
+    padding: 44px 20px;
+  }
+  .az-footer__inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+  }
+  .az-footer__brand {
+    font-family: var(--ms-font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 21px;
+    color: var(--ms-cream);
+  }
+  .az-footer__links { display: flex; gap: 22px; font-size: 14px; }
+  .az-footer__links a { color: rgba(239,231,221,0.75); text-decoration: none; }
+  .az-footer__copy { margin: 0; font-size: 13px; }
+  .az-footer__fb {
+    margin: 0;
+    font-size: 11px;
+    color: rgba(239,231,221,0.38);
+    max-width: 580px;
+    line-height: 1.6;
+  }
+
+  /* ---- YouTube-Player (Watch-Time-getrackt) ---- */
+  .video-facade[data-yt] { position: relative; aspect-ratio: 16 / 9; cursor: pointer; overflow: hidden; }
+  .video-facade[data-yt] img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .rec-yt-mount { position: absolute; inset: 0; }
+  .rec-yt-mount iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+  /* ---- Tag 2 + Buchungs-CTA ---- */
+  .az-tag2-head {
+    font-family: var(--ms-font-display); font-weight: 600;
+    font-size: clamp(24px, 3.6vw, 34px); line-height: 1.1;
+    color: var(--ms-charcoal); text-align: center; margin: 40px 0 18px;
+  }
+  .az-book { display: flex; flex-direction: column; align-items: center; margin-top: 40px; }
+  .az-book .cta { flex-direction: column; gap: 5px; line-height: 1.18; text-align: center; }
+  .az-book__main { font-size: inherit; font-weight: inherit; }
+  .az-book__note { font-size: 14px; font-weight: 600; opacity: 0.92; }
+  .az-spots {
+    display: flex; align-items: center; justify-content: center; gap: 11px; margin: 26px 0 0;
+    font-size: 15px; font-weight: 700; color: var(--ms-charcoal);
+  }
+  .az-spots__dot {
+    width: 14px; height: 14px; border-radius: 50%; background: #22c55e; flex: none;
+    box-shadow: 0 0 0 0 rgba(34,197,94,0.6); animation: az-pulse 1.6s ease-out infinite;
+  }
+  @keyframes az-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.55); }
+    70%  { box-shadow: 0 0 0 13px rgba(34,197,94,0); }
+    100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+  }
+  @media (prefers-reduced-motion: reduce) { .az-spots__dot { animation: none; } }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 760px) {
+    .az-hero { padding: 38px 18px 52px; }
+  }
+  @media (max-width: 560px) {
+    .az-eyebrow { font-size: 20px; margin-bottom: 20px; }
+    .az-lead { font-size: 15.5px; }
+    .az-footer__links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section data-screen-label="Aufzeichnung-Juni" class="az-hero">
+  <div class="az-hero__inner">
+    <div class="az-eyebrow">Die Abnehmrevolution</div>
+
+    <span class="az-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>Aufzeichnung · Juni 2026</span>
+
+    <h1 class="az-h1">Die exklusive <em>Aufzeichnung</em> deiner Abnehm-Revolution</h1>
+
+    <p class="az-lead">Du konntest nicht LIVE dabei sein oder möchtest die wichtigsten Momente noch einmal sehen?</p>
+    <p class="az-lead az-lead--urgent">Jetzt Workshop Aufzeichnung · Tag 1 ansehen</p>
+
+    <!-- VIDEO TAG 1 -->
+    <div class="az-video-wrap">
+      <div class="az-video-frame">
+        <div class="video-facade" data-yt="oKeKoJGQCQg" data-tag="1">
+          <img src="https://i.ytimg.com/vi/oKeKoJGQCQg/maxresdefault.jpg" alt="Aufzeichnung Tag 1 – Die Abnehmrevolution" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/oKeKoJGQCQg/hqdefault.jpg';">
+          <div class="play-btn"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIDEO TAG 2 -->
+    <h2 class="az-tag2-head">Sieh dir jetzt Tag 2 an:</h2>
+    <div class="az-video-wrap">
+      <div class="az-video-frame">
+        <div class="video-facade" data-yt="-qDUoq69ZSk" data-tag="2">
+          <img src="https://i.ytimg.com/vi/-qDUoq69ZSk/maxresdefault.jpg" alt="Aufzeichnung Tag 2 – Die Abnehmrevolution" onerror="if(this.dataset.fb!=='1'){this.dataset.fb='1';this.src='https://i.ytimg.com/vi/-qDUoq69ZSk/hqdefault.jpg';}else if(this.dataset.fb!=='2'){this.dataset.fb='2';this.src='/abnehmrevolution/assets/vanessa-portrait.png';}">
+          <div class="play-btn"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUCHUNGS-CTA -->
+    <div class="az-book">
+      <a id="rec-calendly" class="cta cta--lg" href="https://calendly.com/coaching_vanessa/info-call" target="_blank" rel="noopener noreferrer"><span class="az-book__main">Jetzt Gespräch mit Vanessa buchen</span><span class="az-book__note">Kostenloses Erstgespräch · begrenzte Plätze</span></a>
+      <div class="az-spots"><span class="az-spots__dot"></span>Nur 12 Plätze verfügbar</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="az-footer">
+  <div class="az-footer__inner">
+    <div class="az-footer__brand">Die Abnehmrevolution</div>
+    <div class="az-footer__links">
+      <a href="https://shop.vanessareinthaller.de/policies/legal-notice" target="_blank" rel="noopener noreferrer">Impressum</a>
+      <a href="https://shop.vanessareinthaller.de/policies/privacy-policy" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+      <a href="#">AGB</a>
+    </div>
+    <p class="az-footer__copy">© 2026 Vanessa Reinthaller · Mama Spagat</p>
+    <p class="az-footer__fb">This site is not a part of the Facebook website or Facebook Inc. Additionally, this site is NOT endorsed by Facebook in any way. FACEBOOK is a trademark of FACEBOOK, Inc.</p>
+  </div>
+</footer>
+
+<script defer src="/_vercel/insights/script.js"></script>
+<script src="/abnehmrevolution/js/consent.js" defer></script>
+<script src="/abnehmrevolution/js/tracking.js" defer></script>
+<script src="/abnehmrevolution/js/funnel.js" defer></script>
+<script src="/abnehmrevolution/js/rec-tracking.js" defer></script>
+<script>(function(){if(window.self!==window.top)return;try{var i=new Image();i.src='/abnehmrevolution/api/visit?p=aufzeichnung-06-2026';}catch(e){}})();</script>
+<script src="/abnehmrevolution/js/design.js" defer></script>
+</body>
+</html>

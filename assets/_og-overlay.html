@@ -1,0 +1,23 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+  html,body{margin:0;padding:0;}
+  #stage{position:relative;width:1200px;height:630px;overflow:hidden;
+    font-family:'Avenir Next','Montserrat','Helvetica Neue',sans-serif;}
+  #bg{position:absolute;inset:0;width:1200px;height:630px;display:block;}
+  /* Backing: reproduziert den BG-Verlauf (dunkel links -> warm rechts), löscht alten Pill+Zeilen-Block */
+  #back{position:absolute;left:46px;top:505px;width:424px;height:95px;
+    background:linear-gradient(90deg,#0F1417 0%,#10151A 22%,#14181B 46%,#1C1D1F 66%,#232120 86%,#2A2521 100%);}
+  #pill{position:absolute;left:64px;top:515px;width:394px;height:52px;box-sizing:border-box;
+    display:inline-flex;align-items:center;justify-content:center;gap:11px;border-radius:26px;
+    background:rgba(255,255,255,0.045);border:1px solid rgba(242,236,228,0.33);
+    font-weight:600;font-size:21px;color:#F5EFE7;letter-spacing:0.2px;white-space:nowrap;}
+  #pill .dot{color:#FF6A1F;font-weight:700;font-size:22px;line-height:1;}
+  #mitv{position:absolute;left:73px;top:575px;font-size:15px;font-weight:600;
+    letter-spacing:3.2px;color:#8F887E;text-transform:uppercase;white-space:nowrap;}
+</style></head><body>
+  <div id="stage">
+    <img id="bg" src="og-image.jpg">
+    <div id="back"></div>
+    <div id="pill">18. + 19. Juli 2026 <span class="dot">·</span> 10&#8211;12 Uhr</div>
+    <div id="mitv">Mit Vanessa Reinthaller</div>
+  </div>
+</body></html>

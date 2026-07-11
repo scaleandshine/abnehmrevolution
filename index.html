@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- A/B-Test: Varianten-Zuweisung VOR dem Render (flackerfrei). Aktiver Test zentral hier. -->
+<script>
+(function () {
+  var TEST = 'headline_v1'; // aktiver Micro-Test
+  var variant = 'A';
+  var forced = null, preview = false;
+  try {
+    var q = new URLSearchParams(window.location.search);
+    var qab = (q.get('ab') || '').toUpperCase();
+    if (qab === 'A' || qab === 'B') forced = qab;
+    preview = q.get('preview') === '1';
+  } catch (e2) {}
+  // Globale Fixierung aus dem Design-Editor (Gewinner erklärt): überschreibt den Zufalls-Split.
+  var globalForce = null;
+  try {
+    var dc = JSON.parse(localStorage.getItem('ar_design_cfg_v1') || 'null');
+    var gf = dc && dc.ab && dc.ab[TEST];
+    if (gf === 'A' || gf === 'B') globalForce = gf;
+  } catch (e4) {}
+  try {
+    var key = 'ab_' + TEST;
+    if (forced) {
+      variant = forced;
+      if (!preview) localStorage.setItem(key, variant);
+    } else if (globalForce) {
+      variant = globalForce;
+    } else {
+      variant = localStorage.getItem(key);
+      if (variant !== 'A' && variant !== 'B') {
+        variant = Math.random() < 0.5 ? 'A' : 'B';
+        localStorage.setItem(key, variant);
+      }
+    }
+  } catch (e) { variant = forced || globalForce || 'A'; }
+  document.documentElement.setAttribute('data-ab', variant);
+  // Bei globaler Fixierung läuft der Test nicht mehr → nicht in die Test-Auswertung tracken
+  window.__AB__ = globalForce && !forced ? { test: '', variant: '' } : { test: TEST, variant: variant };
+  window.__AB_PREVIEW__ = preview; // Preview-Aufrufe zählen NICHT in den Test
+})();
+</script>
+<title>Die Abnehmrevolution - Kostenloser 2-Tages-Workshop für Frauen Ü40</title>
+<meta name="description" content="Du kennst das als Frau Ü40, gefühlt hast du schon jede Diät mitgemacht, aber keine hat gehalten. Das ändern wir. Live &amp; kostenlos am 18. und 19. Juli 2026. Jetzt anmelden.">
+  <link rel="icon" type="image/svg+xml" href="/abnehmrevolution/favicon.svg">
+<!-- Open Graph / Social Preview -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:site_name" content="Die Abnehmrevolution">
+<meta property="og:url" content="https://start.vanessareinthaller.de/abnehmrevolution">
+<meta property="og:title" content="Die Abnehmrevolution - Kostenloser 2-Tages-Workshop">
+<meta property="og:description" content="Du kennst das als Frau Ü40, gefühlt hast du schon jede Diät mitgemacht, aber keine hat gehalten. Das ändern wir. Live &amp; kostenlos am 18. und 19. Juli 2026. Jetzt anmelden.">
+<meta property="og:image" content="https://start.vanessareinthaller.de/abnehmrevolution/assets/og-image.jpg?v=jul2026">
+<meta property="og:image:secure_url" content="https://start.vanessareinthaller.de/abnehmrevolution/assets/og-image.jpg?v=jul2026">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Die Abnehmrevolution - kostenloser 2-Tages-Workshop für Frauen Ü40 mit Vanessa Reinthaller">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Die Abnehmrevolution - Kostenloser 2-Tages-Workshop">
+<meta name="twitter:description" content="Du kennst das als Frau Ü40, gefühlt hast du schon jede Diät mitgemacht, aber keine hat gehalten. Das ändern wir. Live &amp; kostenlos am 18. und 19. Juli 2026. Jetzt anmelden.">
+<meta name="twitter:image" content="https://start.vanessareinthaller.de/abnehmrevolution/assets/og-image.jpg?v=jul2026">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="/abnehmrevolution/css/tokens.css">
+<link rel="stylesheet" href="/abnehmrevolution/css/base.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: var(--ms-cream); }
+  .ar-page { font-family: var(--ms-font-body); color: var(--ms-charcoal); background: #E7DDD0; overflow-x: hidden; }
+
+  /* Banner */
+  .ar-banner { background: var(--ms-terracotta); color: var(--ms-white); text-align: center; padding: 11px 18px; font-size: 13px; font-weight: 600; line-height: 1.4; }
+  .ar-banner strong { font-weight: 800; }
+
+  /* Logo / nav bar */
+  .ar-nav { background: #EFE7DD; border-bottom: 1px solid var(--ms-border); padding: 16px 20px; }
+  .ar-nav-inner { max-width: 1180px; margin: 0 auto; text-align: center; }
+  .ar-nav-meta { margin-top: 8px; }
+  .ar-logo { font-family: var(--ms-font-display); font-style: italic; font-weight: 600; font-size: 30px; line-height: 1; color: var(--ms-sage); }
+  .ar-nav-meta { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ms-muted); }
+  .ar-live-pill { display: inline-flex; align-items: center; gap: 6px; color: var(--ms-white); padding: 4px 9px; border-radius: 5px; letter-spacing: 0.1em; background-color: #e44205; }
+  .ar-live-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--ms-white); }
+
+  /* Hero */
+  .ar-hero { position: relative; overflow: hidden; background: #F3EADE; min-height: 680px; }
+  .ar-hero-bg { position: absolute; inset: 0; background-image: url('/abnehmrevolution/assets/hero-keyvisual-v5.jpg'); background-size: cover; background-position: right center; }
+  .ar-hero-veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(243,234,222,0.97) 0%, rgba(243,234,222,0.94) 28%, rgba(243,234,222,0.70) 50%, rgba(243,234,222,0.18) 68%, rgba(243,234,222,0) 82%); }
+  .ar-hero-inner { position: relative; max-width: 1180px; margin: 0 auto; padding: 64px 28px 68px; display: flex; align-items: center; min-height: 680px; }
+  .ar-hero-col { max-width: 600px; }
+  .ar-badge-pill { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 6px 14px 6px 6px; border-radius: 999px; background: var(--ms-white); border: 1px solid var(--ms-border); box-shadow: 0 2px 8px rgba(31,26,21,0.06); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ms-muted); }
+  .ar-badge-live { display: inline-flex; align-items: center; gap: 6px; background: rgb(228,66,5); color: var(--ms-white); padding: 4px 10px; border-radius: 999px; }
+  .ar-thesis { margin: 0 0 16px; max-width: 540px; font-size: 15px; font-weight: 700; line-height: 1.45; color: var(--ms-terracotta); }
+  .ar-eyebrow-hero { margin: 0 0 14px; font-family: var(--ms-font-body); font-weight: 800; font-size: 15px; letter-spacing: 0.02em; color: var(--ms-terracotta); }
+  .ar-hero-h1 { margin: 0 0 18px; font-family: var(--ms-font-display); font-weight: 600; font-size: clamp(30px,3.6vw,48px); line-height: 1.06; color: var(--ms-charcoal); }
+  /* A/B-Test Headline-Varianten (flackerfrei via html[data-ab]) */
+  [data-ab-variant] { display: none; }
+  html[data-ab="A"] [data-ab-variant="A"] { display: block; }
+  html[data-ab="B"] [data-ab-variant="B"] { display: block; }
+  .ar-hero-h1 em { font-style: italic; color: var(--ms-terracotta); }
+  .ar-hero-body { margin: 0 0 14px; max-width: 520px; font-size: 15.5px; line-height: 1.6; color: #4a4540; }
+  .ar-date-chip { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 24px; padding: 11px 16px; border-radius: 12px; background: var(--ms-white); border: 1px solid var(--ms-border); box-shadow: 0 2px 8px rgba(31,26,21,0.05); font-size: 13px; font-weight: 600; line-height: 1.4; color: #3a3530; }
+  .ar-price-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .ar-price-old { font-size: 15px; color: #9a9087; text-decoration: line-through; }
+  .ar-price-free { font-size: 14px; font-weight: 800; color: var(--ms-terracotta); text-transform: uppercase; letter-spacing: 0.04em; }
+  .ar-micro { margin: 12px 0 0; font-size: 13px; color: var(--ms-muted); text-align: center; }
+  .ar-countdown-wrap { margin-top: 26px; border-top: 1px solid rgba(12,17,20,0.12); padding-top: 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
+  .ar-countdown-label { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ms-muted); }
+
+  /* Section helpers */
+  .ar-sec { padding: 84px 20px; }
+  .ar-sec-cream { background: #EFE7DD; }
+  .ar-sec-sage { background: var(--ms-sage); color: var(--ms-white); }
+  .ar-sec-white { background: var(--ms-white); }
+  .ar-sec-dark { background: var(--ms-charcoal); color: var(--ms-white); }
+
+  /* Value / teal card */
+  .ar-value-sec { background: #EFE7DD; padding: 64px 20px; }
+  .ar-teal-card { max-width: 900px; margin: 0 auto; background: var(--ms-sage); border-radius: 28px; padding: 36px; box-shadow: 0 24px 54px rgba(31,26,21,0.22); }
+  .ar-teal-grid { display: grid; grid-template-columns: minmax(0,0.82fr) minmax(0,1.18fr); gap: 34px; align-items: center; }
+  .ar-teal-photo { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 18px; box-shadow: 0 14px 30px rgba(0,0,0,0.3); }
+  .ar-mask { min-width: 0; overflow: hidden; -webkit-mask-image: linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent); mask-image: linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent); }
+  .ar-marquee { display: flex; align-items: center; gap: 30px; width: max-content; animation: logoMarquee 22s linear infinite; }
+  .ar-marquee span { white-space: nowrap; opacity: 0.92; }
+  .ar-logo-serif { font-family: var(--ms-font-display); font-weight: 600; font-size: 15px; color: #EFE7DD; }
+  .ar-logo-serif-i { font-family: var(--ms-font-display); font-style: italic; font-weight: 600; font-size: 15px; color: #EFE7DD; }
+  .ar-logo-waz { font-family: var(--ms-font-body); font-weight: 800; font-size: 16px; letter-spacing: 0.16em; color: #EFE7DD; }
+  .ar-logo-bild { font-family: var(--ms-font-body); font-weight: 900; font-size: 16px; color: #EFE7DD; }
+  .ar-value-h2 { margin: 0 0 16px; font-family: var(--ms-font-display); font-weight: 600; font-size: 28px; line-height: 1.16; color: var(--ms-white); }
+  .ar-check-bullet { flex: none; width: 24px; height: 24px; border-radius: 999px; background: var(--ms-terracotta); display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+  @keyframes logoMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* Info boxes */
+  .ar-info-sec { background: #E7DDD0; padding: 8px 20px 56px; }
+  .ar-info-grid { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .ar-info-card { background: var(--ms-white); border-radius: 18px; padding: 26px 22px; text-align: center; box-shadow: 0 2px 8px rgba(31,26,21,0.06); }
+  .ar-info-ico { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+  .ar-eyebrow { margin: 0 0 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ms-muted); }
+
+  /* Generic section headings */
+  .ar-h2-sage { font-family: var(--ms-font-display); font-weight: 600; font-size: clamp(30px,3.8vw,46px); line-height: 1.1; color: var(--ms-sage); }
+  .ar-h2-light { font-family: var(--ms-font-display); font-weight: 600; font-size: clamp(30px,3.8vw,46px); line-height: 1.1; color: var(--ms-white); }
+
+  /* Wie hilft */
+  .ar-method-item { border-left: 3px solid var(--ms-terracotta); padding-left: 20px; }
+  .ar-method-kicker { margin: 0 0 6px; font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ms-orange); }
+  .ar-method-body { margin: 0; font-size: 16px; line-height: 1.6; color: #EFE7DD; }
+  .ar-diff-box { margin-top: 40px; background: var(--ms-sage-deep); border-radius: 22px; padding: 34px; }
+
+  /* Was bringt dir */
+  .ar-benefit-card { display: flex; gap: 20px; background: var(--ms-white); border-radius: 20px; padding: 28px 30px; box-shadow: 0 2px 8px rgba(31,26,21,0.06); }
+  .ar-benefit-ico { flex: none; width: 56px; height: 56px; border-radius: 16px; background: rgba(202,93,37,0.14); display: flex; align-items: center; justify-content: center; }
+
+  /* Damit kämpfen */
+  .ar-fight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .ar-fight-card { display: flex; gap: 14px; background: #EFE7DD; border-radius: 16px; padding: 22px 24px; }
+  .ar-fight-dot { flex: none; width: 26px; height: 26px; border-radius: 999px; background: var(--ms-sage); display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+
+  /* Curriculum */
+  .ar-day-divider { background: var(--ms-charcoal); border-radius: 14px; padding: 16px 26px; display: flex; align-items: center; gap: 14px; }
+  .ar-day-badge { background: var(--ms-terracotta); color: var(--ms-white); font-weight: 800; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 13px; border-radius: 999px; }
+  .ar-curr { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 30px; align-items: center; }
+  .ar-curr-rev { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; align-items: center; }
+  .ar-curr img { width: 100%; height: 280px; object-fit: cover; border-radius: 20px; box-shadow: 0 14px 30px rgba(31,26,21,0.14); }
+  .ar-curr-num { width: 42px; height: 42px; border-radius: 999px; background: var(--ms-terracotta); color: var(--ms-white); display: flex; align-items: center; justify-content: center; font-family: var(--ms-font-display); font-weight: 700; font-size: 20px; }
+  .ar-curr-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ms-muted); }
+  .ar-curr-h3 { margin: 0 0 14px; font-family: var(--ms-font-display); font-weight: 600; font-size: 25px; line-height: 1.15; color: var(--ms-sage); }
+  .ar-curr-ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .ar-curr-li { display: flex; gap: 10px; font-size: 14.5px; line-height: 1.5; color: #3a3530; }
+  .ar-curr-tick { flex: none; width: 20px; height: 20px; border-radius: 999px; background: rgba(202,93,37,0.14); display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .ar-bonus-card { background: var(--ms-charcoal); border-radius: 22px; padding: 38px; }
+
+  /* Über Vanessa */
+  .ar-vanessa-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 44px; align-items: center; }
+  .ar-vanessa-img { width: 100%; height: 460px; object-fit: cover; border-radius: 24px; box-shadow: 0 24px 48px rgba(31,26,21,0.18); }
+  .ar-stats { margin-top: 36px; background: var(--ms-sage); border-radius: 22px; padding: 6px; display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+  .ar-stat { padding: 28px 16px; text-align: center; }
+  .ar-stat--b { border-left: 1px solid rgba(239,231,221,0.14); }
+  .ar-stat-num { margin: 0; font-family: var(--ms-font-display); font-weight: 700; font-size: 40px; line-height: 1; color: var(--ms-white); }
+  .ar-stat-lbl { margin: 7px 0 0; font-size: 12.5px; color: rgba(239,231,221,0.78); line-height: 1.4; }
+
+  /* Testimonials */
+  .ar-testi-big { background: var(--ms-sage); border-radius: 24px; padding: 36px 38px; margin-bottom: 24px; box-shadow: 0 14px 34px rgba(31,26,21,0.16); }
+  .ar-testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .ar-testi-card { background: var(--ms-white); border-radius: 20px; padding: 28px 26px; box-shadow: 0 2px 10px rgba(31,26,21,0.07); }
+  .ar-avatar { width: 42px; height: 42px; border-radius: 999px; color: var(--ms-white); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; }
+
+  /* Finale Provokation */
+  .ar-prov-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; text-align: left; max-width: 660px; margin: 0 auto 40px; }
+
+  /* FAQ */
+  .ar-faq-list { display: flex; flex-direction: column; gap: 12px; }
+  .faq-item { background: var(--ms-white); border-radius: 16px; box-shadow: 0 2px 8px rgba(31,26,21,0.06); overflow: hidden; }
+  .faq-q { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 21px 24px; background: none; border: none; cursor: pointer; text-align: left; font-family: var(--ms-font-body); font-weight: 700; font-size: 16px; color: var(--ms-charcoal); }
+  .faq-icon { flex: none; width: 27px; height: 27px; border-radius: 999px; background: rgba(202,93,37,0.14); display: flex; align-items: center; justify-content: center; color: var(--ms-terracotta); font-weight: 800; font-size: 19px; }
+  .faq-a { overflow: hidden; max-height: 0; transition: max-height var(--ms-dur) var(--ms-ease); }
+  .faq-a__inner { overflow: hidden; }
+  .faq-a__inner p { margin: 0; padding: 0 24px 22px; font-size: 15px; line-height: 1.65; color: #3a3530; }
+
+  /* CTA helper — terracotta always */
+  .ar-cta { display: inline-flex; align-items: center; gap: 12px; background: var(--ms-orange); color: var(--ms-white); font-weight: 800; font-size: 17px; letter-spacing: 0.02em; text-transform: uppercase; padding: 20px 38px; border: none; border-radius: 999px; text-decoration: none; cursor: pointer; box-shadow: 0 14px 30px rgba(253,101,0,0.32); font-family: var(--ms-font-body); }
+  .ar-cta:hover { background: #e35a00; }
+  .ar-cta--hero { padding: 20px 40px; box-shadow: 0 16px 34px rgba(202,93,37,0.32); animation: ctaPulse 2.6s ease-in-out infinite; }
+  .ar-cta--xl { font-size: 18px; padding: 22px 44px; box-shadow: 0 16px 38px rgba(202,93,37,0.36); animation: ctaPulse 2.6s ease-in-out infinite; }
+  @keyframes ctaPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.025); } }
+  @media (prefers-reduced-motion: reduce) { .ar-cta--hero, .ar-cta--xl { animation: none; } }
+
+  /* Footer wordmark */
+  .ar-footer-mark { font-family: var(--ms-font-display); font-style: italic; font-weight: 600; font-size: 24px; color: #EFE7DD; }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px) {
+    .ar-teal-grid { grid-template-columns: 1fr; gap: 26px; }
+    .ar-teal-photo { max-width: 420px; margin: 0 auto; }
+    .ar-vanessa-grid { grid-template-columns: 1fr; gap: 28px; }
+    .ar-vanessa-img { height: 420px; max-width: 460px; margin: 0 auto; }
+    .ar-testi-grid { grid-template-columns: 1fr; }
+    .ar-stats { grid-template-columns: 1fr 1fr; }
+    .ar-stat--b { border-left: none; }
+  }
+  @media (max-width: 760px) {
+    .ar-hero { min-height: auto; }
+    .ar-hero-bg { background-position: 70% center; }
+    .ar-hero-veil { background: linear-gradient(90deg,rgba(243,234,222,0.99) 0%,rgba(243,234,222,0.97) 45%,rgba(243,234,222,0.88) 70%,rgba(243,234,222,0.6) 100%); }
+    .ar-hero-inner { display: block; min-height: auto; padding: 44px 24px 48px; }
+    .ar-hero-col { max-width: 100%; min-width: 0; }
+    .ar-hero-body { max-width: 100%; }
+    .ar-sec { padding: 52px 24px; }
+    .ar-value-sec, .ar-info-sec { padding-left: 24px; padding-right: 24px; }
+    .ar-teal-card { padding: 28px 22px; }
+    .ar-diff-box, .ar-bonus-card { padding: 26px 22px; }
+    .ar-info-grid { grid-template-columns: 1fr; }
+    .ar-fight-grid { grid-template-columns: 1fr; }
+    .ar-prov-grid { grid-template-columns: 1fr; }
+    .ar-curr, .ar-curr-rev { grid-template-columns: 1fr; gap: 18px; }
+    .ar-curr > img, .ar-curr-rev > img { order: -1; }
+    .ar-curr img { height: 230px; }
+    .ar-nav-inner { justify-content: center; text-align: center; }
+    .ar-countdown-wrap { flex-direction: column; align-items: center; text-align: center; gap: 14px; }
+  }
+  @media (max-width: 560px) {
+    .ar-cta, .ar-cta--hero, .ar-cta--xl { display: flex; width: 100%; justify-content: center; font-size: 14px; padding: 17px 20px; letter-spacing: 0.01em; }
+    .ar-date-chip { flex-direction: column; align-items: flex-start; gap: 6px; font-size: 12px; }
+    .ar-badge-pill { flex-wrap: nowrap; align-items: center; white-space: normal; text-align: left; }
+    .ar-badge-live { flex: none; align-self: center; }
+    .ar-stats { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 414px) {
+    .ar-logo { font-size: 26px; }
+    .ar-hero-h1 { font-size: 28px; }
+    .ar-stat-num { font-size: 34px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ar-page">
+
+  <!-- TOP BANNER -->
+  <div class="ar-banner" data-promo="banner">
+    Live-Plätze sind auf <strong>100 Frauen</strong> limitiert
+  </div>
+
+  <!-- LOGO / NAV BAR -->
+  <div class="ar-nav">
+    <div class="ar-nav-inner">
+      <div class="ar-logo">Die Abnehmrevolution</div>
+      <div class="ar-nav-meta">
+        <span class="ar-live-pill"><span class="ar-live-dot"></span>LIVE</span>
+        <span class="ar-nav-caption" data-promo="navCaption">Kostenloser 2-Tägiger Live Workshop am 18. + 19. Juli 2026 von 10:00 - 12:00 Uhr</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="ar-hero" data-screen-label="Hero">
+    <div class="ar-hero-bg"></div>
+    <div class="ar-hero-veil"></div>
+    <div class="ar-hero-inner">
+      <div class="ar-hero-col">
+        <p class="ar-eyebrow-hero">Exklusiv für Frauen 40+</p>
+        <h1 class="ar-hero-h1" data-ab-variant="A">99% der Frauen über 40 sind nur <em>eine einzige Erkenntnis</em> davon entfernt, dauerhaft schlank zu sein.</h1>
+        <h1 class="ar-hero-h1" data-ab-variant="B">Erfahre, wie du mit der Inner-Slim-Code-Methode <em>deinen Abnehmcode entschlüsselst</em> — ohne Sportmodus und frustrierenden Jo-Jo-Effekt.</h1>
+        <p class="ar-hero-body">Lass mich dir was sagen: Wenn du langsam glaubst, dein Körper sei fertig, dann liegt das nicht an dir. Es liegt an dem, was dir 15 Jahre lang verkauft wurde. An&nbsp; zwei Vormittagen lösen wir dieses Dilemma gemeinsam auf. Danach wirst du JoJo nur noch als Spielzeug kennen und nicht mehr auf den Hüften spüren. <b>Kostenlos.</b></p>
+        <div class="ar-price-row">
+          <span class="ar-price-old">Sichere dir dein Ticket für 97 €</span>
+          <span class="ar-price-free">jetzt 100% kostenlos</span>
+        </div>
+        <button type="button" class="ar-cta ar-cta--hero" data-open-popup>Jetzt kostenlos anmelden<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+        <p class="ar-micro">Die Teilnahme ist 100% kostenlos.</p>
+        <div class="ar-date-chip">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#476160" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><rect x="3" y="4.5" width="18" height="17" rx="2.5"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="8" y1="2.5" x2="8" y2="6.5"></line><line x1="16" y1="2.5" x2="16" y2="6.5"></line></svg>
+          <span data-promo="dates">Samstag, 18. + Sonntag, 19. Juli 2026 · 10:00 - 12:00 Uhr · Live via Zoom · Nur 100 Plätze</span>
+        </div>
+        <div class="ar-countdown-wrap">
+          <span class="ar-countdown-label">Die Abnehmrevolution startet in</span>
+          <div data-countdown data-target="2026-07-18T10:00:00+02:00" data-days-out="6" data-theme="light" data-size="lg" data-variant="boxed"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUE / TEAL CARD -->
+  <section class="ar-value-sec" data-screen-label="Wert-Karte">
+    <div class="ar-teal-card">
+      <div class="ar-teal-grid">
+        <div style="min-width:0;">
+          <img src="/abnehmrevolution/assets/vanessa-live.avif" alt="Vanessa Reinthaller live im Workshop" class="ar-teal-photo">
+          <p style="margin:16px 0 6px; text-align:center; font-weight:800; font-size:15px; color:#FAF7F6;">Vanessa Reinthaller</p>
+          <p style="margin:16px 0 10px; text-align:center; font-size:9.5px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:rgba(239,231,221,0.5);">Bekannt aus</p>
+          <div class="ar-mask">
+            <div class="ar-marquee">
+              <span class="ar-logo-serif">Berliner Morgenpost</span>
+              <span class="ar-logo-serif">Hamburger Abendblatt</span>
+              <span class="ar-logo-waz">WAZ</span>
+              <span><span class="ar-logo-bild">BILD</span><span class="ar-logo-serif-i"> der Frau</span></span>
+              <span class="ar-logo-serif-i">Frau im Spiegel</span>
+              <span class="ar-logo-serif">Berliner Morgenpost</span>
+              <span class="ar-logo-serif">Hamburger Abendblatt</span>
+              <span class="ar-logo-waz">WAZ</span>
+              <span><span class="ar-logo-bild">BILD</span><span class="ar-logo-serif-i"> der Frau</span></span>
+              <span class="ar-logo-serif-i">Frau im Spiegel</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h2 class="ar-value-h2">Das nimmst du aus diesen zwei Vormittagen mit</h2>
+          <p style="margin:0 0 18px; font-size:15px; line-height:1.6; color:rgba(239,231,221,0.85);">Der Inner Slim Code ist anders, als alles, was du bisher probiert hast. An zwei Live-Vormittagen gehst du raus mit:</p>
+          <ul style="margin:0 0 26px; padding:0; list-style:none; display:flex; flex-direction:column; gap:14px;">
+            <li style="display:flex; gap:12px;"><span class="ar-check-bullet"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span style="font-size:14.5px; line-height:1.5; color:#EFE7DD;"><strong style="color:#FAF7F6;">Du verstehst die 3 Säulen des Inner Slim Code</strong> - Ernährung, Vitalstoffe und innere Arbeit. Und damit zum ersten Mal, warum dein Körper nach 8 Diäten anders reagiert und worauf er jetzt wirklich anspringt.</span></li>
+            <li style="display:flex; gap:12px;"><span class="ar-check-bullet"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span style="font-size:14.5px; line-height:1.5; color:#EFE7DD;"><strong style="color:#FAF7F6;">Du fühlst live, was innere Arbeit konkret heißt</strong> - keine Esoterik, sondern eine Mini-Übung, die du selbst ausprobierst. Du erkennst, welches Thema seit Jahren hinter deinem Heißhunger steht.</span></li>
+            <li style="display:flex; gap:12px;"><span class="ar-check-bullet"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span style="font-size:14.5px; line-height:1.5; color:#EFE7DD;"><strong style="color:#FAF7F6;">Du erfährst, warum die meisten Frauen über 40 trotz richtiger Ernährung nicht abnehmen</strong> - welche Vitalstoffe fehlen müssen, damit dein Stoffwechsel überhaupt mitspielt. Damit du im Drogeriemarkt nie wieder blind nach irgendwas mit Magnesium greifst.</span></li>
+          </ul>
+          <button type="button" class="ar-cta" data-open-popup>Jetzt kostenlos anmelden<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width:760px; margin:26px auto 0; text-align:center;">
+      <div style="font-size:16px; letter-spacing:2px; margin-bottom:8px;">⭐️⭐️⭐️⭐️⭐️</div>
+      <p style="margin:0; font-size:14px; line-height:1.6; color:#7A6F63;">Vanessa Reinthaller hat in 80 Tagen 16 Kilo abgenommen und hält sie seit über 2 Jahren. Heute begleitet sie über 100 Frauen Ü40 - und eine Community von 8.500+ Müttern.</p>
+    </div>
+  </section>
+
+  <!-- INFO BOXES -->
+  <section class="ar-info-sec" data-screen-label="Termin-Infos">
+    <div class="ar-info-grid">
+      <div class="ar-info-card">
+        <div class="ar-info-ico" style="background:rgba(71,97,96,0.12);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#476160" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="8" y1="2.5" x2="8" y2="6.5"></line><line x1="16" y1="2.5" x2="16" y2="6.5"></line></svg></div>
+        <p class="ar-eyebrow">Wann?</p>
+        <p style="margin:0; font-size:15px; font-weight:700; color:#1B2020; line-height:1.4;">Samstag, 18. +<br>Sonntag, 19. Juli 2026</p>
+      </div>
+      <div class="ar-info-card">
+        <div class="ar-info-ico" style="background:rgba(71,97,96,0.12);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#476160" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15.5 14"></polyline></svg></div>
+        <p class="ar-eyebrow">Wie spät?</p>
+        <p style="margin:0; font-size:15px; font-weight:700; color:#1B2020; line-height:1.4;">10:00 - 12:00 Uhr<br>Live via Zoom</p>
+      </div>
+      <div class="ar-info-card">
+        <div class="ar-info-ico" style="background:rgba(202,93,37,0.14);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2.5 15 9 22 9.5 16.5 14 18.5 21 12 17 5.5 21 7.5 14 2 9.5 9 9"></polygon></svg></div>
+        <p class="ar-eyebrow">Das Besondere</p>
+        <p style="margin:0; font-size:15px; font-weight:700; color:#1B2020; line-height:1.4;">Nur 100 Live-Plätze.<br>Bonus-Thema nur live am So-Vormittag.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WIE HILFT (sage) -->
+  <section class="ar-sec ar-sec-sage" data-screen-label="Wie hilft es">
+    <div style="max-width:720px; margin:0 auto;">
+      <h2 class="ar-h2-light" style="margin:0 0 36px; text-align:center;">Wie genau hilft dir die Abnehm-Revolution?</h2>
+      <div style="display:flex; flex-direction:column; gap:24px;">
+        <div class="ar-method-item">
+          <p class="ar-method-kicker">Was es ist</p>
+          <p class="ar-method-body">Zwei Live-Vormittage mit mir via Zoom. Keine Powerpoint-Schlacht, kein Werbe-Webinar mit 90% Pitch. Zwei Stunden pro Vormittag, an denen die drei Säulen des Inner Slim Code auf den Tisch kommen: Ernährung, Vitalstoffe und innere Arbeit. Plus ein geheimes Bonus-Thema, das nur live läuft.</p>
+        </div>
+        <div class="ar-method-item">
+          <p class="ar-method-kicker">Was es dir bringt</p>
+          <p class="ar-method-body">Du gehst am Sonntag um 12:00 Uhr mit einer Antwort auf die Frage in den Tag, die du dir seit 312 Diäten stellst: Warum funktioniert das bei mir nicht? Und du verstehst zum ersten Mal, warum dein Körper Ü40 nicht mehr reagiert wie mit 25.</p>
+        </div>
+        <div class="ar-method-item">
+          <p class="ar-method-kicker">Wie es funktioniert</p>
+          <p class="ar-method-body">Der Inner Slim Code. Die Methode, mit der ich vor etwa zwei Jahren mit 38 ganze 16 Kilo abgelegt habe und sie seitdem konstant halte. Drei Säulen, die zusammen funktionieren: eine Ernährung, die in dein Familienleben passt, die Vitalstoffe nach Jahren Mangelmodus und innere Arbeit, ohne die jede Diät nach acht Wochen kollabiert.</p>
+        </div>
+      </div>
+
+      <div class="ar-diff-box">
+        <h3 style="margin:0 0 8px; font-family:var(--ms-font-display); font-weight:600; font-size:26px; line-height:1.15; color:#FAF7F6;">Der Unterschied zu allem, was du bisher probiert hast</h3>
+        <p style="margin:0 0 20px; font-size:15px; color:rgba(239,231,221,0.78);">Frauen, die mit mir arbeiten:</p>
+        <ul style="margin:0 0 22px; padding:0; list-style:none; display:flex; flex-direction:column; gap:13px;">
+          <li style="display:flex; gap:12px; font-size:15.5px; line-height:1.5; color:#EFE7DD;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.5" stroke-linecap="round" style="flex:none; margin-top:2px;"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>lassen am Sonntagabend das Abtippen eines Diätplans weg, den sie am Dienstag schon wieder vergessen haben.</li>
+          <li style="display:flex; gap:12px; font-size:15.5px; line-height:1.5; color:#EFE7DD;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.5" stroke-linecap="round" style="flex:none; margin-top:2px;"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>sitzen nicht mehr mit einer leeren Tüte Gummibärchen im Auto und wundern sich, wie die da hingekommen ist.</li>
+          <li style="display:flex; gap:12px; font-size:15.5px; line-height:1.5; color:#EFE7DD;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.5" stroke-linecap="round" style="flex:none; margin-top:2px;"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>brauchen vor Familienfeiern keine Hungerwoche mehr, um sich am Buffet alles wieder draufzuessen.</li>
+          <li style="display:flex; gap:12px; font-size:15.5px; line-height:1.5; color:#EFE7DD;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.5" stroke-linecap="round" style="flex:none; margin-top:2px;"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>erleben montagsmorgens nicht mehr den Waagen-Schock, der für den Rest der Woche miese Laune verursacht.</li>
+        </ul>
+        <p style="margin:0; font-size:16px; line-height:1.6; color:#FAF7F6;"><strong>Stattdessen</strong> essen sie in einem Rhythmus, der ins Familienleben passt, schlafen besser und sehen sich auf Fotos zum ersten Mal seit Jahren wieder gerne an. Über 100 Frauen Ü40 lassen mit dem Inner Slim Code in 12 Wochen 8 bis 10% ihres Körpergewichts los - ohne Kalorienzählen, ohne Abnehmspritze,.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAS BRINGT DIR (cream) -->
+  <section class="ar-sec ar-sec-cream" data-screen-label="Was bringt dir">
+    <div style="max-width:760px; margin:0 auto;">
+      <h2 class="ar-h2-sage" style="margin:0 0 12px; text-align:center;">Was bringt dir die Abnehm-Revolution?</h2>
+      <p style="margin:0 auto 44px; max-width:560px; text-align:center; font-size:17px; color:#1B2020;">Du hast 53 Diäten hinter dir, dein Körper hat sich nach der zweiten Schwangerschaft verändert, und du fängst langsam an zu glauben, dass es bei dir einfach nicht mehr geht. Diese zwei Vormittage zeigen dir, dass das nicht stimmt.</p>
+
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <div class="ar-benefit-card">
+          <div class="ar-benefit-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3.2"></circle></svg></div>
+          <div>
+            <h3 style="margin:0 0 8px; font-weight:800; font-size:19px; line-height:1.3; color:#1B2020;">Ein Abnehmen, bei dem abends die Schokolade nicht tabu ist</h3>
+            <p style="margin:0; font-size:15px; line-height:1.6; color:#4a4540;">Keine Lebensmittel-Streichliste auf dem Kühlschrank. Keine 5 Tage hart, 2 Tage Sünde. Keine Almased-Wochen. Du verstehst nach Tag 1, was wirklich passieren muss, damit dein Körper Ü40 abnimmt - und was im 17. Diätbuch fehlt, das du nochmal kaufen wolltest.</p>
+          </div>
+        </div>
+        <div class="ar-benefit-card">
+          <div class="ar-benefit-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c2.5 0 2.5-5 5-5s2.5 10 5 10 2.5-5 5-5"></path></svg></div>
+          <div>
+            <h3 style="margin:0 0 8px; font-weight:800; font-size:19px; line-height:1.3; color:#1B2020;">Innere Arbeit, die du spürst, statt drüber zu lesen</h3>
+            <p style="margin:0; font-size:15px; line-height:1.6; color:#4a4540;">An Tag 1, Thema 3, machen wir eine Mini-Übung, die du noch nie gemacht hast. Kein Esoterik-Schmu. Keine Räucherstäbchen. Du erkennst in 15 Minuten, was unter den letzten 8 Kilo wirklich liegt. Spoiler: Es ist selten der Hunger, der dich abends zur Vollmilch-Schokolade treibt.</p>
+          </div>
+        </div>
+        <div class="ar-benefit-card">
+          <div class="ar-benefit-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="16" height="6" rx="3" transform="rotate(-45 12 12)"></rect><line x1="9" y1="9" x2="15" y2="15"></line></svg></div>
+          <div>
+            <h3 style="margin:0 0 8px; font-weight:800; font-size:19px; line-height:1.3; color:#1B2020;">Vitalstoffe, die endlich mehr machen als teures Pipi</h3>
+            <p style="margin:0; font-size:15px; line-height:1.6; color:#4a4540;">Die meisten Frauen über 40 haben einige Vitalstoffe im roten Bereich, ohne es zu wissen. Solange das so bleibt, kannst du essen, was du willst - dein Gewicht geht nicht runter. Du gehst raus mit dem Wissen, welche Vitalstoff dich bei deiner Transfortmation wirklich begleiten.&nbsp;</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:40px;">
+        <p style="margin:0 0 18px; font-weight:700; font-size:18px; color:#1B2020;">Sichere dir jetzt deinen kostenlosen Platz!</p>
+        <button type="button" class="ar-cta" data-open-popup>Jetzt kostenlos anmelden<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+        <p style="margin:14px 0 0; font-size:13px; color:#7A6F63;">Die Teilnahme ist 100% kostenlos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAMIT KÄMPFEN (white) -->
+  <section class="ar-sec ar-sec-white" data-screen-label="Damit kämpfen">
+    <div style="max-width:880px; margin:0 auto;">
+      <div style="max-width:640px; margin:0 auto 44px; text-align:center;">
+        <h2 class="ar-h2-sage" style="margin:0 0 12px;">Damit kämpfen die meisten 40+ Frauen</h2>
+        <p style="margin:0; font-size:17px; color:#1B2020;">Wenn du innerlich nickst, weißt du es.</p>
+      </div>
+
+      <div class="ar-fight-grid">
+        <div class="ar-fight-card">
+          <span class="ar-fight-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <p style="margin:0; font-size:15px; line-height:1.55; color:#1B2020;">Du stehst im Bad, ziehst das dritte Outfit an und ziehst es wieder aus, weil du von der Seite irgendwas anders willst, aber nicht weißt was.</p>
+        </div>
+        <div class="ar-fight-card">
+          <span class="ar-fight-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <p style="margin:0; font-size:15px; line-height:1.55; color:#1B2020;">Du hast vor dem Sommerurlaub schon angefangen, nur noch Salat zu essen - und schreibst dir trotzdem schon den Notfallplan für Pommes am Pool im Kopf.</p>
+        </div>
+        <div class="ar-fight-card">
+          <span class="ar-fight-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <p style="margin:0; font-size:15px; line-height:1.55; color:#1B2020;">Bei jeder Familienfeier sortierst du im Kopf vor: Heute esse ich nur Salat - und greifst dann doch zur Schüssel, weil deine Schwiegermutter extra für dich gemacht hat.</p>
+        </div>
+        <div class="ar-fight-card">
+          <span class="ar-fight-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <p style="margin:0; font-size:15px; line-height:1.55; color:#1B2020;">Auf Hochzeitsfotos suchst du dich zuerst - aber wenn du dich findest, wirst du leise still und scrollst weiter.</p>
+        </div>
+        <div class="ar-fight-card">
+          <span class="ar-fight-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <p style="margin:0; font-size:15px; line-height:1.55; color:#1B2020;">Du hast nach Schwangerschaft Nummer 1 noch 5 Kilo behalten. Nach Nummer 2 weitere 6. Und jetzt fragst du dich, ob das einfach so bleibt.</p>
+        </div>
+        <div class="ar-fight-card">
+          <span class="ar-fight-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <p style="margin:0; font-size:15px; line-height:1.55; color:#1B2020;">Du hast im Mai schon kurz die Lieblings-Jeans anprobiert. Sie ist nicht hochgegangen. Du hast sie in die Schublade gelegt: Im Herbst nochmal.</p>
+        </div>
+      </div>
+
+      <p style="margin:40px auto 0; max-width:680px; text-align:center; font-family:var(--ms-font-display); font-weight:600; font-size:clamp(20px,2.4vw,27px); line-height:1.25; color:#1B2020;">Wenn du bei einem oder mehreren dieser Sätze still genickt hast, ist diese Abnehm-Revolution für dich gebaut. Punkt.</p>
+    </div>
+  </section>
+
+  <!-- CURRICULUM (cream) -->
+  <section class="ar-sec ar-sec-cream" data-screen-label="Curriculum">
+    <div style="max-width:820px; margin:0 auto;">
+      <div style="max-width:660px; margin:0 auto 44px; text-align:center;">
+        <h2 class="ar-h2-sage" style="margin:0 0 12px;">Dein geballtes Abnehm-Wissen in der Abnehm-Revolution</h2>
+        <p style="margin:0; font-size:17px; line-height:1.6; color:#1B2020;">Diese zwei Vormittage kombinieren meine eigene Erfahrung aus 16 Kilo in 80 Tagen mit dem Inner Slim Code, mit dem über 100 Frauen Ü40 mittlerweile dasselbe geschafft haben. So weißt du nach Sonntag genau, wie du als Frau über 40 mit Diät-Vergangenheit nachhaltig abnimmst, ohne JoJo, ohne extra zu kochen.</p>
+      </div>
+
+      <div class="ar-day-divider" style="margin-bottom:30px;">
+        <span class="ar-day-badge">Tag 1</span>
+        <span style="color:#FAF7F6; font-weight:600; font-size:14px;">Samstag, 18. Juli · 10:00 - 12:00 Uhr · <span style="color:rgba(239,231,221,0.6);">Das Fundament.</span></span>
+      </div>
+
+      <!-- Thema 1 -->
+      <div class="ar-curr" style="margin-bottom:34px;">
+        <img src="/abnehmrevolution/assets/vanessa-bowl.png" alt="Vanessa mit einer nährstoffreichen Bowl" style="object-position:center 20%;">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;"><span class="ar-curr-num">01</span><span class="ar-curr-tag">Ernährung</span></div>
+          <h3 class="ar-curr-h3">Warum Crash-Diäten nicht funktionieren</h3>
+          <ul class="ar-curr-ul">
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Was in deinem Stoffwechsel passiert, wenn du nach der dritten Crash-Diät immer noch glaubst 'diesmal ziehst du's durch'.</li>
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Die Wahrheit über Kalorien zählen, Weight Watchers und Intervallfasten ab 40.</li>
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Warum dein Körper Ü40 anders reagiert als mit 25 - und was er stattdessen wirklich braucht.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Thema 2 -->
+      <div class="ar-curr-rev" style="margin-bottom:34px;">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;"><span class="ar-curr-num">02</span><span class="ar-curr-tag">Supplements</span></div>
+          <h3 class="ar-curr-h3">Was deinem Körper wirklich Energie gibt</h3>
+          <ul class="ar-curr-ul">
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Warum 'Supplements sind nur Placebo' einer der teuersten Sätze ist, den deine Freundinnen dir je gesagt haben.</li>
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Die Vitalstoffe, die bei den meisten Frauen Ü40 im roten Bereich liegen - und warum dein Heißhunger genau hier herkommt.</li>
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Was hinter ständiger Müdigkeit nach dem Mittagessen und dem Energietief gegen 16 Uhr tatsächlich steckt.</li>
+          </ul>
+        </div>
+        <img src="/abnehmrevolution/assets/lifestyle-vanessa.png" alt="Vanessa im Alltag voller Energie">
+      </div>
+
+      <!-- Thema 3 -->
+      <div class="ar-curr" style="margin-bottom:8px;">
+        <img src="/abnehmrevolution/assets/vanessa-innere-arbeit.jpg" alt="Vanessa bei der inneren Arbeit" style="height:300px; object-position:center top;">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;"><span class="ar-curr-num">03</span><span class="ar-curr-tag">Innere Arbeit</span></div>
+          <h3 class="ar-curr-h3">Ran an die Ursache, statt nur das Symptom zu behandeln</h3>
+          <ul class="ar-curr-ul" style="margin-bottom:14px;">
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Die Stellen in deinem Leben, an denen dein Körper Gewicht festhält wie an einem Schutzschild.</li>
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Eine konkrete Mini-Übung, die du im Workshop selbst ausprobierst. Keine Esoterik, sondern Neurobiologie.</li>
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Was Vanessa mit 38 erkannt hat, das die 15 Jahre Diät davor nicht geschafft hatten.</li>
+          </ul>
+          <p style="margin:0; font-style:italic; font-weight:600; font-size:14px; color:#CA5D25;">Bring Taschentücher mit. Im Ernst.</p>
+        </div>
+      </div>
+
+      <div class="ar-day-divider" style="margin:34px 0 30px;">
+        <span class="ar-day-badge">Tag 2</span>
+        <span style="color:#FAF7F6; font-weight:600; font-size:14px;">Sonntag, 19. Juli · 10:00 - 12:00 Uhr</span>
+      </div>
+
+      <!-- Thema 4 -->
+      <div class="ar-curr-rev" style="margin-bottom:34px;">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;"><span class="ar-curr-num">04</span><span class="ar-curr-tag">Alltagsstruktur</span></div>
+          <h3 class="ar-curr-h3">Essen, was deinen Körper nährt</h3>
+          <ul class="ar-curr-ul">
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Die Wahrheit über 'dann muss ich für mich separat kochen': Warum das Quatsch ist.</li>
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Die 3-Komponenten-Formel, die selbst bei pingeligen Kindern und dem skeptischen Ehemann durchgeht.</li>
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Welche 7 Lebensmittel du immer im Kühlschrank hast, damit das 17:30-Uhr-Schultor-Szenario nie wieder in Panik endet.</li>
+          </ul>
+        </div>
+        <img src="/abnehmrevolution/assets/vanessa-boho-kueche.jpg" alt="Vanessa in ihrer Küche" style="object-position:center 18%;">
+      </div>
+
+      <!-- Thema 5 -->
+      <div class="ar-curr" style="margin-bottom:34px;">
+        <img src="/abnehmrevolution/assets/vanessa-portrait.png" alt="Vanessa Reinthaller Portrait" style="height:300px; object-position:center 30%;">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;"><span class="ar-curr-num">05</span><span class="ar-curr-tag">Emotionales Essen</span></div>
+          <h3 class="ar-curr-h3">Was wirklich dahinter steckt</h3>
+          <ul class="ar-curr-ul">
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Die drei häufigsten Trigger für Heißhunger zwischen 20 und 22 Uhr - und welche eine Frage du dir vorher stellen kannst.</li>
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Warum 'ich war heute so brav' und der zweite Schoko-Riegel direkt zusammenhängen.</li>
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Was dein Körper dir mit jeder Fressattacke eigentlich erzählen will - und wie du ihm das ohne Essen gibst.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Thema 6 -->
+      <div class="ar-curr-rev" style="margin-bottom:40px;">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;"><span class="ar-curr-num">06</span><span class="ar-curr-tag">Nie wieder JoJo</span></div>
+          <h3 class="ar-curr-h3">Die Wahrheit hinter deinen Gedanken</h3>
+          <ul class="ar-curr-ul">
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Warum 95 % aller Frauen ihre verlorenen Kilos nach 12 Monaten wieder draufhaben.</li>
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Was die 5 % anders machen, die ihre Abnahme halten. Hinweis: Es hat nichts mit Disziplin zu tun.</li>
+            <li class="ar-curr-li"><span class="ar-curr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#CA5D25" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Warum Vanessas 16 Kilo seit zwei Jahren konstant weg sind, obwohl sie zwischendurch krank war.</li>
+          </ul>
+        </div>
+        <img src="/abnehmrevolution/assets/vanessa-tablet.avif" alt="Vanessa am Tablet">
+      </div>
+
+      <!-- BONUS -->
+      <div class="ar-bonus-card">
+        <span style="display:inline-block; background:#CA5D25; color:#FAF7F6; font-weight:800; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; padding:7px 15px; border-radius:999px; margin-bottom:16px;">Bonus · Nur Live · Sonntagvormittag</span>
+        <h3 style="margin:0 0 12px; font-family:var(--ms-font-display); font-weight:600; font-size:27px; line-height:1.15; color:#FAF7F6;">Geheimes Bonus-Thema: Der Satz, den du seit 20 Jahren über dich erzählst</h3>
+        <p style="margin:0 0 14px; font-size:15.5px; line-height:1.6; color:rgba(239,231,221,0.82);">Den Satz, der jeden Morgen im Hintergrund läuft, wenn du in den Spiegel schaust. Wo er herkommt. Und die zwei Schritte, mit denen du ihn ab Freitag früh ersetzt.</p>
+        <p style="margin:0; font-weight:800; font-size:14px; color:#FD6500;">Nur Live!</p>
+      </div>
+
+      <div style="text-align:center; margin-top:40px;">
+        <button type="button" class="ar-cta" data-open-popup>Sichere dir jetzt deinen kostenlosen Platz<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÜBER VANESSA (white) -->
+  <section class="ar-sec ar-sec-white" data-screen-label="Über Vanessa">
+    <div style="max-width:880px; margin:0 auto;">
+      <p style="margin:0 0 8px; text-align:center; font-size:12px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#CA5D25;">Deine Gastgeberin</p>
+      <h2 class="ar-h2-sage" style="margin:0 0 40px; text-align:center;">Von wem wirst du lernen?</h2>
+      <div class="ar-vanessa-grid">
+        <img src="/abnehmrevolution/assets/vanessa-portrait.png" alt="Vanessa Reinthaller" class="ar-vanessa-img">
+        <div>
+          <p style="margin:0 0 18px; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#7A6F63; line-height:1.8;">Berliner Morgenpost · Hamburger Abendblatt · WAZ · Westfalenpost · BILD der Frau · Frau im Spiegel</p>
+          <div style="font-size:15.5px; line-height:1.7; color:#1B2020; display:flex; flex-direction:column; gap:13px;">
+            <p style="margin:0;">Die Frau, die diesen Workshop hält, ist heute 41 und sieht aus wie eine, die schon immer schlank war.</p>
+            <p style="margin:0;">Vor etwa zwei Jahren stand ich auf der Waage mit 86 Kilo. Zwei Schwangerschaften hinter mir. 15 Jahre Diätwahn: Weight Watchers, Kohlsuppe, Almased, Intervallfasten, gar nichts essen. Tausende Euro. Null Ergebnis, das geblieben ist.</p>
+            <p style="margin:0;">Ich hatte mich damit abgefunden. „So bin ich halt nach zwei Kindern.“ Den Satz hörte ich mich selber sagen und glaubte ihn schon lange.</p>
+            <p style="margin:14px 0 0; font-weight:800; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:#CA5D25;">Mit 38 hat sich alles gedreht</p>
+            <p style="margin:0;">Mit 38 habe ich ein Ernährungsprogramm kennengelernt, es ausprobiert und in 80 Tagen 16 Kilo abgelegt. Mein Mann und ich haben damals gemeinsam angefangen, und bei uns beiden ist es geblieben. Daraus ist meine eigene Methode entstanden: der Inner Slim Code. Drei Säulen, die einzeln nicht reichen und zusammen den Unterschied machen.</p>
+            <p style="margin:0; font-weight:700;">Heute bin ich Coach für nachhaltiges Abnehmen, Soul Coach für innere Arbeit, Mama von zwei Kindern und Gastgeberin der Mama-Spagat-Community.</p>
+            <blockquote style="margin:14px 0 0; padding:18px 22px; border-left:3px solid #CA5D25; background:#EFE7DD; border-radius:0 14px 14px 0; font-family:var(--ms-font-display); font-style:italic; font-weight:500; font-size:18px; line-height:1.4; color:#476160;">„Ich kenne keinen ehrlicheren Schmerz als den, im eigenen Körper nicht ankommen zu können. Und ich kenne kein größeres Geschenk als den Weg da raus.“</blockquote>
+          </div>
+        </div>
+      </div>
+
+      <div class="ar-stats">
+        <div class="ar-stat">
+          <p class="ar-stat-num">-16 kg</p>
+          <p class="ar-stat-lbl">in 80 Tagen<br>mit 38</p>
+        </div>
+        <div class="ar-stat ar-stat--b">
+          <p class="ar-stat-num">2 Jahre</p>
+          <p class="ar-stat-lbl">konstant<br>kein JoJo</p>
+        </div>
+        <div class="ar-stat ar-stat--b">
+          <p class="ar-stat-num">100+</p>
+          <p class="ar-stat-lbl">Frauen Ü40<br>begleitet</p>
+        </div>
+        <div class="ar-stat ar-stat--b">
+          <p class="ar-stat-num">8.500+</p>
+          <p class="ar-stat-lbl">Community<br>Mama Spagat</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS (cream) -->
+  <section class="ar-sec ar-sec-cream" data-screen-label="Testimonials">
+    <div style="max-width:920px; margin:0 auto;">
+      <h2 class="ar-h2-sage" style="margin:0 0 12px; text-align:center; font-size:clamp(28px,3.6vw,44px);">Bereits über 100 Frauen im Coaching begleitet</h2>
+      <p style="margin:0 auto 40px; max-width:600px; text-align:center; font-size:15.5px; line-height:1.6; color:#5a544c;">Den Workshop halte ich zum ersten Mal. Die Methode dahinter begleite ich seit Jahren in meinem Coaching - das sagen Frauen, die ihn schon gegangen sind:</p>
+      <div class="ar-testi-big">
+        <div style="font-size:15px; letter-spacing:1px; margin-bottom:14px; color:#FFC107;">★★★★★</div>
+        <p style="margin:0 0 22px; font-family:var(--ms-font-display); font-style:italic; font-weight:500; font-size:clamp(19px,2.3vw,25px); line-height:1.4; color:#FAF7F6;">„Ich war 43, hatte zwei Schwangerschaften hinter mir und ehrlich gesagt mit dem Abnehmen abgeschlossen. Drei Wochen nach dem Start in Vanessas Coaching hab ich nachts wieder durchgeschlafen. Nach 12 Wochen waren 11 Kilo weg. Heute, ein Jahr später, schlüpfe ich in die Sommerjeans, die ich schon zweimal in den Kleiderkreislauf bei meiner Schwester geben wollte.“</p>
+        <div style="display:flex; align-items:center; gap:13px;">
+          <img src="/abnehmrevolution/assets/kundin-blond.jpg" alt="Beate" style="width:48px; height:48px; border-radius:999px; object-fit:cover;">
+          <div><p style="margin:0; font-weight:800; font-size:15px; color:#FAF7F6;">Beate, 43</p><p style="margin:0; font-size:13px; color:rgba(239,231,221,0.75);">Bankkauffrau in Teilzeit, drei Kinder · -11 Kilo in 12 Wochen</p></div>
+        </div>
+      </div>
+      <div class="ar-testi-grid">
+        <div class="ar-testi-card">
+          <div style="font-size:14px; letter-spacing:1px; margin-bottom:14px;">⭐️⭐️⭐️⭐️⭐️</div>
+          <p style="margin:0 0 20px; font-size:15px; line-height:1.6; color:#1B2020;">„Das Schönere als die 9 Kilo: dass ich den Blazer beim Sommerfest auf dem Schulhof ausgezogen habe, ohne mich kurz zu fragen, wer mich gerade von der Seite sieht. Ich habe ihn einfach ausgezogen. Wie früher.“</p>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <img src="/abnehmrevolution/assets/kundin-bruenett.jpg" alt="Birgit" style="width:42px; height:42px; border-radius:999px; object-fit:cover;">
+            <div><p style="margin:0; font-weight:800; font-size:14px; color:#1B2020;">Birgit, 47</p><p style="margin:0; font-weight:700; font-size:13px; color:#CA5D25;">Verwaltungsangestellte</p></div>
+          </div>
+        </div>
+        <div class="ar-testi-card">
+          <div style="font-size:14px; letter-spacing:1px; margin-bottom:14px;">⭐️⭐️⭐️⭐️⭐️</div>
+          <p style="margin:0 0 20px; font-size:15px; line-height:1.6; color:#1B2020;">„Das Erste, was sich verändert hat, war nicht die Waage. Es war, dass ich nachts wieder durchgeschlafen habe. Nach drei Wochen im Coaching. Das hatte ich seit Kind Nummer zwei nicht mehr.“</p>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <img src="/abnehmrevolution/assets/kundin-rot.jpg" alt="Mirjam" style="width:42px; height:42px; border-radius:999px; object-fit:cover;">
+            <div><p style="margin:0; font-weight:800; font-size:14px; color:#1B2020;">Mirjam, 43</p><p style="margin:0; font-weight:700; font-size:13px; color:#CA5D25;">Apothekerin · drei Kinder</p></div>
+          </div>
+        </div>
+        <div class="ar-testi-card">
+          <div style="font-size:14px; letter-spacing:1px; margin-bottom:14px;">⭐️⭐️⭐️⭐️⭐️</div>
+          <p style="margin:0 0 20px; font-size:15px; line-height:1.6; color:#1B2020;">„Ich habe nicht nur abgenommen. Ich habe aufgehört, Krieg gegen meinen Körper zu führen. Den hatte ich vorher 15 Jahre lang geführt. Manchmal denke ich, der Krieg war anstrengender als die zwölf Stunden Spätschicht.“</p>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span class="ar-avatar" style="background:#CA5D25;">M</span>
+            <div><p style="margin:0; font-weight:800; font-size:14px; color:#1B2020;">Monika, 45</p><p style="margin:0; font-weight:700; font-size:13px; color:#CA5D25;">Pflegekraft · -11,5 kg</p></div>
+          </div>
+        </div>
+      </div>
+      <p style="margin:20px 0 0; text-align:center; font-size:12px; color:#9a9087;">Erfahrungsberichte aus meinem Coaching. Ergebnisse sind individuell.</p>
+    </div>
+  </section>
+
+  <!-- FINALE PROVOKATION (dark) -->
+  <section class="ar-sec-dark" style="padding:96px 20px;" data-screen-label="Finale Provokation">
+    <div style="max-width:720px; margin:0 auto; text-align:center;">
+      <h2 style="margin:0 0 12px; font-family:var(--ms-font-display); font-weight:600; font-size:clamp(30px,4.2vw,52px); line-height:1.1; color:#FAF7F6;">Die eigentliche Frage ist nicht, ob das funktioniert.</h2>
+      <p style="margin:0 0 32px; font-size:clamp(19px,2.4vw,26px); font-weight:700; color:#FD6500;">Die Frage ist: Was verlierst du, wenn du diesmal wieder wartest?</p>
+      <div style="max-width:600px; margin:0 auto 36px; font-size:16px; line-height:1.7; color:rgba(239,231,221,0.85); display:flex; flex-direction:column; gap:12px;">
+        <p style="margin:0;">Du weißt, dass Diäten nicht dauerhaft funktionieren. Und du weißt, dass du das schon lange weißt.</p>
+        <p style="margin:0;">Was du diesmal aufs Spiel setzt, ist nicht die nächste Diät. Es ist der nächste Sommer, in dem du sagst: Nächstes Jahr mache ich das anders. Diese zwei Vormittage kosten dich nichts außer Zeit. Was sie dir geben können, suchst du seit 15 Jahren.</p>
+      </div>
+      <div class="ar-prov-grid">
+        <div style="display:flex; gap:11px;"><span class="ar-check-bullet"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span style="font-size:14.5px; line-height:1.5; color:#EFE7DD;">Du verstehst, warum dein Körper so reagiert - nach zwei Schwangerschaften und 8 Diäten.</span></div>
+        <div style="display:flex; gap:11px;"><span class="ar-check-bullet"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span style="font-size:14.5px; line-height:1.5; color:#EFE7DD;">Du gehst raus mit den drei Säulen - Ernährung, Vitalstoffe, Innere Arbeit.</span></div>
+        <div style="display:flex; gap:11px;"><span class="ar-check-bullet"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span style="font-size:14.5px; line-height:1.5; color:#EFE7DD;">Du nimmst dir die zwei wichtigsten Vormittage des Juli für dich raus.</span></div>
+        <div style="display:flex; gap:11px;"><span class="ar-check-bullet"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span style="font-size:14.5px; line-height:1.5; color:#EFE7DD;">Kein separates Kochen, kein Kalorienzählen, kein nächster Diätplan.</span></div>
+      </div>
+      <button type="button" class="ar-cta ar-cta--xl" data-open-popup>Jetzt kostenlos anmelden<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+      <p style="margin:14px 0 0; font-size:13px; color:rgba(239,231,221,0.6);">Die Teilnahme ist 100% kostenlos. Nur noch wenige Plätze verfügbar.</p>
+    </div>
+  </section>
+
+  <!-- FAQ (cream) -->
+  <section class="ar-sec ar-sec-cream" data-screen-label="FAQ">
+    <div style="max-width:760px; margin:0 auto;">
+      <h2 class="ar-h2-sage" style="margin:0 0 36px; text-align:center; font-size:clamp(28px,3.6vw,44px);">FAQ - Häufig gestellte Fragen</h2>
+      <div class="ar-faq-list">
+        <div class="faq-item" data-faq-item>
+          <button class="faq-q" data-faq-q><span>Darf ich erst ab 40 Jahren teilnehmen?</span> <span class="faq-icon">+</span></button>
+          <div class="faq-a"><div class="faq-a__inner"><p>Nein, du darfst auch jünger sein. Aber ab 40 verändert sich der Körper, bei manchen früher, bei manchen später. Genau hier setzt meine Methode an: Es liegt nicht an deinen Genen, den Wechseljahren und Co., sondern du kannst immer etwas verändern.</p></div></div>
+        </div>
+        <div class="faq-item" data-faq-item>
+          <button class="faq-q" data-faq-q><span>Ich hab schon so viel ausprobiert. Warum soll's diesmal anders sein?</span> <span class="faq-icon">+</span></button>
+          <div class="faq-a"><div class="faq-a__inner"><p>Genau weil du schon so viel ausprobiert hast. Die Frauen in meinen Programmen haben im Schnitt 8 bis 14 Diäten hinter sich. Sie sind keine hoffnungslosen Fälle. Sie haben bisher mit dem falschen Werkzeug gearbeitet, meistens nur an einer von drei Säulen, die zusammen funktionieren müssen. An diesen zwei Vormittagen siehst du erstmals alle drei.</p></div></div>
+        </div>
+        <div class="faq-item" data-faq-item>
+          <button class="faq-q" data-faq-q><span>Was steckt hinter innerer Arbeit?</span> <span class="faq-icon">+</span></button>
+          <div class="faq-a"><div class="faq-a__inner"><p>Die meisten vergleichen das direkt mit einer Sitzung beim Psychologen. Das ist aber völliger Quatsch. Innere Arbeit ist eine ganz andere Ebene, und weil das super schwer in Worte zu fassen ist, machen wir das im Workshop direkt live. Du machst die Mini-Übung in Thema 3 selbst mit. Keine Räucherstäbchen. Kein Pendel. Du erkennst nach 15 Minuten, was unter deinen letzten 8 Kilo wirklich liegt.</p></div></div>
+        </div>
+        <div class="faq-item" data-faq-item>
+          <button class="faq-q" data-faq-q><span>Muss ich danach für mich separat kochen?</span> <span class="faq-icon">+</span></button>
+          <div class="faq-a"><div class="faq-a__inner"><p>Nein. Im Gegenteil. An Tag 2 zeige ich dir die 3-Komponenten-Formel, mit der ein einziges Familien-Abendessen für alle funktioniert. Pingelige Kinder eingeschlossen. Falls du ins Project You einsteigst, gibt es zusätzlich das Bonus-Rezeptbuch mit alltagstauglichen Familienrezepten.</p></div></div>
+        </div>
+        <div class="faq-item" data-faq-item>
+          <button class="faq-q" data-faq-q><span>Werde ich an diesen Vormittagen was verkauft bekommen?</span> <span class="faq-icon">+</span></button>
+          <div class="faq-a"><div class="faq-a__inner"><p>Am Ende von Tag 2 stelle ich dir mein 12-Wochen-Coaching Project You vor, das kurz nach dem Workshop startet, mit einem speziellen Workshop-Preis. Wenn du Lust hast einzusteigen, freue ich mich. Wenn nicht, gehst du mit deinem neuen Wissen weiter und es bleibt freundlich. Kein Druck, kein Hard-Sell.</p></div></div>
+        </div>
+        <div class="faq-item" data-faq-item>
+          <button class="faq-q" data-faq-q><span>Sind meine Daten bei dir sicher?</span> <span class="faq-icon">+</span></button>
+          <div class="faq-a"><div class="faq-a__inner"><p>Deine Daten bleiben bei mir und meinem E-Mail-System. DSGVO-konform, Server in Deutschland. Keine Weitergabe an Dritte. Keine Verkäufe von Adresslisten. Falls du jemals löschen willst, schreib eine kurze Mail an support@vanessareinthaller.de.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA (sage) -->
+  <section id="anmeldung" class="ar-sec-sage" style="padding:96px 20px; scroll-margin-top:20px;" data-screen-label="Final CTA">
+    <div style="max-width:720px; margin:0 auto; text-align:center;">
+      <p style="margin:0 0 14px; font-size:12px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:#FD6500;">Worauf wartest du noch?</p>
+      <h2 class="ar-h2-light" style="margin:0 0 16px; font-size:clamp(30px,4vw,50px);">Sichere dir jetzt deinen kostenlosen Platz beim 2-Tages-Online-Event.</h2>
+      <p style="margin:0 0 34px; font-size:17px; color:rgba(239,231,221,0.85);">Der erste Tag läuft am Samstag, den 18. Juli 2026 von 10:00 - 12:00 Uhr.</p>
+      <button type="button" class="ar-cta ar-cta--xl" style="box-shadow:0 16px 38px rgba(0,0,0,0.28);" data-open-popup>Jetzt kostenlos anmelden<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+      <p style="margin:14px 0 36px; font-size:13px; color:rgba(239,231,221,0.7);">Die Teilnahme ist 100% kostenlos.</p>
+      <p style="margin:0 0 14px; font-size:11px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:rgba(239,231,221,0.6);">Die Abnehmrevolution startet in</p>
+      <div style="display:flex; justify-content:center;"><div data-countdown data-target="2026-07-18T10:00:00+02:00" data-days-out="6" data-theme="dark" data-size="lg" data-variant="boxed"></div></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="ms-footer" style="background:#1B2020; color:rgba(239,231,221,0.7); padding:44px 20px;">
+    <div style="max-width:760px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:16px; text-align:center;">
+      <div class="ar-footer-mark">Die Abnehmrevolution</div>
+      <div style="display:flex; gap:22px; font-size:14px;">
+        <a href="https://shop.vanessareinthaller.de/policies/legal-notice" target="_blank" rel="noopener noreferrer" style="color:rgba(239,231,221,0.8); text-decoration:none;">Impressum</a>
+        <a href="https://shop.vanessareinthaller.de/policies/privacy-policy" target="_blank" rel="noopener noreferrer" style="color:rgba(239,231,221,0.8); text-decoration:none;">Datenschutz</a>
+      </div>
+      <p style="margin:0; font-size:13px;">© 2026 Vanessa Reinthaller · Mama Spagat</p>
+      <p style="margin:0; font-size:11px; color:rgba(239,231,221,0.4); max-width:540px; line-height:1.6;">This site is not a part of the Facebook website or Facebook Inc. Additionally, this site is NOT endorsed by Facebook in any way.</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- SIGNUP POPUP -->
+<div class="popup-overlay" id="signup-popup" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Zum Workshop anmelden">
+  <div class="popup-card">
+    <button class="popup-close" data-close-popup aria-label="Schließen">×</button>
+    <h3 class="ms-h2" style="margin:0 0 8px; font-size:clamp(16px,4.5vw,21px); line-height:1.25;">Sichere dir jetzt deinen Platz beim kostenlosen 2-Tages-Workshop<br><span style="color:var(--ms-orange); font-size:clamp(18px,5.5vw,28px); line-height:1.1; display:inline-block; margin-top:4px;">„Die Abnehmrevolution"</span></h3>
+    <p class="ms-body-sm" style="margin:0;color:var(--ms-muted);">Der erste Tag läuft am Samstag, den 18. Juli 2026 von 10:00 - 12:00 Uhr.</p>
+    <form data-redirect="/abnehmrevolution/danke">
+      <div class="popup-field"><label for="pf-name">Dein Vorname *</label><input id="pf-name" name="vorname" type="text" required autocomplete="given-name"></div>
+      <div class="popup-field"><label for="pf-email">Deine E-Mailadresse *</label><input id="pf-email" name="email" type="email" required autocomplete="email"></div>
+      <button type="submit" class="cta cta--block" style="margin-top:22px;">Jetzt kostenlos anmelden <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </form>
+    <p class="ms-caption" style="margin:14px 0 0;text-align:center;">Die Teilnahme ist 100% kostenlos. Deine Daten bleiben DSGVO-konform bei mir. · <a href="https://shop.vanessareinthaller.de/policies/privacy-policy" target="_blank" rel="noopener noreferrer" style="color:var(--ms-muted)">Datenschutz</a></p>
+  </div>
+</div>
+
+<script>(function(){if(window.__AB_PREVIEW__||window.self!==window.top)return;var ab=window.__AB__||{};var i=new Image();i.src='/abnehmrevolution/api/visit?p=landing&abt='+encodeURIComponent(ab.test||'')+'&abv='+encodeURIComponent(ab.variant||'');})();</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script src="/abnehmrevolution/js/promo.js" defer></script>
+<script src="/abnehmrevolution/js/design.js" defer></script>
+<script src="/abnehmrevolution/js/consent.js" defer></script>
+<script src="/abnehmrevolution/js/tracking.js" defer></script>
+
+<script src="/abnehmrevolution/js/funnel.js" defer></script>
+</body>
+</html>

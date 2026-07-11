@@ -1,0 +1,202 @@
+/* =============================================================
+   Mama.Spagat — Funnel base / shared component styles
+   Layered on top of tokens.css. Page-specific layout lives in
+   each page's own <style> block.
+   ============================================================= */
+
+*, *::before, *::after { box-sizing: border-box; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+
+.ms-wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.ms-wrap-narrow { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+
+/* ---- Primary CTA (always terracotta, pulsing) ---- */
+.cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  background: var(--ms-orange); color: var(--ms-white);
+  font-family: var(--ms-font-body); font-weight: 800; font-size: 17px;
+  letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none;
+  padding: 20px 38px; border: none; border-radius: 999px;
+  box-shadow: var(--ms-shadow-lift); cursor: pointer;
+  transition: transform var(--ms-dur-fast) var(--ms-ease),
+              background-color var(--ms-dur) var(--ms-ease),
+              box-shadow var(--ms-dur) var(--ms-ease);
+  animation: cta-pulse 2.6s var(--ms-ease) infinite;
+}
+.cta:hover { background: #e35a00; }
+.cta:active { transform: scale(0.98); }
+.cta svg { flex: none; }
+.cta--lg { font-size: 19px; padding: 22px 44px; }
+.cta--block { display: flex; width: 100%; }
+@keyframes cta-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.025); } }
+@media (prefers-reduced-motion: reduce) { .cta { animation: none; } }
+
+.downsell-link {
+  display: inline-block; background: none; border: none; cursor: pointer;
+  font-family: var(--ms-font-body); font-size: 14px; color: var(--ms-muted);
+  text-decoration: underline; text-underline-offset: 3px; padding: 8px;
+}
+.downsell-link:hover { color: var(--ms-charcoal); }
+
+/* ---- Availability dot (pulsing green) ---- */
+.avail-dot {
+  display: inline-block; width: 10px; height: 10px; border-radius: 999px;
+  background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,0.55);
+  animation: dot-pulse 1.8s ease-out infinite;
+}
+@keyframes dot-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.55); }
+  70% { box-shadow: 0 0 0 9px rgba(34,197,94,0); }
+  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
+.blink-dot { animation: blink 1.2s steps(2,start) infinite; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+/* ---- Countdown (JS-rendered) ---- */
+.cd { display: inline-flex; gap: 14px; align-items: stretch; font-family: var(--ms-font-body); }
+.cd--sm { gap: 8px; }
+.cd__cell { display: flex; flex-direction: column; align-items: center; min-width: 64px; }
+.cd--sm .cd__cell { min-width: 38px; }
+.cd__num { font-family: var(--ms-font-display); font-weight: 700; font-size: 52px; line-height: 1; }
+.cd--sm .cd__num { font-size: 26px; }
+.cd__lbl { margin-top: 6px; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+.cd__sep { align-self: center; font-family: var(--ms-font-display); font-weight: 600; font-size: 52px; line-height: 1; }
+.cd--sm .cd__sep { font-size: 26px; }
+/* boxed variant */
+.cd--boxed { gap: 12px; }
+.cd--boxed.cd--sm { gap: 8px; }
+.cd--boxed .cd__cell { padding: 16px 12px; border-radius: 14px; }
+.cd--boxed.cd--sm .cd__cell { padding: 10px 8px; }
+.cd--boxed .cd__sep { display: none; }
+/* theme: dark (default) */
+.cd--dark .cd__num { color: #FAF7F6; }
+.cd--dark .cd__lbl { color: rgba(239,231,221,0.6); }
+.cd--dark .cd__sep { color: rgba(239,231,221,0.35); }
+.cd--dark.cd--boxed .cd__cell { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); }
+/* theme: light */
+.cd--light .cd__num { color: #1B2020; }
+.cd--light .cd__lbl { color: rgba(27,32,32,0.55); }
+.cd--light .cd__sep { color: rgba(27,32,32,0.3); }
+.cd--light.cd--boxed .cd__cell { background: rgba(27,32,32,0.04); border: 1px solid rgba(27,32,32,0.1); }
+
+/* ---- Signup popup ---- */
+.popup-overlay {
+  position: fixed; inset: 0; z-index: 1000; display: none;
+  align-items: center; justify-content: center; padding: 20px;
+  background: rgba(12,17,20,0.6); backdrop-filter: blur(3px);
+}
+.popup-overlay.is-open { display: flex; animation: fade-in var(--ms-dur) var(--ms-ease); }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.popup-card {
+  position: relative; width: 100%; max-width: 440px; background: var(--ms-white);
+  border-radius: 20px; padding: 40px 34px 34px; box-shadow: var(--ms-shadow-hero);
+  animation: pop-in var(--ms-dur) var(--ms-ease);
+}
+@keyframes pop-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.popup-close {
+  position: absolute; top: 14px; right: 14px; width: 36px; height: 36px;
+  border: none; background: rgba(12,17,20,0.06); border-radius: 999px;
+  font-size: 20px; line-height: 1; color: var(--ms-charcoal); cursor: pointer;
+}
+.popup-close:hover { background: rgba(12,17,20,0.12); }
+/* Opt-in form sits in a dashed card (matches Claude Design) */
+.popup-card form { border: 1.5px dashed var(--ms-border-strong); border-radius: 18px; padding: 22px 20px 24px; margin-top: 18px; }
+.popup-field { display: block; margin-top: 16px; }
+.popup-card form .popup-field:first-child { margin-top: 0; }
+.popup-field label { display: block; font-size: 14px; font-weight: 700; color: var(--ms-ink); margin-bottom: 9px; }
+.popup-field input {
+  width: 100%; padding: 16px 18px; border: 1.5px solid transparent;
+  border-radius: 12px; font-family: var(--ms-font-body); font-size: 15px; color: var(--ms-ink);
+  background: var(--ms-cream);
+}
+.popup-field input:focus { outline: none; border-color: var(--ms-terracotta); background: #fff; }
+@media (max-width: 520px) {
+  .popup-overlay { padding: 0; align-items: stretch; }
+  .popup-card {
+    max-width: 100%; border-radius: 0; padding: 48px 22px 36px;
+    min-height: 100%; overflow-y: auto;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .popup-card form { padding: 16px 14px 18px; margin-top: 14px; }
+}
+
+/* ---- FAQ accordion ---- */
+.faq-item { border-bottom: 1px solid var(--ms-border-strong); }
+.faq-q {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  padding: 22px 4px; font-family: var(--ms-font-body); font-weight: 700;
+  font-size: 18px; color: var(--ms-ink);
+}
+.faq-q .faq-icon { flex: none; font-size: 24px; transition: transform var(--ms-dur) var(--ms-ease); color: var(--ms-terracotta); }
+.faq-item.is-open .faq-q .faq-icon { transform: rotate(45deg); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height var(--ms-dur-slow) var(--ms-ease); }
+.faq-a__inner { padding: 0 4px 22px; font-size: 16px; line-height: 1.65; color: var(--ms-charcoal); }
+
+/* ---- Video facade ---- */
+.video-facade { position: relative; cursor: pointer; overflow: hidden; border-radius: var(--ms-radius-lg); aspect-ratio: 16/9; background: #000; }
+.video-facade img { width: 100%; height: 100%; object-fit: cover; }
+.video-facade .play-btn {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 84px; height: 84px; border-radius: 999px; background: rgba(202,93,37,0.95);
+  display: flex; align-items: center; justify-content: center; box-shadow: var(--ms-shadow-hero);
+  transition: transform var(--ms-dur) var(--ms-ease);
+}
+.video-facade:hover .play-btn { transform: translate(-50%,-50%) scale(1.08); }
+.video-facade .play-btn::after { content: ""; border-style: solid; border-width: 16px 0 16px 26px; border-color: transparent transparent transparent #fff; margin-left: 6px; }
+.video-facade iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+/* ---- Gold guarantee disc ---- */
+.guarantee-disc {
+  width: 120px; height: 120px; border-radius: 999px; flex: none;
+  background: linear-gradient(145deg, #F2C14E, #C8920A); color: #3a2a00;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; box-shadow: var(--ms-shadow-lift); padding: 10px;
+}
+.guarantee-disc .g-num { font-family: var(--ms-font-display); font-weight: 700; font-size: 30px; line-height: 1; }
+.guarantee-disc .g-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
+
+/* ---- Progress bar ---- */
+.progress-track { width: 100%; height: 14px; border-radius: 999px; background: rgba(27,32,32,0.10); overflow: hidden; }
+.progress-fill { height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--ms-terracotta), var(--ms-orange)); transition: width 1.4s var(--ms-ease); }
+
+/* ---- Slide-down banner ---- */
+@keyframes slide-down { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+
+/* ---- Purchase toast ---- */
+.toast {
+  position: fixed; left: 20px; bottom: 20px; z-index: 900; max-width: 320px;
+  display: flex; gap: 12px; align-items: center; background: var(--ms-white);
+  border-radius: 14px; padding: 14px 18px; box-shadow: var(--ms-shadow-lift);
+  transform: translateY(140%); opacity: 0; transition: transform var(--ms-dur-slow) var(--ms-ease), opacity var(--ms-dur-slow) var(--ms-ease);
+  border: 1px solid var(--ms-border);
+}
+.toast.is-visible { transform: translateY(0); opacity: 1; }
+.toast .toast-dot { width: 8px; height: 8px; border-radius: 999px; background: #22c55e; flex: none; }
+.toast .toast-text { font-size: 13px; line-height: 1.4; color: var(--ms-charcoal); }
+.toast .toast-text b { color: var(--ms-ink); }
+
+/* ---- Footer ---- */
+.ms-footer { background: var(--ms-charcoal); color: rgba(239,231,221,0.7); font-size: 13px; line-height: 1.7; padding: 48px 24px; }
+.ms-footer a { color: rgba(239,231,221,0.85); text-decoration: underline; text-underline-offset: 2px; }
+.ms-footer .ms-footer-links { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 16px; }
+.ms-footer .fb-disclaimer { margin-top: 18px; font-size: 11px; color: rgba(239,231,221,0.45); max-width: 720px; }
+
+/* ---- Countdown: responsive shrink on small screens (lg/boxed would overflow ~375px) ---- */
+@media (max-width: 480px) {
+  .cd { gap: 8px; }
+  .cd__cell { min-width: 0; }
+  .cd__num { font-size: 36px; }
+  .cd__sep { font-size: 36px; }
+  .cd--boxed { gap: 7px; }
+  .cd--boxed .cd__cell { padding: 10px 7px; }
+}
+@media (max-width: 380px) {
+  .cd { gap: 6px; }
+  .cd__num, .cd__sep { font-size: 28px; }
+  .cd__lbl { font-size: 10px; letter-spacing: 0.1em; }
+  .cd--boxed .cd__cell { padding: 9px 5px; }
+}
+
+body.no-scroll { overflow: hidden; }

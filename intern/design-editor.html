@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Design-Editor · Abnehmrevolution</title>
+<style>
+  :root { --cream:#FAF7F6; --sand:#EFE7DD; --ink:#1B2020; --terra:#CA5D25; --sage:#476160; --muted:#7c746b; --line:rgba(27,32,32,0.12); }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:'Avenir Next','Montserrat','Helvetica Neue',sans-serif; background:var(--sand); color:var(--ink); }
+  header { display:flex; align-items:center; gap:14px; padding:12px 20px; background:var(--ink); color:var(--cream); position:sticky; top:0; z-index:5; }
+  header h1 { margin:0; font-size:16px; font-weight:700; white-space:nowrap; }
+  .spacer { flex:1; }
+  button { font-family:inherit; cursor:pointer; }
+  .btn { border:none; border-radius:10px; padding:10px 16px; font-size:13px; font-weight:700; }
+  .btn-pub { background:var(--terra); color:#fff; }
+  .btn-pub:disabled { opacity:0.5; cursor:default; }
+  .btn-ghost { background:transparent; color:var(--cream); border:1px solid rgba(250,247,246,0.35); }
+  /* Seiten-Tabs */
+  .pagetabs { display:flex; gap:6px; padding:10px 20px 0; background:var(--sand); flex-wrap:wrap; }
+  .ptab { border:1px solid var(--line); background:#fff; border-radius:10px 10px 0 0; padding:9px 16px; font-size:13px; font-weight:700; color:var(--muted); border-bottom:none; }
+  .ptab.active { background:var(--cream); color:var(--ink); }
+  .wrap { display:flex; gap:0; height:calc(100vh - 100px); }
+  .panel { width:410px; min-width:350px; overflow-y:auto; background:var(--cream); border-right:1px solid var(--line); padding:16px; }
+  .devtabs { display:flex; gap:6px; margin-bottom:6px; }
+  .devtab { flex:1; padding:9px 0; border-radius:10px; border:1px solid var(--line); background:#fff; font-size:13px; font-weight:700; color:var(--muted); }
+  .devtab.active { background:var(--ink); color:var(--cream); border-color:var(--ink); }
+  .devnote { font-size:11.5px; color:var(--muted); margin:0 0 12px; line-height:1.5; }
+  .block { background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:10px; }
+  .block h3 { margin:0 0 8px; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:var(--sage); }
+  /* Edit-Mode */
+  .editbar { display:flex; align-items:center; gap:10px; }
+  .toggle { position:relative; width:44px; height:24px; border-radius:99px; background:#d8cfc4; border:none; transition:background .15s; flex:none; }
+  .toggle.on { background:var(--terra); }
+  .toggle::after { content:''; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:left .15s; }
+  .toggle.on::after { left:23px; }
+  .editbar .lbl { font-size:13px; font-weight:700; }
+  .editbar .sub { font-size:11px; color:var(--muted); }
+  /* AB */
+  .abrow { display:flex; gap:6px; }
+  .abbtn { flex:1; padding:8px 0; border-radius:9px; border:1px solid var(--line); background:var(--cream); font-size:12.5px; font-weight:700; color:var(--muted); }
+  .abbtn.active { background:var(--sage); border-color:var(--sage); color:#fff; }
+  /* Texte-Liste */
+  .txt-item { display:flex; align-items:center; gap:8px; padding:7px 0; border-bottom:1px dashed var(--line); font-size:12px; }
+  .txt-item:last-child { border-bottom:none; }
+  .txt-item .tprev { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--ink); }
+  .txt-item .tsec { color:var(--muted); font-size:10.5px; flex:none; }
+  .txt-item button { border:none; background:rgba(179,64,42,0.1); color:#B3402A; border-radius:7px; padding:3px 8px; font-size:11px; font-weight:700; }
+  /* Sektionen */
+  .sec { background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:10px; }
+  .sec-head { display:flex; align-items:center; gap:8px; }
+  .sec-title { font-weight:700; font-size:13.5px; flex:1; }
+  .sec-badge { font-size:10px; font-weight:700; color:var(--terra); background:rgba(202,93,37,0.1); border-radius:99px; padding:2px 8px; }
+  .mv { border:1px solid var(--line); background:var(--cream); border-radius:8px; width:26px; height:26px; font-size:12px; line-height:1; }
+  .mv:disabled { opacity:0.3; }
+  .fields { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+  .f label { display:block; font-size:10.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+  .f input[type=number] { width:100%; padding:7px 8px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-family:inherit; background:var(--cream); }
+  .f input::placeholder { color:#b8b0a6; }
+  .hiderow { grid-column:1 / -1; display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--sage); }
+  .toolbar2 { display:flex; gap:8px; margin:14px 0 4px; }
+  .btn-sm { flex:1; background:#fff; border:1px solid var(--line); border-radius:10px; padding:9px 0; font-size:12.5px; font-weight:700; color:var(--ink); }
+  .status { font-size:12px; color:var(--muted); margin:10px 2px; min-height:16px; }
+  .status.ok { color:#2E7D54; } .status.err { color:#B3402A; }
+  /* Vorschau */
+  .stage { flex:1; display:flex; flex-direction:column; background:var(--sand); }
+  .stagebar { display:flex; align-items:center; gap:8px; padding:10px 16px; }
+  .dev { border:1px solid var(--line); background:#fff; border-radius:8px; padding:7px 13px; font-size:12px; font-weight:700; color:var(--muted); }
+  .dev.active { background:var(--sage); border-color:var(--sage); color:#fff; }
+  .stagebar .sz { font-size:11.5px; color:var(--muted); margin-left:4px; }
+  .frameWrap { flex:1; display:flex; justify-content:center; overflow:auto; padding:0 16px 16px; }
+  .frameShell { background:#fff; border-radius:18px; box-shadow:0 18px 50px rgba(27,32,32,0.18); overflow:hidden; height:100%; transition:width .25s ease; width:100%; }
+  iframe { width:100%; height:100%; border:0; display:block; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🎛 Design-Editor</h1>
+  <div class="spacer"></div>
+  <button class="btn btn-ghost" onclick="resetPage()">Diese Seite zurücksetzen</button>
+  <button class="btn btn-pub" id="pubBtn" onclick="publish()">Veröffentlichen</button>
+</header>
+
+<div class="pagetabs" id="pagetabs"></div>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="block">
+      <div class="editbar">
+        <button class="toggle" id="editToggle" onclick="toggleEdit()"></button>
+        <div><div class="lbl">✏️ Text-Modus</div><div class="sub">Text in der Vorschau anklicken und direkt tippen</div></div>
+      </div>
+      <div id="txtList" style="margin-top:8px;"></div>
+    </div>
+
+    <div class="block" id="abBlock" style="display:none;">
+      <h3>A/B-Test „Headline" (Hero)</h3>
+      <div class="abrow">
+        <button class="abbtn" data-ab="" onclick="setAb(this)">Auto (Test läuft)</button>
+        <button class="abbtn" data-ab="A" onclick="setAb(this)">A fixieren</button>
+        <button class="abbtn" data-ab="B" onclick="setAb(this)">B fixieren</button>
+      </div>
+      <p class="devnote" style="margin:8px 0 0;">Fixieren = alle Besucher sehen diese Variante, der Test pausiert (keine Test-Zählung mehr).</p>
+    </div>
+
+    <div class="devtabs">
+      <button class="devtab active" id="tab-d" onclick="setDevice('d')">🖥 Desktop</button>
+      <button class="devtab" id="tab-m" onclick="setDevice('m')">📱 Mobil</button>
+    </div>
+    <p class="devnote">Desktop-Werte gelten überall, Mobil-Werte überschreiben unter 760 px. Leeres Feld = Original.</p>
+    <div id="secs"><p style="font-size:13px;color:var(--muted);">Lade Sektionen…</p></div>
+    <div class="toolbar2">
+      <button class="btn-sm" onclick="reloadFrame()">↻ Vorschau neu laden</button>
+      <button class="btn-sm" onclick="loadPublished()">⤓ Veröffentlichten Stand laden</button>
+    </div>
+    <p class="status" id="status"></p>
+  </div>
+
+  <div class="stage">
+    <div class="stagebar">
+      <button class="dev" data-w="375" onclick="setW(this)">iPhone · 375</button>
+      <button class="dev" data-w="430" onclick="setW(this)">Phone L · 430</button>
+      <button class="dev" data-w="768" onclick="setW(this)">Tablet · 768</button>
+      <button class="dev active" data-w="full" onclick="setW(this)">Desktop · 100%</button>
+      <span class="sz" id="szNote"></span>
+    </div>
+    <div class="frameWrap"><div class="frameShell" id="shell">
+      <iframe id="frame" src="/abnehmrevolution/?preview=1"></iframe>
+    </div></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var API = '/abnehmrevolution/api/design';
+  var LS_DRAFT = 'ar_design_draft_v2';
+  var LS_CRED = 'ar_design_cred_v1';
+  var LS_LIVE = 'ar_design_cfg_v1';
+  var PAGES = [
+    { key: 'landing', label: 'Landingpage', url: '/abnehmrevolution/?preview=1' },
+    { key: 'danke', label: 'Danke (Glow)', url: '/abnehmrevolution/danke' },
+    { key: 'bestaetigung', label: 'Bestätigung', url: '/abnehmrevolution/bestaetigung' },
+    { key: 'aufzeichnung', label: 'Aufzeichnung', url: '/abnehmrevolution/aufzeichnung' },
+    { key: 'aufzeichnung-06-2026', label: 'Aufz. Juni-Archiv', url: '/abnehmrevolution/aufzeichnung-06-2026' },
+  ];
+  var cfg = { v: 2, pages: {}, ab: {} };
+  var page = 'landing', device = 'd', secList = [], canOrder = false, editMode = false;
+  var frame = document.getElementById('frame');
+
+  function $(id) { return document.getElementById(id); }
+  function setStatus(m, c) { var s = $('status'); s.textContent = m || ''; s.className = 'status ' + (c || ''); }
+  function pgCfg() {
+    if (!cfg.pages[page]) cfg.pages[page] = {};
+    var p = cfg.pages[page];
+    if (!p.sections) p.sections = {};
+    if (!p.texts) p.texts = {};
+    return p;
+  }
+  function saveDraft() { try { localStorage.setItem(LS_DRAFT, JSON.stringify(cfg)); } catch (e) {} }
+  function pushPreview() { try { frame.contentWindow.postMessage({ type: 'ar-design-preview', config: cfg }, '*'); } catch (e) {} }
+  function pushEdit() { try { frame.contentWindow.postMessage({ type: 'ar-edit-mode', on: editMode }, '*'); } catch (e) {} }
+
+  // ---- Nachrichten aus der Vorschau ----
+  window.addEventListener('message', function (ev) {
+    var d = ev.data || {};
+    if (d.type === 'ar-design-ready') {
+      secList = d.sections || [];
+      canOrder = !!d.canOrder;
+      $('abBlock').style.display = d.hasAb ? '' : 'none';
+      renderSecs(); renderTxtList(); renderAb();
+      pushPreview(); pushEdit();
+    }
+    if (d.type === 'ar-text-changed' && d.page === page) {
+      pgCfg().texts[d.key] = { h: d.html, oh: d.oh, p: d.p || d.preview };
+      saveDraft(); renderTxtList();
+      setStatus('Text geändert (Entwurf) — „Veröffentlichen“ macht ihn live.');
+    }
+  });
+
+  // ---- Seiten-Tabs ----
+  function renderPageTabs() {
+    $('pagetabs').innerHTML = PAGES.map(function (p) {
+      return '<button class="ptab' + (p.key === page ? ' active' : '') + '" onclick="setPage(\'' + p.key + '\')">' + p.label + '</button>';
+    }).join('');
+  }
+  window.setPage = function (k) {
+    page = k; secList = [];
+    renderPageTabs();
+    $('secs').innerHTML = '<p style="font-size:13px;color:var(--muted);">Lade Sektionen…</p>';
+    var p = PAGES.filter(function (x) { return x.key === k; })[0];
+    frame.src = p.url;
+    renderTxtList();
+  };
+  window.reloadFrame = function () { frame.src = frame.src.split('#')[0]; };
+
+  // ---- Text-Modus ----
+  window.toggleEdit = function () {
+    editMode = !editMode;
+    $('editToggle').classList.toggle('on', editMode);
+    pushEdit();
+    setStatus(editMode ? 'Text-Modus AN — klicke einen Text in der Vorschau.' : 'Text-Modus aus.');
+  };
+  function renderTxtList() {
+    var texts = (cfg.pages[page] || {}).texts || {};
+    var keys = Object.keys(texts);
+    if (!keys.length) { $('txtList').innerHTML = ''; return; }
+    $('txtList').innerHTML = keys.map(function (k) {
+      var t = texts[k];
+      var prev = (t.p || t.h || '').replace(/<[^>]*>/g, '').slice(0, 46);
+      return '<div class="txt-item"><span class="tsec">' + k.split(':')[0].slice(0, 14) + '</span><span class="tprev">' + prev.replace(/</g, '&lt;') + '</span><button onclick="revertTxt(\'' + k + '\')">✕</button></div>';
+    }).join('');
+  }
+  window.revertTxt = function (k) {
+    delete pgCfg().texts[k];
+    saveDraft(); renderTxtList();
+    reloadFrame(); // Original-Text kommt aus dem Quell-HTML zurück
+    setStatus('Text-Änderung verworfen.');
+  };
+
+  // ---- A/B ----
+  function renderAb() {
+    var cur = (cfg.ab || {}).headline_v1 || '';
+    document.querySelectorAll('.abbtn').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-ab') === cur); });
+  }
+  window.setAb = function (btn) {
+    var v = btn.getAttribute('data-ab');
+    if (!cfg.ab) cfg.ab = {};
+    if (v === 'A' || v === 'B') cfg.ab.headline_v1 = v; else delete cfg.ab.headline_v1;
+    saveDraft(); renderAb(); pushPreview();
+    setStatus(v ? ('Variante ' + v + ' fixiert (Entwurf) — Vorschau ggf. neu laden.') : 'Zurück auf Auto-Test (Entwurf).');
+  };
+
+  // ---- Geräte / Vorschau-Breite ----
+  window.setDevice = function (dv) {
+    device = dv;
+    $('tab-d').classList.toggle('active', dv === 'd');
+    $('tab-m').classList.toggle('active', dv === 'm');
+    var target = dv === 'm' ? '375' : 'full';
+    document.querySelectorAll('.dev').forEach(function (b) { if (b.getAttribute('data-w') === target) setW(b); });
+    renderSecs();
+  };
+  window.setW = function (btn) {
+    document.querySelectorAll('.dev').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    var w = btn.getAttribute('data-w');
+    $('shell').style.width = w === 'full' ? '100%' : (w + 'px');
+    $('szNote').textContent = w === 'full' ? '' : (w + ' px — Mobil-Regeln greifen unter 760 px');
+  };
+
+  // ---- Sektionen ----
+  function secDev(key) {
+    var s = pgCfg().sections;
+    if (!s[key]) s[key] = {};
+    if (!s[key][device]) s[key][device] = {};
+    return s[key][device];
+  }
+  function val(key, f) {
+    var s = ((pgCfg().sections[key] || {})[device]) || {};
+    return (typeof s[f] === 'number') ? s[f] : '';
+  }
+  window.setFieldProxy = function (key, f, raw) {
+    var c = secDev(key);
+    if (raw === '' || isNaN(parseFloat(raw))) delete c[f]; else c[f] = parseFloat(raw);
+    saveDraft(); pushPreview();
+    setStatus('Entwurf gespeichert — noch nicht veröffentlicht.');
+  };
+  window.setHideProxy = function (key, on) {
+    var c = secDev(key);
+    if (on) c.hide = true; else delete c.hide;
+    saveDraft(); pushPreview(); renderSecs();
+  };
+  function orderOf(s) {
+    var c = pgCfg().sections[s.key] || {};
+    var dv = c[device] || {};
+    if (typeof dv.o === 'number') return dv.o;
+    if (device === 'm' && c.d && typeof c.d.o === 'number') return c.d.o;
+    return s.index * 10;
+  }
+  function orderedKeys() {
+    return secList.slice().sort(function (a, b) { return orderOf(a) - orderOf(b); }).map(function (s) { return s.key; });
+  }
+  window.move = function (key, dir) {
+    var keys = orderedKeys();
+    var i = keys.indexOf(key), j = i + dir;
+    if (i < 0 || j < 0 || j >= keys.length) return;
+    var t = keys[i]; keys[i] = keys[j]; keys[j] = t;
+    keys.forEach(function (k, idx) {
+      var s = pgCfg().sections;
+      if (!s[k]) s[k] = {};
+      if (!s[k][device]) s[k][device] = {};
+      s[k][device].o = idx * 10;
+    });
+    saveDraft(); pushPreview(); renderSecs();
+  };
+  function labelOf(key) { for (var i = 0; i < secList.length; i++) if (secList[i].key === key) return secList[i].label; return key; }
+  function fld(key, f, label) {
+    var v = val(key, f);
+    return '<div class="f"><label>' + label + '</label><input type="number" value="' + v + '" placeholder="' + (f === 'z' ? '100' : 'Original') + '" oninput="setFieldProxy(\'' + key + '\',\'' + f + '\', this.value)"></div>';
+  }
+  function renderSecs() {
+    if (!secList.length) return;
+    var keys = orderedKeys();
+    $('secs').innerHTML = keys.map(function (key, idx) {
+      var dv = ((pgCfg().sections[key] || {})[device]) || {};
+      var touched = Object.keys(dv).length > 0;
+      return '<div class="sec"><div class="sec-head">' +
+        (canOrder ? '<button class="mv" onclick="move(\'' + key + '\',-1)"' + (idx === 0 ? ' disabled' : '') + '>▲</button><button class="mv" onclick="move(\'' + key + '\',1)"' + (idx === keys.length - 1 ? ' disabled' : '') + '>▼</button>' : '') +
+        '<span class="sec-title">' + labelOf(key) + '</span>' + (touched ? '<span class="sec-badge">angepasst</span>' : '') +
+        '</div><div class="fields">' +
+        fld(key, 'pt', 'Padding oben (px)') + fld(key, 'pb', 'Padding unten (px)') +
+        fld(key, 'z', 'Schriftgröße / Zoom (%)') + fld(key, 'w', 'Inhaltsbreite (px)') +
+        '<label class="hiderow"><input type="checkbox" onchange="setHideProxy(\'' + key + '\', this.checked)"' + (dv.hide ? ' checked' : '') + '> Auf ' + (device === 'm' ? 'Mobil' : 'Desktop') + ' ausblenden</label>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  // ---- Laden / Publish / Reset ----
+  function migrate(c) {
+    if (c && c.sections && !c.pages) return { v: 2, pages: { landing: { sections: c.sections, texts: {} } }, ab: {} };
+    if (!c || !c.pages) return { v: 2, pages: {}, ab: {} };
+    if (!c.ab) c.ab = {};
+    return c;
+  }
+  window.loadPublished = function () {
+    setStatus('Lade veröffentlichten Stand…');
+    fetch(API + '?cb=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) {
+      cfg = migrate((d && d.config) || {});
+      saveDraft(); renderSecs(); renderTxtList(); renderAb(); pushPreview();
+      setStatus('Veröffentlichter Stand geladen.', 'ok');
+    }).catch(function () { setStatus('Konnte veröffentlichten Stand nicht laden.', 'err'); });
+  };
+  window.resetPage = function () {
+    if (!confirm('Alle Anpassungen DIESER Seite („' + page + '“) verwerfen? (Live erst nach „Veröffentlichen“.)')) return;
+    delete cfg.pages[page];
+    if (page === 'landing' && cfg.ab) delete cfg.ab.headline_v1;
+    saveDraft(); renderSecs(); renderTxtList(); renderAb(); reloadFrame();
+    setStatus('Seite zurückgesetzt — zum Livestellen „Veröffentlichen“.');
+  };
+  function creds() {
+    var c = null;
+    try { c = JSON.parse(sessionStorage.getItem(LS_CRED) || 'null'); } catch (e) {}
+    if (!c) {
+      var u = prompt('Intern-Benutzer (wie Dashboard-Login):', 'mamaspagat');
+      if (u === null) return null;
+      var p = prompt('Intern-Passwort:');
+      if (p === null) return null;
+      c = { u: u, p: p };
+      try { sessionStorage.setItem(LS_CRED, JSON.stringify(c)); } catch (e) {}
+    }
+    return c;
+  }
+  window.publish = function () {
+    var c = creds();
+    if (!c) return;
+    var btn = $('pubBtn'); btn.disabled = true;
+    setStatus('Veröffentliche…');
+    fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Basic ' + btoa(c.u + ':' + c.p) },
+      body: JSON.stringify({ config: cfg }),
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      btn.disabled = false;
+      if (d && d.ok) {
+        try { localStorage.setItem(LS_LIVE, JSON.stringify(cfg)); } catch (e) {}
+        setStatus('✓ Veröffentlicht! Live in max. ~30 Sekunden (CDN-Cache).', 'ok');
+      } else if (d && d.error === 'unauthorized') { sessionStorage.removeItem(LS_CRED); setStatus('Login falsch — bitte erneut veröffentlichen.', 'err'); }
+      else setStatus('Fehler: ' + ((d && d.error) || 'unbekannt'), 'err');
+    }).catch(function () { btn.disabled = false; setStatus('Netzwerkfehler beim Veröffentlichen.', 'err'); });
+  };
+
+  // ---- Start ----
+  renderPageTabs();
+  var d0 = null;
+  try { d0 = JSON.parse(localStorage.getItem(LS_DRAFT) || 'null'); } catch (e) {}
+  if (d0 && d0.pages) { cfg = migrate(d0); renderAb(); }
+  else loadPublished();
+})();
+</script>
+</body>
+</html>

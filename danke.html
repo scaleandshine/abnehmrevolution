@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schön, dass du dabei bist · Glow Starterpaket · Die Abnehmrevolution</title>
+  <link rel="icon" type="image/svg+xml" href="/abnehmrevolution/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="/abnehmrevolution/css/tokens.css">
+<link rel="stylesheet" href="/abnehmrevolution/css/base.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #E7DDD0; overflow-x: hidden; }
+
+  /* ---- Urgent top banner (slides in after 1s) ---- */
+  #urgent-banner {
+    position: sticky; top: 0; left: 0; right: 0; z-index: 10000;
+    color: var(--ms-white); text-align: center; padding: 13px 20px;
+    font-size: 13px; font-weight: 700; line-height: 1.4;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 4px 20px rgba(202,93,37,0.4); background-color: var(--ms-ember);
+    max-height: 0; padding-top: 0; padding-bottom: 0; overflow: hidden;
+  }
+  #urgent-banner.is-down { max-height: 200px; padding-top: 13px; padding-bottom: 13px; transition: max-height 0.55s cubic-bezier(0.22,1,0.36,1), padding 0.55s cubic-bezier(0.22,1,0.36,1); }
+  #urgent-banner svg { flex: none; }
+
+  /* ---- Hero ---- */
+  .dk-hero {
+    position: relative; overflow: hidden; color: var(--ms-charcoal);
+    background: radial-gradient(100% 70% at 100% 0%, #F7E0D1 0%, rgba(247,224,209,0) 56%),
+                linear-gradient(180deg, #F3EADE 0%, #EFE7DD 100%);
+    padding: 22px 20px 74px;
+  }
+  .dk-brandmark { font-family: var(--ms-font-display); font-style: italic; font-weight: 600; font-size: 25px; line-height: 1; color: var(--ms-sage); }
+  .dk-hero-head { text-align: center; padding-bottom: 24px; margin-bottom: 30px; border-bottom: 1px solid rgba(12,17,20,0.08); }
+
+  .dk-progress-wrap { max-width: 480px; margin: 10px auto 22px; }
+  .dk-progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .dk-progress-lbl { font-size: 12px; font-weight: 700; color: var(--ms-terracotta); letter-spacing: 0.06em; text-transform: uppercase; }
+  .dk-progress-pct { font-size: 12px; font-weight: 800; color: var(--ms-terracotta); }
+  .dk-progress-track { height: 10px; background: rgba(202,93,37,0.18); border-radius: 999px; overflow: hidden; }
+  #prog-bar { height: 100%; width: 0%; background: var(--ms-terracotta); border-radius: 999px; transition: width 1.6s cubic-bezier(0.22,1,0.36,1); }
+  .dk-progress-foot { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; font-weight: 600; color: #9a9087; }
+
+  .dk-hero-inner { position: relative; max-width: 720px; margin: 0 auto; text-align: center; }
+  .dk-confirm-pill {
+    display: inline-flex; align-items: center; gap: 9px; border: 1px solid #6dbe7d4d;
+    color: #6dbe7d; font-size: 12px; font-weight: 700; padding: 8px 16px;
+    border-radius: 999px; margin-bottom: 20px; background-color: #1b20200d;
+  }
+  .dk-confirm-pill .check { flex: none; width: 18px; height: 18px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background-color: #6dbe7d; }
+  .dk-h1 { margin: 0 0 16px; font-family: var(--ms-font-display); font-weight: 600; font-size: clamp(30px,5.6vw,42px); line-height: 1.04; color: var(--ms-charcoal); }
+  .dk-h1 em { font-style: italic; color: var(--ms-terracotta); }
+  .dk-lead { margin: 0 auto 30px; max-width: 560px; font-size: 16px; line-height: 1.6; color: #4a4540; }
+  .dk-hook { margin: 0 auto 22px; max-width: 600px; font-family: var(--ms-font-display); font-style: italic; font-weight: 500; font-size: clamp(15px,2.6vw,22px); line-height: 1.32; color: var(--ms-charcoal); }
+
+  .dk-video-wrap { position: relative; max-width: 860px; margin: 0 auto 30px; }
+  .dk-video-wrap .video-facade { box-shadow: 0 0 0 1px rgba(12,17,20,0.08), 0 24px 60px rgba(31,26,21,0.22); }
+  .dk-video-tag {
+    position: absolute; left: 18px; bottom: 16px; display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(12,17,20,0.6); color: var(--ms-white); font-size: 12px; font-weight: 600;
+    padding: 7px 14px; border-radius: 999px; backdrop-filter: blur(3px); z-index: 2; pointer-events: none;
+  }
+  .dk-video-tag .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--ms-orange); }
+
+  .dk-urgency {
+    display: inline-flex; align-items: center; gap: 10px; background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.3); border-radius: 999px; padding: 8px 18px; margin-bottom: 22px;
+  }
+  .dk-urgency .txt { font-size: 13px; font-weight: 800; color: var(--ms-charcoal); }
+  .avail-num { display: inline-block; transform-origin: center; color: #22c55e; }
+  @keyframes availFlip { 0%{transform:rotateX(0) scale(1);} 28%{transform:rotateX(88deg) scale(1.05); opacity:0.2;} 56%{transform:rotateX(0) scale(1.4); opacity:1;} 100%{transform:rotateX(0) scale(1);} }
+
+  .dk-ticket-line { margin: 0 auto 22px; max-width: 430px; font-family: var(--ms-font-display); font-weight: 600; font-size: 17px; line-height: 1.32; color: var(--ms-charcoal); }
+  .dk-ticket-line .accent { color: var(--ms-terracotta); }
+
+  /* ---- Price block (3-tier) ---- */
+  .dk-price-card { max-width: 430px; margin: 0 auto 22px; background: var(--ms-white); border: 1px solid rgba(12,17,20,0.06); border-radius: 20px; padding: 26px; box-shadow: 0 8px 22px rgba(31,26,21,0.1); }
+  .dk-price-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .dk-price-rows p { margin: 0; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font-size: 14px; }
+  .dk-price-rows .r1 { color: var(--ms-muted); }
+  .dk-price-rows .r1 b { font-weight: 700; white-space: nowrap; }
+  .dk-price-rows .r2 { color: #9a9087; }
+  .dk-price-rows .r2 s { text-decoration: line-through; white-space: nowrap; }
+  .dk-price-now { border-top: 1px solid rgba(12,17,20,0.08); padding-top: 18px; }
+  .dk-price-now .label { margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ms-terracotta); }
+  .dk-price-now .big { margin: 0; font-family: var(--ms-font-display); font-weight: 700; font-size: 50px; line-height: 1.1; color: var(--ms-terracotta); }
+  .dk-price-now .sub { margin: 12px 0 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ms-muted); }
+
+  .dk-guarantee-row { display: flex; align-items: center; justify-content: center; gap: 16px; max-width: 430px; margin: 0 auto 22px; }
+  .dk-guarantee-row .gtxt { text-align: left; font-size: 13px; line-height: 1.5; color: #4a4540; max-width: 220px; }
+  .dk-guarantee-row .gtxt b { color: var(--ms-charcoal); }
+
+  .dk-skip { margin-top: 16px; }
+
+  /* ---- Produkt-Intro (sage) ---- */
+  .dk-intro { background: var(--ms-sage); color: var(--ms-white); padding: 80px 20px; }
+  .dk-intro-inner { max-width: 760px; margin: 0 auto; text-align: center; }
+  .dk-intro-eyebrow { margin: 0 0 10px; font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ms-orange); }
+  .dk-intro-h2 { margin: 0 0 30px; font-family: var(--ms-font-display); font-weight: 600; font-size: clamp(30px,4vw,48px); line-height: 1.08; color: var(--ms-white); }
+  .dk-box-stack { position: relative; width: 230px; height: 200px; margin: 0 auto 34px; }
+  .dk-box-stack .bx { position: absolute; left: 50%; width: 150px; height: 190px; border-radius: 16px; }
+  .dk-box-stack .bx1 { top: 18px; transform: translateX(-50%) rotate(-7deg); background: var(--ms-sage-deep); box-shadow: 0 16px 34px rgba(0,0,0,0.3); }
+  .dk-box-stack .bx2 { top: 9px; transform: translateX(-50%) rotate(4deg); background: var(--ms-cream); box-shadow: 0 16px 34px rgba(0,0,0,0.3); }
+  .dk-box-stack .bx3 { top: 0; transform: translateX(-50%); background: var(--ms-terracotta); box-shadow: 0 18px 38px rgba(0,0,0,0.34); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 18px; text-align: center; }
+  .dk-box-stack .bx3 .b-brand { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(250,247,246,0.8); }
+  .dk-box-stack .bx3 .b-title { margin-top: 8px; font-family: var(--ms-font-display); font-weight: 700; font-size: 22px; line-height: 1.05; color: var(--ms-white); }
+  .dk-box-stack .bx3 .b-rule { margin-top: 10px; width: 40px; height: 2px; background: rgba(250,247,246,0.5); }
+  .dk-box-stack .bx3 .b-boni { margin-top: 10px; font-size: 12px; font-weight: 700; color: var(--ms-white); }
+  .dk-intro-hook { margin: 0 auto 14px; max-width: 560px; font-family: var(--ms-font-display); font-style: italic; font-weight: 500; font-size: clamp(19px,2.4vw,24px); line-height: 1.35; color: var(--ms-white); }
+  .dk-intro-sub { margin: 0 auto; max-width: 520px; font-size: 16px; line-height: 1.6; color: rgba(239,231,221,0.82); }
+
+  /* ---- Bonus cards ---- */
+  .dk-bonus { background: var(--ms-cream); padding: 80px 20px; }
+  .dk-bonus-list { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px; }
+  .bonus-card { display: grid; grid-template-columns: 300px 1fr; gap: 30px; align-items: center; background: var(--ms-white); border-radius: 24px; padding: 30px 36px 30px 18px; box-shadow: 0 8px 24px rgba(31,26,21,0.07); }
+  .bonus-card.bonus-rev { grid-template-columns: 1fr 300px; }
+  .bonus-card.bonus-rev .pimg { order: 2; }
+  .bonus-card .pimg { display: flex; align-items: center; justify-content: center; padding: 8px; }
+  .bonus-tag { display: inline-block; background: rgba(71,97,96,0.14); color: var(--ms-sage); font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; margin-bottom: 12px; }
+  .bonus-card h3 { margin: 0 0 12px; font-family: var(--ms-font-display); font-weight: 600; font-size: clamp(23px,2.8vw,30px); line-height: 1.15; color: var(--ms-charcoal); }
+  .bonus-card p { margin: 0; font-size: 15.5px; line-height: 1.65; color: #4a4540; }
+  .wert-disc { position: absolute; border-radius: 999px; color: var(--ms-white); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+  .wert-disc .w-lbl { font-size: 7.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.8; }
+  .wert-disc .w-num { font-family: var(--ms-font-display); font-weight: 700; line-height: 1; }
+
+  .dk-bonus-foot { max-width: 640px; margin: 54px auto 0; text-align: center; }
+  .dk-bonus-foot .p1 { margin: 0 0 24px; font-size: 18px; line-height: 1.65; color: var(--ms-charcoal); }
+  .dk-bonus-foot .p2 { margin: 0 0 24px; font-size: 13px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ms-terracotta); }
+
+  /* ---- Summary box (dark) ---- */
+  .dk-summary { background: #E7DDD0; padding: 80px 20px; }
+  .dk-summary-inner { max-width: 680px; margin: 0 auto; scroll-margin-top: 16px; }
+  .dk-summary-h2 { margin: 0 0 24px; text-align: center; font-family: var(--ms-font-display); font-weight: 600; font-size: clamp(26px,3.4vw,38px); line-height: 1.1; color: var(--ms-sage); }
+  .dk-summary-card { background: var(--ms-charcoal); border-radius: 26px; padding: 40px; box-shadow: 0 24px 54px rgba(31,26,21,0.24); }
+  .dk-summary-card .lead { margin: 0 0 20px; font-weight: 800; font-size: 17px; color: var(--ms-white); }
+  .dk-summary-list { margin: 0 0 26px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 13px; }
+  .dk-summary-list li { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; border-bottom: 1px solid rgba(239,231,221,0.12); padding-bottom: 13px; }
+  .dk-summary-list .lab { display: flex; gap: 11px; font-size: 14.5px; line-height: 1.45; color: var(--ms-cream); }
+  .dk-summary-list .lab svg { flex: none; margin-top: 2px; }
+  .dk-summary-list .val { flex: none; white-space: nowrap; font-weight: 800; font-size: 13.5px; color: rgba(239,231,221,0.6); }
+  .dk-summary-avail { margin: 0 0 18px; text-align: center; font-size: 12px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ms-orange); }
+  .dk-summary-price { text-align: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 24px 22px; margin-bottom: 22px; }
+  .dk-summary-price .rows { max-width: 280px; margin: 0 auto 16px; display: flex; flex-direction: column; gap: 8px; }
+  .dk-summary-price .rows p { margin: 0; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font-size: 14px; }
+  .dk-summary-price .rows .r1 { color: rgba(239,231,221,0.7); }
+  .dk-summary-price .rows .r1 b { font-weight: 700; white-space: nowrap; }
+  .dk-summary-price .rows .r2 { color: rgba(239,231,221,0.5); }
+  .dk-summary-price .rows .r2 s { text-decoration: line-through; white-space: nowrap; }
+  .dk-summary-price .now { border-top: 1px solid rgba(239,231,221,0.14); padding-top: 18px; }
+  .dk-summary-price .now .label { margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ms-orange); }
+  .dk-summary-price .now .big { margin: 0; font-family: var(--ms-font-display); font-weight: 700; font-size: 50px; line-height: 1.1; color: var(--ms-white); }
+  .dk-summary-price .now .sub { margin: 12px 0 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(239,231,221,0.55); }
+  .dk-summary-guarantee { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 18px auto 0; max-width: 360px; }
+  .dk-summary-guarantee .gtxt { text-align: left; font-size: 13px; line-height: 1.5; color: rgba(239,231,221,0.75); }
+  .dk-summary-guarantee .gtxt b { color: var(--ms-white); }
+  .dk-trust { display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; margin-top: 18px; }
+  .dk-trust span { display: flex; align-items: center; gap: 7px; font-size: 12px; color: rgba(239,231,221,0.65); }
+  .dk-social { display: flex; align-items: center; justify-content: center; gap: 9px; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(239,231,221,0.12); }
+  .dk-social .stack { display: flex; }
+  .dk-social .stack img { width: 30px; height: 30px; border-radius: 999px; object-fit: cover; border: 2px solid var(--ms-charcoal); }
+  .dk-social .stack img + img { margin-left: -9px; }
+  .dk-social .stxt { font-size: 13px; font-weight: 700; color: var(--ms-white); }
+
+  /* ---- Verlust-Moment ---- */
+  .dk-loss { background: var(--ms-cream); padding: 84px 20px; }
+  .dk-loss-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+  .dk-loss h2 { margin: 0 0 22px; font-family: var(--ms-font-display); font-weight: 600; font-size: clamp(28px,3.6vw,42px); line-height: 1.12; color: var(--ms-sage); }
+  .dk-loss p { margin: 0 auto 30px; max-width: 600px; font-size: 17px; line-height: 1.7; color: #3a3530; }
+
+  /* ---- Footer overrides for source layout ---- */
+  .dk-footer-inner { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+  .dk-footer-brand { font-family: var(--ms-font-display); font-style: italic; font-weight: 600; font-size: 22px; color: var(--ms-cream); }
+
+  /* ---- Toast (source styling) ---- */
+  #dk-toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9999; max-width: 320px;
+    background: var(--ms-white); border-radius: 16px; padding: 14px 16px;
+    box-shadow: 0 16px 40px rgba(31,26,21,0.22); display: none; align-items: center; gap: 12px;
+  }
+  #dk-toast.is-in { display: flex; animation: toastIn 0.4s ease forwards; }
+  #dk-toast.is-out { display: flex; animation: toastOut 0.4s ease forwards; }
+  @keyframes toastIn { from{transform:translateX(110%); opacity:0;} to{transform:translateX(0); opacity:1;} }
+  @keyframes toastOut { from{opacity:1;} to{opacity:0; transform:translateY(8px);} }
+  #dk-toast .t-avatar { flex: none; width: 40px; height: 40px; border-radius: 999px; background: var(--ms-sage); color: var(--ms-white); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; }
+  #dk-toast .t-name { font-size: 12px; font-weight: 800; color: var(--ms-charcoal); line-height: 1.3; }
+  #dk-toast .t-sub { font-size: 11px; color: var(--ms-muted); line-height: 1.4; }
+  #dk-toast .t-city { font-size: 10px; color: #9a9087; margin-top: 2px; }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 980px) {
+    .dk-intro, .dk-bonus, .dk-summary, .dk-loss { padding: 64px 20px; }
+  }
+  @media (max-width: 760px) {
+    .bonus-card, .bonus-card.bonus-rev { grid-template-columns: 1fr !important; gap: 30px; padding: 30px 24px; text-align: center; }
+    .bonus-card .pimg, .bonus-card.bonus-rev .pimg { order: -1 !important; }
+  }
+  @media (max-width: 560px) {
+    .dk-summary-card { padding: 30px 22px; }
+    .dk-summary-list li { flex-direction: column; gap: 4px; align-items: flex-start; }
+    .dk-summary-list .val { align-self: flex-end; }
+    #dk-toast { left: 16px; right: 16px; max-width: none; }
+  }
+  @media (max-width: 414px) {
+    .dk-hero { padding: 20px 16px 60px; }
+    .dk-h1 { font-size: 32px; line-height: 1.05; }
+    .dk-guarantee-row { flex-direction: column; }
+    .dk-guarantee-row .gtxt { text-align: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #prog-bar, #urgent-banner.is-down { transition: none; }
+    .avail-num { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- URGENT TOP BANNER (slides in after 1s) -->
+<div id="urgent-banner">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.2 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.2a2 2 0 0 0-3.4 0Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12" y2="17.01"></line></svg>
+  Du siehst diese Seite nur ein einziges Mal und danach nie wieder - schau dir das Video unbedingt bis zum Ende an!
+</div>
+
+<!-- TOP HOOK (light & warm, integrated header) -->
+<section data-screen-label="Danke-Hero" class="dk-hero">
+  <div class="dk-hero-head">
+    <div class="dk-brandmark">Die Abnehmrevolution</div>
+  </div>
+
+  <!-- ANIMATED PROGRESS BAR -->
+  <div class="dk-progress-wrap">
+    <div class="dk-progress-top">
+      <span class="dk-progress-lbl">Nur noch ein Schritt</span>
+      <span class="dk-progress-pct">80%</span>
+    </div>
+    <div class="dk-progress-track">
+      <div id="prog-bar"></div>
+    </div>
+    <div class="dk-progress-foot">
+      <span>✓ Angemeldet</span>
+      <span>Fertig</span>
+    </div>
+  </div>
+
+  <div class="dk-hero-inner">
+    <div class="dk-confirm-pill">
+      <span class="check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      Anmeldung zur Abnehm-Revolution bestätigt
+    </div>
+
+    <h1 class="dk-h1">Schön, dass du <em>dabei bist.</em></h1>
+    <p class="dk-lead">Dein Platz im Workshop ist sicher. Bevor du die Seite schließt, habe ich noch etwas für dich, das du danach nicht wieder zu Gesicht bekommst.</p>
+
+    <p class="dk-hook">Die meisten Frauen kommen in den Workshop und hören zu. Ein paar kommen vorbereitet und verändern wirklich etwas. Dieses kurze Video zeigt dir den Unterschied.</p>
+
+    <div class="dk-video-wrap">
+      <div style="position:relative;width:100%;aspect-ratio:16/9;">
+        <iframe src="https://www.youtube.com/embed/f84UrpaVkMo?rel=0" style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:inherit;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <span class="dk-video-tag"><span class="dot"></span>Meine Nachricht an dich</span>
+    </div>
+
+    <!-- LIVE URGENCY BAR -->
+    <div class="dk-urgency">
+      <span class="avail-dot"></span>
+      <span class="txt">Nur noch <span class="avail-num">37</span> Glow Starterpakete, und nur hier auf dieser Seite</span>
+    </div>
+
+    <p class="dk-ticket-line">Sichere dir jetzt dein <span class="accent">GLOW-Ticket</span> &amp; erhalte das <span class="accent">GLOW STARTERPAKET</span>, bevor alle <span class="accent">100 Plätze</span> vergeben sind.</p>
+
+    <!-- 3-TIER PRICE BLOCK -->
+    <div class="dk-price-card">
+      <div class="dk-price-rows">
+        <p class="r1"><span>Einzeln zusammen</span><b>365 €</b></p>
+        <p class="r2"><span>Normalerweise</span><s>97 €</s></p>
+      </div>
+      <div class="dk-price-now">
+        <p class="label">Heute nur</p>
+        <p class="big">19,95 €</p>
+        <p class="sub">einmalig · sofortiger Zugang · kein Abo</p>
+      </div>
+    </div>
+
+
+    <a class="cta cta--lg" href="https://mamaspagat.tentary.com/p/glow-starterpaket/checkout">Ja, ich sichere mir mein Glow Starterpaket<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+
+    <div class="dk-skip"><a class="downsell-link" href="/abnehmrevolution/bestaetigung">Nein danke, ich möchte ohne Vorbereitung in den Workshop starten.</a></div>
+  </div>
+</section>
+
+<!-- PRODUKT INTRO -->
+<section data-screen-label="Intro" class="dk-intro">
+  <div class="dk-intro-inner">
+    <p class="dk-intro-eyebrow">Exklusiv für Workshop-Teilnehmerinnen</p>
+    <h2 class="dk-intro-h2">Das Glow Starterpaket</h2>
+
+    <div class="dk-box-stack">
+      <div class="bx bx1"></div>
+      <div class="bx bx2"></div>
+      <div class="bx bx3">
+        <span class="b-brand">Mama · Spagat</span>
+        <span class="b-title">Glow Starter­paket</span>
+        <span class="b-rule"></span>
+        <span class="b-boni">6 Boni</span>
+      </div>
+    </div>
+
+    <p class="dk-intro-hook">Warum du mit dem Glow Starterpaket schon vor dem Workshop anfängst abzunehmen, von innen heraus.</p>
+    <p class="dk-intro-sub">Du kommst nicht als Zuschauerin in den Workshop. Du kommst als Frau, die schon angefangen hat. Das steckt drin:</p>
+  </div>
+</section>
+
+<!-- PRODUKT INHALTE (Boni als gebrandete Cover) -->
+<section data-screen-label="Glow-Angebot" class="dk-bonus">
+  <div class="dk-bonus-list">
+
+    <!-- 1 -->
+    <div class="bonus-card">
+      <div class="pimg">
+        <div style="position:relative; padding:8px 6px;">
+          <div style="position:relative; width:280px; display:flex; align-items:flex-end; justify-content:center; filter:drop-shadow(0 22px 40px rgba(31,26,21,0.3));">
+            <!-- MacBook -->
+            <div style="position:relative; width:280px; z-index:1;">
+              <div style="background:#2a3130; border:5px solid #1B2020; border-radius:12px 12px 0 0; padding:0; overflow:hidden;">
+                <div style="position:relative; aspect-ratio:16/10; background:radial-gradient(circle at 50% 42%, #34403e, #14191a 75%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; text-align:center; padding:14px;">
+                  <span style="font-size:7px; font-weight:800; letter-spacing:0.22em; text-transform:uppercase; color:#FD6500;">Endlich gelüftet</span>
+                  <span style="font-family:var(--ms-font-display); font-weight:700; font-size:14px; line-height:1.12; color:#FAF7F6; max-width:170px;">Warum keine Diät bisher funktioniert hat</span>
+                  <span style="margin-top:3px; width:34px; height:34px; border-radius:999px; background:#CA5D25; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(202,93,37,0.6);"><svg width="13" height="13" viewBox="0 0 24 24" fill="#FAF7F6"><polygon points="6 4 20 12 6 20"></polygon></svg></span>
+                </div>
+              </div>
+              <div style="height:11px; background:linear-gradient(180deg,#d0d3d6,#a7abb0); border-radius:0 0 4px 4px;"></div>
+              <div style="height:5px; width:64%; margin:0 auto; background:#1B2020; border-radius:0 0 7px 7px;"></div>
+            </div>
+            <!-- Tablet -->
+            <div style="position:absolute; left:-30px; bottom:6px; width:96px; z-index:2; transform:rotate(-5deg);">
+              <div style="background:#1B2020; border-radius:12px; padding:7px 5px;">
+                <div style="position:relative; aspect-ratio:3/4; border-radius:5px; overflow:hidden; background:radial-gradient(circle at 50% 40%, #5a3520, #1B2020 78%); display:flex; align-items:center; justify-content:center;">
+                  <span style="position:absolute; top:7px; left:0; right:0; text-align:center; font-size:5px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:rgba(253,101,0,0.95);">Mystery-Kurs</span>
+                  <span style="width:28px; height:28px; border-radius:999px; background:#CA5D25; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(202,93,37,0.6);"><svg width="11" height="11" viewBox="0 0 24 24" fill="#FAF7F6"><polygon points="6 4 20 12 6 20"></polygon></svg></span>
+                </div>
+              </div>
+            </div>
+            <!-- Phone -->
+            <div style="position:absolute; right:-22px; bottom:0; width:62px; z-index:3; transform:rotate(6deg);">
+              <div style="background:#1B2020; border-radius:12px; padding:5px 4px;">
+                <div style="position:relative; aspect-ratio:9/19; border-radius:7px; overflow:hidden; background:radial-gradient(circle at 50% 42%, #34403e, #14191a 78%); display:flex; align-items:center; justify-content:center;">
+                  <span style="width:22px; height:22px; border-radius:999px; background:#CA5D25; display:flex; align-items:center; justify-content:center; box-shadow:0 3px 10px rgba(202,93,37,0.6);"><svg width="9" height="9" viewBox="0 0 24 24" fill="#FAF7F6"><polygon points="6 4 20 12 6 20"></polygon></svg></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="wert-disc" style="right:2px; top:-6px; width:62px; height:62px; transform:rotate(8deg); box-shadow:0 10px 22px rgba(0,0,0,0.26); border:1px solid rgba(253,101,0,0.4); background-color:var(--ms-ember);">
+            <span class="w-lbl" style="opacity:0.72;">Wert</span>
+            <span class="w-num" style="font-size:15px;">179 €</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="bonus-tag">Inhalt 1</span>
+        <h3>Mini Online-Kurs „Warum du bisher gescheitert bist"</h3>
+        <p>4 kurze Videos mit mir. Du verstehst zum ersten Mal, warum Diäten biologisch scheitern müssen - und was das mit deinem Kopf zu tun hat.</p>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="bonus-card bonus-rev">
+      <div class="pimg">
+        <div style="position:relative;">
+          <div style="position:relative; width:188px; aspect-ratio:3/4; border-radius:3px 8px 8px 3px; overflow:hidden; box-shadow:0 24px 46px rgba(31,26,21,0.26); transform:rotate(3deg); background:#EFE7DD; border:1px solid rgba(12,17,20,0.06);">
+            <div style="position:absolute; left:0; top:0; bottom:0; width:9px; background:linear-gradient(90deg,rgba(0,0,0,0.1),rgba(0,0,0,0));"></div>
+            <div style="position:absolute; inset:0; padding:22px 17px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; text-align:center;">
+              <span style="font-size:8.5px; font-weight:800; letter-spacing:0.24em; text-transform:uppercase; color:#CA5D25;">Mama · Spagat</span>
+              <span style="font-family:var(--ms-font-display); font-weight:700; font-size:23px; line-height:1.07; text-transform:uppercase; color:#1B2020;">Das Workbook</span>
+              <span style="font-size:8px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:#7A6F63; border-top:1px solid rgba(12,17,20,0.18); padding-top:7px;">Zum Workshop · PDF</span>
+            </div>
+          </div>
+          <div class="wert-disc" style="right:-16px; bottom:-12px; width:72px; height:72px; transform:rotate(-7deg); box-shadow:0 10px 22px rgba(202,93,37,0.3); background-color:var(--ms-orange);">
+            <span class="w-lbl">Wert</span>
+            <span class="w-num" style="font-size:18px;">49 €</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="bonus-tag">Inhalt 2</span>
+        <h3>Digitales Workbook zum Workshop</h3>
+        <p>Dein persönlicher Begleiter durch beide Workshop-Tage. Platz für Notizen, Reflexionen und deine wichtigsten Erkenntnisse - strukturiert nach den 6 Themen.</p>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="bonus-card">
+      <div class="pimg">
+        <div style="position:relative;">
+          <div style="position:relative; width:208px; border-radius:22px; overflow:hidden; box-shadow:0 24px 46px rgba(31,26,21,0.26); transform:rotate(-2deg);">
+            <img src="/abnehmrevolution/assets/vanessa-stuhl.jpg" alt="Vanessa Reinthaller" style="width:100%; aspect-ratio:3/4; object-fit:cover; object-position:center 12%; display:block;">
+            <div style="position:absolute; left:0; right:0; top:0; padding:11px 13px; background:linear-gradient(180deg, rgba(27,32,32,0.55), rgba(27,32,32,0));">
+              <span style="font-size:8px; font-weight:800; letter-spacing:0.2em; text-transform:uppercase; color:rgba(250,247,246,0.92);">Mama · Spagat · VIP</span>
+            </div>
+            <div style="position:absolute; left:14px; right:34px; bottom:16px; background:#FAF7F6; border-radius:14px 14px 14px 3px; padding:10px 12px; box-shadow:0 8px 20px rgba(0,0,0,0.28);">
+              <span style="display:block; font-size:8px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:#CA5D25; margin-bottom:3px;">Neue Frage von Sandra</span>
+              <span style="display:block; font-size:10px; line-height:1.32; color:#1B2020;">„Wie schaffe ich es abends, nicht aus Frust zu essen?"</span>
+            </div>
+          </div>
+          <div class="wert-disc" style="right:-16px; bottom:-12px; width:72px; height:72px; transform:rotate(7deg); box-shadow:0 10px 22px rgba(202,93,37,0.3); background-color:var(--ms-orange);">
+            <span style="font-size:15px; line-height:1;">★</span>
+            <span style="font-size:8.5px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; margin-top:2px;">VIP</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="bonus-tag">Inhalt 3</span>
+        <h3>VIP-Fragen vorab einreichen</h3>
+        <p>Du schickst deine persönliche Frage vor dem Workshop ein. Ich nehme sie mit auf die Bühne. Kein Warten, kein Zögern - deine Frage wird beantwortet.</p>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="bonus-card bonus-rev">
+      <div class="pimg">
+        <div style="position:relative;">
+          <div style="position:relative; width:178px; padding:18px 16px 0; border-radius:30px; box-shadow:0 24px 46px rgba(31,26,21,0.26); transform:rotate(2deg); background:#1B2020;">
+            <div style="position:absolute; left:50%; top:9px; transform:translateX(-50%); width:42px; height:5px; border-radius:999px; background:rgba(250,247,246,0.25);"></div>
+            <div style="border-radius:20px 20px 0 0; overflow:hidden; background:#F7E0D1; padding:16px 14px 18px;">
+              <span style="display:block; font-size:8px; font-weight:800; letter-spacing:0.18em; text-transform:uppercase; color:#CA5D25; margin-bottom:6px;">Mama · Spagat · Selbsttest</span>
+              <span style="display:block; font-family:var(--ms-font-display); font-weight:700; font-size:17px; line-height:1.12; color:#1B2020; margin-bottom:13px;">15 Fragen später und du weißt es</span>
+              <div style="display:flex; align-items:center; gap:7px; margin-bottom:12px;">
+                <div style="flex:1; height:5px; border-radius:999px; background:rgba(202,93,37,0.2); overflow:hidden;"><span style="display:block; width:60%; height:100%; background:#CA5D25; border-radius:999px;"></span></div>
+                <span style="font-size:8.5px; font-weight:800; color:#A8431B;">9/15</span>
+              </div>
+              <span style="display:block; font-size:10.5px; font-weight:700; color:#1B2020; line-height:1.3; margin-bottom:10px;">Isst du, wenn du gestresst bist - obwohl du gar keinen Hunger hast?</span>
+              <div style="display:flex; flex-direction:column; gap:7px;">
+                <span style="display:flex; align-items:center; gap:8px; background:#CA5D25; color:#FAF7F6; font-size:10px; font-weight:700; padding:9px 11px; border-radius:10px;"><span style="width:13px; height:13px; border-radius:999px; border:2px solid #FAF7F6; display:flex; align-items:center; justify-content:center;"><span style="width:5px; height:5px; border-radius:999px; background:#FAF7F6;"></span></span>Ja, ständig</span>
+                <span style="display:flex; align-items:center; gap:8px; background:#FAF7F6; color:#1B2020; font-size:10px; font-weight:600; padding:9px 11px; border-radius:10px;"><span style="width:13px; height:13px; border-radius:999px; border:2px solid rgba(12,17,20,0.25);"></span>Manchmal</span>
+                <span style="display:flex; align-items:center; gap:8px; background:#FAF7F6; color:#1B2020; font-size:10px; font-weight:600; padding:9px 11px; border-radius:10px;"><span style="width:13px; height:13px; border-radius:999px; border:2px solid rgba(12,17,20,0.25);"></span>Nie</span>
+              </div>
+            </div>
+          </div>
+          <div class="wert-disc" style="right:-16px; bottom:-12px; width:72px; height:72px; transform:rotate(-7deg); box-shadow:0 10px 22px rgba(0,0,0,0.2); background-color:var(--ms-orange);">
+            <span class="w-lbl">Wert</span>
+            <span class="w-num" style="font-size:18px;">79 €</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="bonus-tag">Inhalt 4</span>
+        <h3>Selbsttest „Bin ich ein emotionaler Esser?"</h3>
+        <p>15 Fragen, sofortige Auswertung, dein persönlicher Esstyp. Du weißt vor dem Workshop schon mehr über dich als nach zehn Diäten.</p>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="bonus-card">
+      <div class="pimg">
+        <div style="position:relative;">
+          <div style="position:relative; width:188px; aspect-ratio:3/4; border-radius:3px 8px 8px 3px; overflow:hidden; box-shadow:0 24px 46px rgba(31,26,21,0.26); transform:rotate(-3deg); background:#3A504F;">
+            <div style="position:absolute; left:0; top:0; bottom:0; width:9px; background:linear-gradient(90deg,rgba(0,0,0,0.2),rgba(0,0,0,0));"></div>
+            <div style="position:absolute; inset:0; padding:22px 17px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; text-align:center;">
+              <span style="font-size:8.5px; font-weight:800; letter-spacing:0.24em; text-transform:uppercase; color:rgba(239,231,221,0.85);">Mama · Spagat</span>
+              <span style="font-family:var(--ms-font-display); font-weight:700; font-size:22px; line-height:1.07; text-transform:uppercase; color:#FAF7F6;">7 Tage Hunger neu lernen</span>
+              <span style="font-size:8px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:rgba(239,231,221,0.8); border-top:1px solid rgba(239,231,221,0.32); padding-top:7px;">Satt-Signal-Guide</span>
+            </div>
+          </div>
+          <div class="wert-disc" style="right:-16px; bottom:-12px; width:72px; height:72px; transform:rotate(7deg); box-shadow:0 10px 22px rgba(202,93,37,0.3); background-color:var(--ms-orange);">
+            <span class="w-lbl">Wert</span>
+            <span class="w-num" style="font-size:18px;">39 €</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="bonus-tag">Inhalt 5</span>
+        <h3>Satt-Signal-Guide „7 Tage Hunger neu lernen"</h3>
+        <p>Tägliche Mikro-Übungen, die du sofort starten kannst. Erste echte Veränderung noch vor dem Workshop.</p>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="bonus-card bonus-rev">
+      <div class="pimg">
+        <div style="position:relative;">
+          <div style="position:relative; width:248px; border-radius:22px; overflow:hidden; box-shadow:0 24px 46px rgba(31,26,21,0.26); transform:rotate(-2deg); background:#1B2020;">
+            <div style="position:relative; height:152px; overflow:hidden;">
+              <img src="/abnehmrevolution/assets/vanessa-portrait.png" alt="Vanessa Reinthaller" style="width:100%; height:100%; object-fit:cover; object-position:center 22%; display:block;">
+              <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(27,32,32,0) 35%, rgba(27,32,32,0.92) 100%);"></div>
+              <span style="position:absolute; left:14px; top:13px; font-size:8px; font-weight:800; letter-spacing:0.22em; text-transform:uppercase; color:rgba(250,247,246,0.9);">Mama · Spagat</span>
+              <span style="position:absolute; left:14px; right:14px; bottom:12px; font-family:var(--ms-font-display); font-weight:700; font-size:21px; line-height:1.05; color:#FAF7F6;">Rückkehr zu dir<br>Meditation</span>
+            </div>
+            <div style="padding:16px 16px 18px;">
+              <div style="display:flex; align-items:center; gap:11px;">
+                <span style="flex:none; width:38px; height:38px; border-radius:999px; background:#CA5D25; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(202,93,37,0.45);"><svg width="15" height="15" viewBox="0 0 24 24" fill="#FAF7F6"><polygon points="6 4 20 12 6 20"></polygon></svg></span>
+                <div style="flex:1; display:flex; align-items:center; gap:2.5px; height:30px;">
+                  <span style="flex:1; height:30%; background:#CA5D25; border-radius:2px;"></span>
+                  <span style="flex:1; height:62%; background:#CA5D25; border-radius:2px;"></span>
+                  <span style="flex:1; height:88%; background:#CA5D25; border-radius:2px;"></span>
+                  <span style="flex:1; height:50%; background:#CA5D25; border-radius:2px;"></span>
+                  <span style="flex:1; height:74%; background:#CA5D25; border-radius:2px;"></span>
+                  <span style="flex:1; height:100%; background:#CA5D25; border-radius:2px;"></span>
+                  <span style="flex:1; height:46%; background:#CA5D25; border-radius:2px;"></span>
+                  <span style="flex:1; height:68%; background:rgba(250,247,246,0.28); border-radius:2px;"></span>
+                  <span style="flex:1; height:40%; background:rgba(250,247,246,0.28); border-radius:2px;"></span>
+                  <span style="flex:1; height:82%; background:rgba(250,247,246,0.28); border-radius:2px;"></span>
+                  <span style="flex:1; height:34%; background:rgba(250,247,246,0.28); border-radius:2px;"></span>
+                  <span style="flex:1; height:58%; background:rgba(250,247,246,0.28); border-radius:2px;"></span>
+                  <span style="flex:1; height:90%; background:rgba(250,247,246,0.28); border-radius:2px;"></span>
+                  <span style="flex:1; height:44%; background:rgba(250,247,246,0.28); border-radius:2px;"></span>
+                </div>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-top:9px; font-size:9px; font-weight:600; color:rgba(250,247,246,0.5);"><span>4:18</span><span>12:00</span></div>
+            </div>
+          </div>
+          <div class="wert-disc" style="right:-16px; bottom:-12px; width:72px; height:72px; transform:rotate(-7deg); box-shadow:0 10px 22px rgba(0,0,0,0.26); background-color:var(--ms-orange);">
+            <span class="w-lbl" style="opacity:0.72;">Wert</span>
+            <span class="w-num" style="font-size:18px;">19 €</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="bonus-tag">Inhalt 6</span>
+        <h3>Audio-Meditation „Rückkehr zu dir"</h3>
+        <p>Eine geführte Körperwahrnehmungs-Übung von mir. 12 Minuten. Einmal hören und du weißt, was innere Arbeit bedeutet.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="dk-bonus-foot">
+    <p class="p1">Mein Glow Starterpaket ist die perfekte Ergänzung für jede Teilnehmerin, die die Inhalte des Workshops tiefer verankern und so schneller dauerhaft abnehmen möchte, ohne je wieder von vorne anzufangen.</p>
+    <p class="p2">Achtung, die Anzahl der verfügbaren Glow Starterpakete ist begrenzt.</p>
+    <a class="cta" href="https://mamaspagat.tentary.com/p/glow-starterpaket/checkout">Ja, ich sichere mir mein Glow Starterpaket<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+    <div class="dk-skip"><a class="downsell-link" href="/abnehmrevolution/bestaetigung">Nein danke, ich möchte ohne Vorbereitung in den Workshop starten.</a></div>
+  </div>
+</section>
+
+<!-- SUMMARY BOX -->
+<section data-screen-label="Paket-Übersicht" class="dk-summary">
+  <div class="dk-summary-inner" id="sichern">
+    <h2 class="dk-summary-h2">Hier nochmal alles auf einen Blick</h2>
+    <div class="dk-summary-card">
+      <p class="lead">Das Glow Starterpaket beinhaltet:</p>
+      <ul class="dk-summary-list">
+        <li><span class="lab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Mini Online-Kurs „Warum du bisher gescheitert bist" · 4 Videos</span><span class="val">179 €</span></li>
+        <li><span class="lab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Digitales Workbook zum Workshop</span><span class="val">49 €</span></li>
+        <li><span class="lab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>VIP-Fragen vorab einreichen</span><span class="val">Unbezahlbar</span></li>
+        <li><span class="lab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Selbsttest „Bin ich ein emotionaler Esser?"</span><span class="val">79 €</span></li>
+        <li><span class="lab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Satt-Signal-Guide „7 Tage Hunger neu lernen"</span><span class="val">19 €</span></li>
+        <li><span class="lab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FD6500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Audio-Meditation „Rückkehr zu dir"</span><span class="val">39 €</span></li>
+      </ul>
+      <p class="dk-summary-avail">Wichtig, nur noch <span class="avail-num">37</span> Glow Starterpakete verfügbar.</p>
+      <div class="dk-summary-price">
+        <div class="rows">
+          <p class="r1"><span>Gesamtwert</span><b>365 €</b></p>
+          <p class="r2"><span>Normalerweise</span><s>97 €</s></p>
+        </div>
+        <div class="now">
+          <p class="label">Heute nur</p>
+          <p class="big">19,95 €</p>
+          <p class="sub">einmalig · sofortiger Zugang</p>
+        </div>
+      </div>
+      <a class="cta cta--block" href="https://mamaspagat.tentary.com/p/glow-starterpaket/checkout" style="display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;">Ja, ich sichere mir mein Glow Starterpaket<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+      <div class="dk-trust">
+        <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8AA09D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>Sichere Zahlung</span>
+        <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8AA09D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"></path></svg>Käuferschutz</span>
+      </div>
+      <div class="dk-social">
+        <div class="stack">
+          <img src="/abnehmrevolution/assets/kundin-blond.jpg" alt="">
+          <img src="/abnehmrevolution/assets/kundin-bruenett.jpg" alt="">
+          <img src="/abnehmrevolution/assets/kundin-rot.jpg" alt="">
+        </div>
+        <span class="stxt">Bereits über 60x gekauft</span>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:16px;"><a class="downsell-link" href="/abnehmrevolution/bestaetigung">Nein danke, ich möchte ohne Vorbereitung in den Workshop starten.</a></div>
+  </div>
+</section>
+
+<!-- BLOCK 9 · VERLUST-MOMENT -->
+<section data-screen-label="Workshop-Ausblick" class="dk-loss">
+  <div class="dk-loss-inner">
+    <h2>Stell dir den ersten Workshop-Vormittag vor</h2>
+    <p>Samstag, 10:00 Uhr. Die einen sitzen da und hören zum ersten Mal von den drei Säulen. Die anderen haben den Mini-Kurs schon gesehen, den Selbsttest gemacht, die ersten Tage hinter sich. Sie nicken leise, wenn ich etwas sage, weil sie es schon in sich spüren. Für 19,95 € entscheidest du, zu welcher der beiden Frauen du am Samstagvormittag gehörst.</p>
+    <a class="cta" href="https://mamaspagat.tentary.com/p/glow-starterpaket/checkout">Ja, ich sichere mir mein Glow Starterpaket<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FAF7F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+  </div>
+</section>
+
+<!-- TOAST NOTIFICATION -->
+<div id="dk-toast" role="status" aria-live="polite">
+  <span class="t-avatar" id="toast-initial"></span>
+  <div>
+    <div class="t-name" id="toast-name"></div>
+    <div class="t-sub">hat gerade das <strong>Glow Starterpaket</strong> gesichert ✓</div>
+    <div class="t-city" id="toast-city"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="ms-footer">
+  <div class="dk-footer-inner">
+    <div class="dk-footer-brand">Die Abnehmrevolution</div>
+    <div class="ms-footer-links" style="margin:0;">
+      <a href="https://shop.vanessareinthaller.de/policies/legal-notice" target="_blank" rel="noopener noreferrer">Impressum</a>
+      <a href="https://shop.vanessareinthaller.de/policies/privacy-policy" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+    </div>
+    <p style="margin:0; font-size:13px;">© 2026 Vanessa Reinthaller / Mama Spagat</p>
+    <p class="fb-disclaimer" style="margin:0; text-align:center;">This site is not a part of the Facebook website or Facebook Inc. Additionally, this site is NOT endorsed by Facebook in any way. FACEBOOK is a trademark of FACEBOOK, Inc.</p>
+  </div>
+</footer>
+
+<script defer src="/_vercel/insights/script.js"></script>
+<script src="/abnehmrevolution/js/consent.js" defer></script>
+
+<script src="/abnehmrevolution/js/tracking.js" defer></script>
+
+<script src="/abnehmrevolution/js/funnel.js" defer></script>
+<script>
+(function () {
+  // Progress bar fills to 80% shortly after load
+  setTimeout(function () {
+    var bar = document.getElementById('prog-bar');
+    if (bar) bar.style.width = '80%';
+  }, 300);
+
+  // Urgent banner slides down after 1s
+  setTimeout(function () {
+    var banner = document.getElementById('urgent-banner');
+    if (banner) banner.classList.add('is-down');
+  }, 1000);
+
+  // Scarcity counter + purchase toasts
+  var buyers = [
+    { name: 'Sabrina M.', city: 'München' },
+    { name: 'Katharina B.', city: 'Hamburg' },
+    { name: 'Julia W.', city: 'Köln' },
+    { name: 'Andrea H.', city: 'Berlin' },
+    { name: 'Stefanie K.', city: 'Stuttgart' },
+    { name: 'Monika F.', city: 'Frankfurt' },
+    { name: 'Claudia R.', city: 'Düsseldorf' },
+    { name: 'Petra N.', city: 'Leipzig' }
+  ];
+  var available = 37;
+  var toast = document.getElementById('dk-toast');
+  var dismissTimer = null;
+
+  function flipAvail() {
+    document.querySelectorAll('.avail-num').forEach(function (el) {
+      el.textContent = available;
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = 'availFlip 0.7s cubic-bezier(0.22,1,0.36,1)';
+    });
+  }
+
+  function showToast(i) {
+    var buyer = buyers[i % buyers.length];
+    available = Math.max(0, available - 1);
+    flipAvail();
+    document.getElementById('toast-initial').textContent = buyer.name.charAt(0);
+    document.getElementById('toast-name').textContent = buyer.name;
+    document.getElementById('toast-city').textContent = buyer.city;
+    toast.classList.remove('is-out');
+    toast.classList.add('is-in');
+    if (dismissTimer) clearTimeout(dismissTimer);
+    dismissTimer = setTimeout(function () {
+      toast.classList.remove('is-in');
+      toast.classList.add('is-out');
+      setTimeout(function () { toast.classList.remove('is-out'); toast.style.display = 'none'; }, 400);
+    }, 4500);
+  }
+
+  [8000, 19000, 31000].forEach(function (delay, i) {
+    setTimeout(function () { toast.style.display = ''; showToast(i); }, delay);
+  });
+})();
+</script>
+<script>(function(){if(window.self!==window.top)return;try{var i=new Image();i.src='/abnehmrevolution/api/visit?p=danke';}catch(e){}})();</script>
+<script src="/abnehmrevolution/js/design.js" defer></script>
+</body>
+</html>

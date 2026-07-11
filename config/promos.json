@@ -1,0 +1,25 @@
+{
+  "_comment": "Single source of truth für zeit-/terminbezogenes Wording. Nie hartkodiert auf der Seite. Promo-Watcher warnt 3 Tage vor 'end'; nach Ablauf fällt die Seite automatisch auf 'evergreen' zurück.",
+  "promos": [
+    {
+      "id": "workshop-juli-2026",
+      "type": "workshop",
+      "start": "2026-06-28",
+      "end": "2026-07-19",
+      "seats": 100,
+      "wording": {
+        "banner": "Live-Plätze sind auf <strong>100 Frauen</strong> limitiert",
+        "navCaption": "Kostenloser 2-Tägiger Live Workshop am 18. + 19. Juli 2026 von 10:00 - 12:00 Uhr",
+        "dates": "Samstag, 18. + Sonntag, 19. Juli 2026 · 10:00 - 12:00 Uhr · Live via Zoom · Nur 100 Plätze"
+      }
+    }
+  ],
+  "evergreen": {
+    "id": "evergreen",
+    "wording": {
+      "banner": "Live-Plätze sind limitiert",
+      "navCaption": "Kostenloser 2-Tägiger Live Workshop · Termin folgt in Kürze",
+      "dates": "Nächster Live-Termin wird in Kürze bekannt gegeben · Live via Zoom · Begrenzte Plätze"
+    }
+  }
+}

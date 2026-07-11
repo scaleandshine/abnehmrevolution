@@ -1,0 +1,4 @@
+.DS_Store
+.vercel/
+.alerts/
+node_modules/
