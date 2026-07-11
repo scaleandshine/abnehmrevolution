@@ -56,12 +56,6 @@
 
   .dk-video-wrap { position: relative; max-width: 720px; margin: 0 auto 26px; }
   .dk-video-wrap .video-facade { box-shadow: 0 0 0 1px rgba(12,17,20,0.08), 0 24px 60px rgba(31,26,21,0.22); }
-  .dk-video-tag {
-    position: absolute; left: 18px; bottom: 16px; display: inline-flex; align-items: center; gap: 7px;
-    background: rgba(12,17,20,0.6); color: var(--ms-white); font-size: 12px; font-weight: 600;
-    padding: 7px 14px; border-radius: 999px; backdrop-filter: blur(3px); z-index: 2; pointer-events: none;
-  }
-  .dk-video-tag .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--ms-orange); }
 
   .dk-urgency {
     display: inline-flex; align-items: center; gap: 10px; background: rgba(34,197,94,0.1);
@@ -271,7 +265,6 @@
 
     <div class="dk-video-wrap">
       <script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/mk7isd53f0.js" async type="module"></script><style>wistia-player[media-id='mk7isd53f0']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/mk7isd53f0/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style> <wistia-player media-id="mk7isd53f0" aspect="1.7777777777777777"></wistia-player>
-      <span class="dk-video-tag"><span class="dot"></span>Meine Nachricht an dich</span>
     </div>
 
     <!-- LIVE URGENCY BAR -->
@@ -681,9 +674,37 @@
     }, 4500);
   }
 
-  [8000, 19000, 31000].forEach(function (delay, i) {
-    setTimeout(function () { toast.style.display = ''; showToast(i); }, delay);
-  });
+  // Kauf-Notifications: erst NACHDEM übers Video hinaus gescrollt wurde
+  // (Angebot gesehen) — und nie sichtbar, solange das Video im Viewport ist.
+  var videoEl = document.querySelector('.dk-video-wrap');
+  function videoVisible() {
+    if (!videoEl) return false;
+    var r = videoEl.getBoundingClientRect();
+    return r.bottom > 0 && r.top < window.innerHeight;
+  }
+  function hideToastNow() {
+    if (toast.classList.contains('is-in')) {
+      toast.classList.remove('is-in');
+      toast.style.display = 'none';
+      if (dismissTimer) clearTimeout(dismissTimer);
+    }
+  }
+  var armed = false;
+  function arm() {
+    if (armed) return;
+    armed = true;
+    [3000, 15000, 28000].forEach(function (delay, i) {
+      setTimeout(function tryShow() {
+        if (videoVisible()) { setTimeout(tryShow, 4000); return; } // nie übers Video
+        toast.style.display = '';
+        showToast(i);
+      }, delay);
+    });
+  }
+  window.addEventListener('scroll', function () {
+    if (videoVisible()) { hideToastNow(); return; }
+    if (!armed && videoEl && videoEl.getBoundingClientRect().bottom <= 60) arm();
+  }, { passive: true });
 })();
 </script>
 <script>(function(){if(window.self!==window.top)return;try{var i=new Image();i.src='/abnehmrevolution/api/visit?p=danke';}catch(e){}})();</script>
